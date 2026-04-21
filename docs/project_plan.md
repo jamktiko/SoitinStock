@@ -18,9 +18,13 @@
 
 ## Projektin tiedot
 
-\<Projektin nimi>
+\SoitinStock
 
 Tekijät:
+- Jun Fengari
+- Minttu Räisänen
+- Thomas Vainikainen
+- Oskari Puranen
 
 ## Projektin sisältö
 
@@ -28,14 +32,17 @@ Tekijät:
 
 _Lyhyt kuvaus projektista. Minkälaista ohjelmistoa ollaan tekemässä?_
 
+
 ### Projektiryhmä
 
 _Ketä projektiin kuuluu ja mitkä ovat henkilöiden päävastuut._
 
-| Nimi           | Vastuurooli          |
-| -------------- | -------------------- |
-| Teppo Virtanen | Git-päällikkö        |
-| Satu Jokinen   | Dokumentti-päällikkö |
+| Nimi              | Vastuurooli          |
+| ------------------| -------------------- |
+| Minttu Räisänen   | Git-päällikkö        |
+| Jun Fengari       | Dokumentti-päällikkö |
+| Thomas Vainikainen| Git-päällikkö        |
+| Oskari Puranen    | Dokumentti-päällikkö |
 
 ### Tavoite
 
