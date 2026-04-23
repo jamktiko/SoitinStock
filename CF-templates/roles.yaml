@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template to create IAM roles and an EC2 Instance Profile for AWS Elastic Beanstalk environments.'
+
+Resources:
+    # --------------------------------------------------------------------------
+    # 1. Elastic Beanstalk Service Role
+    # --------------------------------------------------------------------------
+    # This role is assumed by the Elastic Beanstalk service itself to provision
+    # and manage AWS resources (like Auto Scaling Groups, Load Balancers, etc.)
+    # on your behalf.
+    EBServiceRole:
+        Type: 'AWS::IAM::Role'
+        Properties:
+            RoleName: !Sub '${AWS::StackName}-ServiceRole'
+            AssumeRolePolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service:
+                              - 'elasticbeanstalk.amazonaws.com'
+                      Action: 'sts:AssumeRole'
+                      Condition:
+                          StringEquals:
+                              'sts:ExternalId': 'elasticbeanstalk'
+            ManagedPolicyArns:
+                - 'arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkEnhancedHealth'
+                - 'arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkService'
+
+    # --------------------------------------------------------------------------
+    # 2. EC2 Instance Role (for the nodes cluster)
+    # --------------------------------------------------------------------------
+    # This role is assumed by the actual EC2 instances (t4g.small) created by
+    # Elastic Beanstalk. It grants the Node.js application permissions to interact
+    # with minimal AWS services (like CloudWatch Logs or S3 for deployments).
+    EBInstanceRole:
+        Type: 'AWS::IAM::Role'
+        Properties:
+            RoleName: !Sub '${AWS::StackName}-EC2Role'
+            AssumeRolePolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service:
+                              - 'ec2.amazonaws.com'
+                      Action: 'sts:AssumeRole'
+            ManagedPolicyArns:
+                - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier'
+            Policies:
+                - PolicyName: 'CloudWatchLogsPolicy'
+                  PolicyDocument:
+                      Version: '2012-10-17'
+                      Statement:
+                          - Effect: Allow
+                            Action:
+                                - 'logs:CreateLogGroup'
+                                - 'logs:CreateLogStream'
+                                - 'logs:PutLogEvents'
+                                - 'logs:DescribeLogStreams'
+                            Resource: '*'
+
+    # --------------------------------------------------------------------------
+    # 3. EC2 Instance Profile
+    # --------------------------------------------------------------------------
+    # An Instance Profile is an AWS container for an IAM role that allows you
+    # to attach the role to an EC2 instance. This is what you select in the
+    # Elastic Beanstalk configuration UI under "IAM instance profile".
+    EBInstanceProfile:
+        Type: 'AWS::IAM::InstanceProfile'
+        Properties:
+            InstanceProfileName: !Sub '${AWS::StackName}-InstanceProfile'
+            Roles:
+                - !Ref EBInstanceRole
+
+Outputs:
+    EBServiceRoleArn:
+        Description: 'The ARN of the Elastic Beanstalk Service Role'
+        Value: !GetAtt EBServiceRole.Arn
+    EBInstanceProfileName:
+        Description: 'The name of the EC2 Instance Profile to use in your Elastic Beanstalk environment configuration'
+        Value: !Ref EBInstanceProfile
