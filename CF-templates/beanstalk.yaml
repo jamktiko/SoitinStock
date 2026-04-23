@@ -26,14 +26,6 @@ Parameters:
         Type: AWS::EC2::Subnet::Id
         Description: Public subnet for EB instance (default VPC subnet)
 
-    ServiceRoleArn:
-        Type: String
-        Description: Elastic Beanstalk Service Role ARN
-
-    InstanceProfileName:
-        Type: String
-        Description: EC2 Instance Profile name for EB instances
-
 Resources:
     # --------------------------------------------------------------------
     # Elastic Beanstalk Application
@@ -64,7 +56,7 @@ Resources:
 
                 - Namespace: aws:elasticbeanstalk:environment
                   OptionName: ServiceRole
-                  Value: !Ref ServiceRoleArn
+                  Value: !ImportValue SoitinStock-ServiceRoleArn
 
                 # -------------------------
                 # EC2 Instance Configuration
@@ -75,7 +67,7 @@ Resources:
 
                 - Namespace: aws:autoscaling:launchconfiguration
                   OptionName: IamInstanceProfile
-                  Value: !Ref InstanceProfileName
+                  Value: !ImportValue SoitinStock-InstanceProfileName
 
                 - Namespace: aws:autoscaling:launchconfiguration
                   OptionName: EC2KeyName

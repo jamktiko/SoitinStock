@@ -77,6 +77,11 @@ Outputs:
     EBServiceRoleArn:
         Description: 'The ARN of the Elastic Beanstalk Service Role'
         Value: !GetAtt EBServiceRole.Arn
+        Export:
+            Name: SoitinStock-ServiceRoleArn
+
     EBInstanceProfileName:
         Description: 'The name of the EC2 Instance Profile to use in your Elastic Beanstalk environment configuration'
         Value: !Ref EBInstanceProfile
+        Export:
+            Name: SoitinStock-InstanceProfileName
