@@ -77,6 +77,9 @@ Resources:
                   OptionName: DisableIMDSv1
                   Value: 'true'
 
+                # -------------------------
+                # SSH Configuration
+                # -------------------------
                 # SSH access disabled (no direct EC2 access required)
                 # Logs and debugging handled via Elastic Beanstalk / CloudWatch
                 # ⚠️ SECURITY FIX (was previously open in your setup)
@@ -148,7 +151,7 @@ Resources:
                   Value: '600'
 
                 # -------------------------
-                # PLACEHOLDER: Environment variables (future Cognito + RDS)
+                # PLACEHOLDERS: Environment variables (future Cognito + RDS)
                 # -------------------------
                 - Namespace: aws:elasticbeanstalk:application:environment
                   OptionName: NODE_ENV
