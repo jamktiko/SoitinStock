@@ -159,11 +159,13 @@ Resources:
 
                 - Namespace: aws:elasticbeanstalk:application:environment
                   OptionName: COGNITO_USER_POOL_ID
-                  Value: ''
+                  Value:
+                      Fn::ImportValue: SoitinStock-UserPoolId
 
                 - Namespace: aws:elasticbeanstalk:application:environment
                   OptionName: COGNITO_CLIENT_ID
-                  Value: ''
+                  Value:
+                      Fn::ImportValue: SoitinStock-UserPoolClientId
 
                 - Namespace: aws:elasticbeanstalk:application:environment
                   OptionName: RDS_HOST

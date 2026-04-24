@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SoitinStock - Cognito Authentication'
+
+Resources:
+    UserPool:
+        Type: AWS::Cognito::UserPool
+        Properties:
+            UserPoolName: SoitinStock-UserPool
+
+            UsernameAttributes:
+                - email
+
+            AutoVerifiedAttributes:
+                - email
+
+            Policies:
+                PasswordPolicy:
+                    MinimumLength: 8
+                    RequireUppercase: true
+                    RequireLowercase: true
+                    RequireNumbers: true
+                    RequireSymbols: false
+
+            Schema:
+                - Name: email
+                  Required: true
+                  Mutable: true
+
+    UserPoolClient:
+        Type: AWS::Cognito::UserPoolClient
+        Properties:
+            ClientName: SoitinStock-Client
+            UserPoolId: !Ref UserPool
+
+            GenerateSecret: false # IMPORTANT for frontend apps
+
+            ExplicitAuthFlows:
+                - ALLOW_USER_PASSWORD_AUTH
+                - ALLOW_REFRESH_TOKEN_AUTH
+
+Outputs:
+    UserPoolId:
+        Value: !Ref UserPool
+        Export:
+            Name: SoitinStock-UserPoolId
+
+    UserPoolClientId:
+        Value: !Ref UserPoolClient
+        Export:
+            Name: SoitinStock-UserPoolClientId
