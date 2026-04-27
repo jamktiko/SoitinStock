@@ -1,7 +1,4 @@
--- version 1.0
-
 -- MySQL Workbench Forward Engineering
-
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -47,19 +44,20 @@ DEFAULT CHARACTER SET = utf8mb4;
 DROP TABLE IF EXISTS `Instrument` ;
 
 CREATE TABLE IF NOT EXISTS `Instrument` (
+  `id_Instrument` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(40) NOT NULL,
   `model` VARCHAR(45) NOT NULL,
   `Description` TEXT NULL DEFAULT NULL,
   `Instrument_type_id` INT NOT NULL,
-  PRIMARY KEY (`name`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
   UNIQUE INDEX `model_UNIQUE` (`model` ASC) VISIBLE,
   INDEX `fk_Instrument_Instrument_type1_idx` (`Instrument_type_id` ASC) VISIBLE,
+  PRIMARY KEY (`id_Instrument`),
+  UNIQUE INDEX `id_Instrument_UNIQUE` (`id_Instrument` ASC) VISIBLE,
   CONSTRAINT `fk_Instrument_Instrument_type1`
     FOREIGN KEY (`Instrument_type_id`)
-    REFERENCES `mydb`.`Instrument_type` (`id_type`)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT)
+    REFERENCES `Instrument_type` (`id_type`)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
@@ -77,16 +75,16 @@ CREATE TABLE IF NOT EXISTS `Item` (
   `rent_month` DECIMAL(10,2) NOT NULL,
   `is_available` TINYINT NOT NULL,
   `condition` ENUM('excellent', 'good', 'damaged', 'under_repair') NOT NULL,
-  `Instrument_name` VARCHAR(40) NOT NULL,
+  `Instrument_id_Instrument` INT NOT NULL,
   PRIMARY KEY (`id_Item`),
   UNIQUE INDEX `id_Item_UNIQUE` (`id_Item` ASC) VISIBLE,
   UNIQUE INDEX `barcode_UNIQUE` (`barcode` ASC) VISIBLE,
-  INDEX `fk_Item_Instrument_idx` (`Instrument_name` ASC) VISIBLE,
-  CONSTRAINT `fk_Item_Instrument`
-    FOREIGN KEY (`Instrument_name`)
-    REFERENCES `Instrument` (`name`)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT)
+  INDEX `fk_Item_Instrument1_idx` (`Instrument_id_Instrument` ASC) VISIBLE,
+  CONSTRAINT `fk_Item_Instrument1`
+    FOREIGN KEY (`Instrument_id_Instrument`)
+    REFERENCES `Instrument` (`id_Instrument`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
@@ -97,12 +95,11 @@ DEFAULT CHARACTER SET = utf8mb4;
 DROP TABLE IF EXISTS `Rentals` ;
 
 CREATE TABLE IF NOT EXISTS `Rentals` (
-  `id_Rentals` INT NOT NULL AUTO_INCREMENT COMMENT 'UUID\\n',
+  `id_Rentals` INT NOT NULL AUTO_INCREMENT,
   `start_date` DATETIME NOT NULL,
   `end_date` DATE NOT NULL,
   `returned_date` DATETIME NOT NULL,
   `employee` CHAR(36) NOT NULL COMMENT 'UUID',
-  `payment_status` TINYINT NOT NULL,
   `rent_status` ENUM('active', 'returned', 'overdue') NOT NULL,
   `customer_id` INT NOT NULL,
   `total_price` DECIMAL(10,2) NOT NULL,
@@ -112,8 +109,7 @@ CREATE TABLE IF NOT EXISTS `Rentals` (
   CONSTRAINT `fk_Rentals_Customer1`
     FOREIGN KEY (`customer_id`)
     REFERENCES `Customer` (`id_customer`)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
@@ -131,14 +127,10 @@ CREATE TABLE IF NOT EXISTS `Rentals_has_Item` (
   INDEX `fk_Rentals_has_Item_Rentals1_idx` (`Rentals_id` ASC) VISIBLE,
   CONSTRAINT `fk_Rentals_has_Item_Item1`
     FOREIGN KEY (`Item_id`)
-    REFERENCES `Item` (`id_Item`)
-	ON UPDATE RESTRICT
-    ON DELETE RESTRICT,
+    REFERENCES `Item` (`id_Item`),
   CONSTRAINT `fk_Rentals_has_Item_Rentals1`
     FOREIGN KEY (`Rentals_id`)
-    REFERENCES `Rentals` (`id_Rentals`)
-    ON UPDATE RESTRICT
-    ON DELETE RESTRICT)
+    REFERENCES `Rentals` (`id_Rentals`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
