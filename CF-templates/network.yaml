@@ -52,24 +52,24 @@ Resources:
                 - Key: Name
                   Value: SoitinStock-DBSubnetGroup
 
+    # --------------------------------------------------------------------
+    # EB Security Group
+    # --------------------------------------------------------------------
     EBSecurityGroup:
         Type: AWS::EC2::SecurityGroup
         Properties:
             GroupDescription: 'Elastic Beanstalk EC2 instances security group'
             VpcId: !Ref VPCId
-
-    SecurityGroupIngress:
-        # Allow HTTP from anywhere (for now)
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-
-        # Optional: HTTPS later
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
+            SecurityGroupIngress:
+                # Allow HTTP from anywhere (for now)
+                - IpProtocol: tcp
+                  FromPort: 80
+                  ToPort: 80
+                  CidrIp: 0.0.0.0/0
+                - IpProtocol: tcp
+                  FromPort: 443
+                  ToPort: 443
+                  CidrIp: 0.0.0.0/0
 
 Outputs:
     PrivateSubnetAId:

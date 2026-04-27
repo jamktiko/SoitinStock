@@ -24,9 +24,9 @@ Parameters:
     PrivateSubnet2:
         Type: AWS::EC2::Subnet::Id
 
-    EBInstanceSecurityGroup:
+    EBSecurityGroup:
         Type: AWS::EC2::SecurityGroup::Id
-        Description: 'Security group used by Elastic Beanstalk EC2 instances'
+        Description: 'Elastic Beanstalk security group ID'
 
 Resources:
     # --------------------------------------------------
@@ -53,8 +53,7 @@ Resources:
                 - IpProtocol: tcp
                   FromPort: 3306
                   ToPort: 3306
-                  SourceSecurityGroupId:
-                      Fn::ImportValue: SoitinStock-EBSecurityGroup
+                  SourceSecurityGroupId: !Ref EBSecurityGroup
 
     # --------------------------------------------------
     # RDS Instance
