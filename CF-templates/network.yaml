@@ -6,6 +6,8 @@ Parameters:
         Type: AWS::EC2::VPC::Id
         Description: Default VPC ID
 
+# Routing still goes through default routing table and internet gateway
+# Later adding hardening, with (Nat Gateway if compute in private) and custom routing tables for private subnets.
 Resources:
     # --------------------------------------------------------------------
     # Private Subnet A (AZ 1a)
@@ -50,6 +52,25 @@ Resources:
                 - Key: Name
                   Value: SoitinStock-DBSubnetGroup
 
+    EBSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupDescription: 'Elastic Beanstalk EC2 instances security group'
+            VpcId: !Ref VPCId
+
+    SecurityGroupIngress:
+        # Allow HTTP from anywhere (for now)
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+        # Optional: HTTPS later
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+
 Outputs:
     PrivateSubnetAId:
         Value: !Ref PrivateSubnetA
@@ -65,3 +86,8 @@ Outputs:
         Value: !Ref DBSubnetGroup
         Export:
             Name: SoitinStock-DBSubnetGroup
+
+    EBSecurityGroup:
+        Value: !Ref EBSecurityGroup
+        Export:
+            Name: SoitinStock-EBSecurityGroup

@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `Rentals` (
   `id_Rentals` INT NOT NULL AUTO_INCREMENT,
   `start_date` DATETIME NOT NULL,
   `end_date` DATE NOT NULL,
-  `returned_date` DATETIME NOT NULL,
+  `returned_date` DATETIME,
   `employee` CHAR(36) NOT NULL COMMENT 'UUID',
   `rent_status` ENUM('active', 'returned', 'overdue') NOT NULL,
   `customer_id` INT NOT NULL,

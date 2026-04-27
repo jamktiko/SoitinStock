@@ -1,0 +1,111 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SoitinStock - RDS MySQL (Private, secure, minimal cost)'
+
+Parameters:
+    DBName:
+        Type: String
+        Default: soitinstockdb
+
+    DBUser:
+        Type: String
+        Default: admin
+
+    DBPassword:
+        Type: String
+        NoEcho: true
+        Description: 'Database password (temporary, move to Secrets Manager later)'
+
+    VPCId:
+        Type: AWS::EC2::VPC::Id
+
+    PrivateSubnet1:
+        Type: AWS::EC2::Subnet::Id
+
+    PrivateSubnet2:
+        Type: AWS::EC2::Subnet::Id
+
+    EBInstanceSecurityGroup:
+        Type: AWS::EC2::SecurityGroup::Id
+        Description: 'Security group used by Elastic Beanstalk EC2 instances'
+
+Resources:
+    # --------------------------------------------------
+    # DB Subnet Group (REQUIRED for private RDS)
+    # --------------------------------------------------
+    DBSubnetGroup:
+        Type: AWS::RDS::DBSubnetGroup
+        Properties:
+            DBSubnetGroupDescription: 'Private subnets for RDS'
+            SubnetIds:
+                - !Ref PrivateSubnet1
+                - !Ref PrivateSubnet2
+
+    # --------------------------------------------------
+    # RDS Security Group
+    # --------------------------------------------------
+    RDSSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupDescription: 'Allow MySQL access ONLY from EB instances'
+            VpcId: !Ref VPCId
+
+            SecurityGroupIngress:
+                - IpProtocol: tcp
+                  FromPort: 3306
+                  ToPort: 3306
+                  SourceSecurityGroupId:
+                      Fn::ImportValue: SoitinStock-EBSecurityGroup
+
+    # --------------------------------------------------
+    # RDS Instance
+    # --------------------------------------------------
+    MyDB:
+        Type: AWS::RDS::DBInstance
+        Properties:
+            DBInstanceIdentifier: soitinstock-db
+
+            Engine: mysql
+            EngineVersion: '8.0'
+
+            DBInstanceClass: db.t4g.micro # cheapest ARM option
+
+            AllocatedStorage: 20
+            StorageType: gp3
+
+            DBName: !Ref DBName
+
+            MasterUsername: !Ref DBUser
+            MasterUserPassword: !Ref DBPassword
+
+            VPCSecurityGroups:
+                - !Ref RDSSecurityGroup
+
+            DBSubnetGroupName: !Ref DBSubnetGroup
+
+            PubliclyAccessible: false # 🔒 IMPORTANT
+            MultiAZ: false # cost-saving
+            BackupRetentionPeriod: 0 # dev mode (no backups)
+
+            DeletionProtection: false # allow deletion for dev
+
+Outputs:
+    DBEndpoint:
+        Description: 'RDS endpoint'
+        Value: !GetAtt MyDB.Endpoint.Address
+        Export:
+            Name: SoitinStock-RDSEndpoint
+
+    DBPort:
+        Value: !GetAtt MyDB.Endpoint.Port
+        Export:
+            Name: SoitinStock-RDSPort
+
+    DBName:
+        Value: !Ref DBName
+        Export:
+            Name: SoitinStock-DBName
+
+    DBUser:
+        Value: !Ref DBUser
+        Export:
+            Name: SoitinStock-DBUser

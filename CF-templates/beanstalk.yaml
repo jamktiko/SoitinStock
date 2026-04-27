@@ -26,6 +26,12 @@ Parameters:
         Type: AWS::EC2::Subnet::Id
         Description: Public subnet for EB instance (default VPC subnet)
 
+    # temporary password setup for now, later to Secrets Manager or env var.
+    DBPassword:
+        Type: String
+        NoEcho: true
+        Description: 'Database password (temporary, move to Secrets Manager/env variables later)'
+
 Resources:
     # --------------------------------------------------------------------
     # Elastic Beanstalk Application
@@ -76,6 +82,12 @@ Resources:
                 - Namespace: aws:autoscaling:launchconfiguration
                   OptionName: DisableIMDSv1
                   Value: 'true'
+
+                # custom security group for EB instances, persistent, fixing RDS access
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: SecurityGroups
+                  Value:
+                      Fn::ImportValue: SoitinStock-EBSecurityGroup
 
                 # -------------------------
                 # SSH Configuration
@@ -169,23 +181,27 @@ Resources:
 
                 - Namespace: aws:elasticbeanstalk:application:environment
                   OptionName: RDS_HOST
-                  Value: ''
+                  Value:
+                      Fn::ImportValue: SoitinStock-RDSEndpoint
 
                 - Namespace: aws:elasticbeanstalk:application:environment
                   OptionName: RDS_PORT
-                  Value: ''
+                  Value:
+                      Fn::ImportValue: SoitinStock-RDSPort
 
                 - Namespace: aws:elasticbeanstalk:application:environment
                   OptionName: RDS_DB_NAME
-                  Value: ''
+                  Value:
+                      Fn::ImportValue: SoitinStock-DBName
 
                 - Namespace: aws:elasticbeanstalk:application:environment
                   OptionName: RDS_USERNAME
-                  Value: ''
+                  Value:
+                      Fn::ImportValue: SoitinStock-DBUser
 
                 - Namespace: aws:elasticbeanstalk:application:environment
                   OptionName: RDS_PASSWORD
-                  Value: ''
+                  Value: !Ref DBPassword
 
 Outputs:
     EnvironmentURL:
