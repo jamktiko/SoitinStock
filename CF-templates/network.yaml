@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SoitinStock - Network Stack (Default VPC Extension for RDS)'
+
+Parameters:
+    VPCId:
+        Type: AWS::EC2::VPC::Id
+        Description: Default VPC ID
+
+Resources:
+    # --------------------------------------------------------------------
+    # Private Subnet A (AZ 1a)
+    # --------------------------------------------------------------------
+    PrivateSubnetA:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPCId
+            AvailabilityZone: !Select [0, !GetAZs '']
+            CidrBlock: 172.31.64.0/20
+            MapPublicIpOnLaunch: false
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-Private-A
+
+    # --------------------------------------------------------------------
+    # Private Subnet B (AZ 1b)
+    # --------------------------------------------------------------------
+    PrivateSubnetB:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPCId
+            AvailabilityZone: !Select [1, !GetAZs '']
+            CidrBlock: 172.31.80.0/20
+            MapPublicIpOnLaunch: false
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-Private-B
+
+    # --------------------------------------------------------------------
+    # DB Subnet Group (required for RDS)
+    # --------------------------------------------------------------------
+    DBSubnetGroup:
+        Type: AWS::RDS::DBSubnetGroup
+        Properties:
+            DBSubnetGroupDescription: 'SoitinStock RDS subnet group'
+            SubnetIds:
+                - !Ref PrivateSubnetA
+                - !Ref PrivateSubnetB
+            DBSubnetGroupName: soitinstock-db-subnet-group
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-DBSubnetGroup
+
+Outputs:
+    PrivateSubnetAId:
+        Value: !Ref PrivateSubnetA
+        Export:
+            Name: SoitinStock-PrivateSubnetA
+
+    PrivateSubnetBId:
+        Value: !Ref PrivateSubnetB
+        Export:
+            Name: SoitinStock-PrivateSubnetB
+
+    DBSubnetGroupName:
+        Value: !Ref DBSubnetGroup
+        Export:
+            Name: SoitinStock-DBSubnetGroup
