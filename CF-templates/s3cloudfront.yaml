@@ -1,0 +1,103 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SoitinStock - Frontend (S3 + CloudFront)'
+
+Resources:
+    # -------------------------
+    # S3 Bucket (PRIVATE)
+    # -------------------------
+    FrontendBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: !Sub 'soitinstock-frontend-${AWS::AccountId}'
+
+            VersioningConfiguration:
+                Status: Enabled
+
+            PublicAccessBlockConfiguration:
+                BlockPublicAcls: true
+                BlockPublicPolicy: true
+                IgnorePublicAcls: true
+                RestrictPublicBuckets: true
+
+    # -------------------------
+    # CloudFront Origin Access Control
+    # -------------------------
+    FrontendOAC:
+        Type: AWS::CloudFront::OriginAccessControl
+        Properties:
+            OriginAccessControlConfig:
+                Name: SoitinStock-OAC
+                OriginAccessControlOriginType: s3
+                SigningBehavior: always
+                SigningProtocol: sigv4
+
+    # -------------------------
+    # CloudFront Distribution
+    # -------------------------
+    FrontendDistribution:
+        Type: AWS::CloudFront::Distribution
+        Properties:
+            DistributionConfig:
+                Enabled: true
+                DefaultRootObject: index.html
+
+                Origins:
+                    - Id: S3Origin
+                      DomainName: !GetAtt FrontendBucket.RegionalDomainName
+                      OriginAccessControlId: !Ref FrontendOAC
+                      S3OriginConfig: {}
+
+                DefaultCacheBehavior:
+                    TargetOriginId: S3Origin
+                    ViewerProtocolPolicy: redirect-to-https
+
+                    AllowedMethods:
+                        - GET
+                        - HEAD
+
+                    CachedMethods:
+                        - GET
+                        - HEAD
+
+                    ForwardedValues:
+                        QueryString: false
+                        Cookies:
+                            Forward: none
+
+                # SPA ROUTING FIX (IMPORTANT)
+                CustomErrorResponses:
+                    - ErrorCode: 403
+                      ResponseCode: 200
+                      ResponsePagePath: /index.html
+                    - ErrorCode: 404
+                      ResponseCode: 200
+                      ResponsePagePath: /index.html
+
+                PriceClass: PriceClass_100 # cheapest (EU/US only)
+
+    # -------------------------
+    # Bucket Policy (ALLOW CLOUDFRONT ONLY)
+    # -------------------------
+    FrontendBucketPolicy:
+        Type: AWS::S3::BucketPolicy
+        Properties:
+            Bucket: !Ref FrontendBucket
+            PolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                    - Effect: Allow
+                      Principal:
+                          Service: cloudfront.amazonaws.com
+                      Action: s3:GetObject
+                      Resource: !Sub '${FrontendBucket.Arn}/*'
+                      Condition:
+                          StringEquals:
+                              AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${FrontendDistribution}'
+
+Outputs:
+    CloudFrontURL:
+        Description: 'Frontend URL (use this!)'
+        Value: !Sub 'https://${FrontendDistribution.DomainName}'
+
+    BucketName:
+        Value: !Ref FrontendBucket
