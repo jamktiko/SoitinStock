@@ -3,12 +3,16 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ApiService } from './api.service';
+import { NavBar } from './nav-bar/nav-bar';
+import { RouterOutlet, RouterLinkWithHref, RouterLink } from '@angular/router';
+// import { RouterOutlet } from "../../node_modules/@angular/router/types/_router_module-chunk";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrls: ['./app.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NavBar, RouterOutlet],
 })
 export class App implements OnInit {
   private apiService = inject(ApiService); // "Injects" the value of ApiService-component to apiService-property. If there is no value, turns into null
