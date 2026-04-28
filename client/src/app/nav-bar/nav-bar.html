@@ -1,9 +1,9 @@
-<a routerLink="/products/guitar">Guitars</a>
+<!-- <a routerLink="/products/guitar">Guitars</a>
 <a routerLink="/products/piano">Pianos</a>
 <a routerLink="/products/violin">Violins</a>
 <a routerLink="/products/harp">Harps</a>
 <a routerLink="/products/drums">Drums</a>
-<a routerLink="/products/accordion">accordion</a>
+<a routerLink="/products/accordion">accordion</a> -->
 
 <!--routerLink on Angularin direktiivi. Kertoo selaimelle
 että tämä ei ole tavallinen linkki jossa olisi href, vaan
@@ -12,12 +12,10 @@ muuttujia, joihin vaihtuu arvoja, sen ympärillä pitää olla hakasulut.
 page on muuttuja, joka esiintyy routerLinkin arvona olevassa taulukossa.
 Dynaamisen reitin kaksi osaa ovat taulukossa pilkulla erotettuna.
 -->
-<!-- <nav>
- 
+<nav>
   @for (page of content; track $index) {
     <span>
-      <a [routerLink]="['/page', page.id]"> {{ page.name }}</a>
+      <a [routerLink]="['/page', page.id_type]"> {{ page.type_name }}</a>
     </span>
   }
-</nav> 
--->
+</nav>

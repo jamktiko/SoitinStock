@@ -8,7 +8,7 @@ import { Instruments, RawInstrumentType, RawInstrument } from './.models/instrum
   providedIn: 'root',
 })
 export class ContentService {
-  apiurl = 'api/content';
+  apiurl = 'api/productCategorys'; // original api/content
   constructor(
     private http: HttpClient, // voi käyttää myös private http = inject(HttpClient)
   ) {}
