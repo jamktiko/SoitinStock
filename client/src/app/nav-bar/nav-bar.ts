@@ -1,7 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Content } from '../content';
+
 import { RouterLink } from '@angular/router';
 import { ContentService } from '../content.service';
+import { RawInstrumentType, RawInstrument } from '../.models/instrument';
 
 @Component({
   standalone: true,
@@ -11,10 +12,10 @@ import { ContentService } from '../content.service';
   styleUrl: './nav-bar.css',
 })
 export class NavBar implements OnInit {
-  content: Content[] | undefined;
+  content: RawInstrumentType[] | undefined;
   //Otetaan contentsevice käyttöön ja haetaan content aina, kun komponentti latautuu muistiin
   private cservice = inject(ContentService);
   ngOnInit(): void {
-    this.cservice.GetContents().subscribe((data) => (this.content = data));
+    this.cservice.GetContentTypes().subscribe((data) => (this.content = data));
   }
 }

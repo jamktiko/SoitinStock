@@ -3,7 +3,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-import { Content } from './content';
+import { Instruments, RawInstrumentType, RawInstrument } from './.models/instrument';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,14 +14,17 @@ export class ContentService {
   ) {}
 
   // Tehdään palvelimelle pyyntö, jolla haetaan koko content-taulukko
-  GetContents(): Observable<Content[]> {
-    return this.http.get<Content[]>(this.apiurl);
+  GetContents(): Observable<RawInstrument[]> {
+    return this.http.get<RawInstrument[]>(this.apiurl);
     //virheenkäsittely voitaisiin tehdä tähän
   }
 
+  GetContentTypes(): Observable<RawInstrumentType[]> {
+    return this.http.get<RawInstrumentType[]>(this.apiurl);
+  }
   //Hakee yhden content-olion id:n perusteella
-  GetContentByID(contentid: string): Observable<Content> {
-    return this.http.get<Content>(this.apiurl + '/' + contentid).pipe(
+  GetContentByID(contentid: string): Observable<Instruments> {
+    return this.http.get<Instruments>(this.apiurl + '/' + contentid).pipe(
       catchError((error) => {
         console.error('Tapahtui virhe: ', error);
         return throwError(() => new Error(error.message || 'Tuntematon virhe'));

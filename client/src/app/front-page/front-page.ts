@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 // ContentServicen avulla saadaan palvelimelta sisältö komponenttiin
 // import { ContentService } from '../content.service';
-import { Content } from '../content';
+import { Instruments } from '../.models/instrument';
 
 @Component({
   selector: 'app-page',
@@ -12,7 +12,7 @@ import { Content } from '../content';
 })
 export class FrontPage implements OnInit {
   // esitettävän "sivun" sisältö tulee pageContent-muuttujaan
-  frontpagecontent: Content | undefined;
+  frontpagecontent: Instruments | undefined;
   // DI:llä otetaan käyttöön kaksi oliota
   // cservice = inject(ContentService);
   route = inject(ActivatedRoute);
