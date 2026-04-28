@@ -1,6 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'SoitinStock - Frontend (S3 + CloudFront)'
 
+Parameters:
+    BackendDomainName:
+        Type: String
+        Description: 'API backend domain (Elastic Beanstalk URL or ALB DNS)'
+
 Resources:
     # -------------------------
     # S3 Bucket (PRIVATE)
@@ -42,14 +47,54 @@ Resources:
                 DefaultRootObject: index.html
 
                 Origins:
+                    # Frontend (S3)
                     - Id: S3Origin
                       DomainName: !GetAtt FrontendBucket.RegionalDomainName
                       OriginAccessControlId: !Ref FrontendOAC
                       S3OriginConfig: {}
 
+                    # Backend API (Elastic Beanstalk)
+                    - Id: ApiOrigin
+                      DomainName: !Ref BackendDomainName
+                      CustomOriginConfig:
+                          HTTPPort: 80
+                          HTTPSPort: 443
+                          OriginProtocolPolicy: http-only
+
+                # -------------------------
+                # API ROUTING
+                # -------------------------
+                CacheBehaviors:
+                    - PathPattern: /api/*
+                      TargetOriginId: ApiOrigin
+
+                      ViewerProtocolPolicy: allow-all
+
+                      AllowedMethods:
+                          - GET
+                          - HEAD
+                          - OPTIONS
+                          - PUT
+                          - POST
+                          - PATCH
+                          - DELETE
+
+                      CachedMethods:
+                          - GET
+                          - HEAD
+
+                      ForwardedValues:
+                          QueryString: true
+                          Cookies:
+                              Forward: all
+
+                # -------------------------
+                # DEFAULT (FRONTEND)
+                # -------------------------
                 DefaultCacheBehavior:
                     TargetOriginId: S3Origin
-                    ViewerProtocolPolicy: redirect-to-https
+
+                    ViewerProtocolPolicy: allow-all
 
                     AllowedMethods:
                         - GET
@@ -64,7 +109,9 @@ Resources:
                         Cookies:
                             Forward: none
 
-                # SPA ROUTING FIX (IMPORTANT)
+                # -------------------------
+                # SPA ROUTING FIX
+                # -------------------------
                 CustomErrorResponses:
                     - ErrorCode: 403
                       ResponseCode: 200
@@ -73,7 +120,7 @@ Resources:
                       ResponseCode: 200
                       ResponsePagePath: /index.html
 
-                PriceClass: PriceClass_100 # cheapest (EU/US only)
+                PriceClass: PriceClass_100
 
     # -------------------------
     # Bucket Policy (ALLOW CLOUDFRONT ONLY)
