@@ -1,0 +1,217 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SoitinStock - Elastic Beanstalk (ALB + HTTPS enabled)'
+
+# FUTURE, NOT YET IMPLEMENTED!!!!!
+
+Parameters:
+    ApplicationName:
+        Type: String
+        Default: SoitinStock
+
+    EnvironmentName:
+        Type: String
+        Default: SoitinStock-env
+
+    InstanceType:
+        Type: String
+        Default: t4g.small
+
+    KeyPairName:
+        Type: String
+        Default: vockey
+
+    VPCId:
+        Type: AWS::EC2::VPC::Id
+        Description: Default VPC is fine for now
+
+    SubnetId:
+        Type: AWS::EC2::Subnet::Id
+        Description: Default public subnet (used for ALB + EB in default VPC)
+
+    DBPassword:
+        Type: String
+        NoEcho: true
+
+    # 🔥 NEW: ACM certificate for HTTPS
+    SSLCertificateArn:
+        Type: String
+        Description: ARN of ACM certificate (must be in same region)
+
+Resources:
+    # --------------------------------------------------------------------
+    # Elastic Beanstalk Application
+    # --------------------------------------------------------------------
+    EBApplication:
+        Type: AWS::ElasticBeanstalk::Application
+        Properties:
+            ApplicationName: !Ref ApplicationName
+
+    # --------------------------------------------------------------------
+    # Elastic Beanstalk Environment
+    # --------------------------------------------------------------------
+    EBEnvironment:
+        Type: AWS::ElasticBeanstalk::Environment
+        Properties:
+            ApplicationName: !Ref EBApplication
+            EnvironmentName: !Ref EnvironmentName
+
+            # 🔥 CHANGED: Enable Load Balancer (ALB instead of direct EC2)
+            SolutionStackName: '64bit Amazon Linux 2023 v6.10.1 running Node.js 24'
+
+            OptionSettings:
+                # =========================================================
+                # 🔥 CHANGED: Environment now uses ALB instead of single instance
+                # =========================================================
+                - Namespace: aws:elasticbeanstalk:environment
+                  OptionName: EnvironmentType
+                  Value: LoadBalanced
+
+                - Namespace: aws:elasticbeanstalk:environment
+                  OptionName: ServiceRole
+                  Value: !ImportValue SoitinStock-ServiceRoleArn
+
+                # =========================================================
+                # EC2 CONFIG (unchanged)
+                # =========================================================
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: InstanceType
+                  Value: !Ref InstanceType
+
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: IamInstanceProfile
+                  Value: !ImportValue SoitinStock-InstanceProfileName
+
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: EC2KeyName
+                  Value: !Ref KeyPairName
+
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: DisableIMDSv1
+                  Value: 'true'
+
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: SecurityGroups
+                  Value:
+                      Fn::ImportValue: SoitinStock-EBSecurityGroup
+
+                # =========================================================
+                # 🔥 NEW: LOAD BALANCER CONFIGURATION (ALB)
+                # =========================================================
+
+                # Use ALB instead of classic ELB
+                - Namespace: aws:elasticbeanstalk:environment
+                  OptionName: LoadBalancerType
+                  Value: application
+
+                # Attach HTTPS listener
+                - Namespace: aws:elbv2:listener:443
+                  OptionName: ListenerEnabled
+                  Value: 'true'
+
+                - Namespace: aws:elbv2:listener:443
+                  OptionName: Protocol
+                  Value: HTTPS
+
+                - Namespace: aws:elbv2:listener:443
+                  OptionName: SSLCertificateArns
+                  Value: !Ref SSLCertificateArn
+
+                # Redirect HTTP → HTTPS
+                - Namespace: aws:elbv2:listener:80
+                  OptionName: ListenerEnabled
+                  Value: 'true'
+
+                - Namespace: aws:elbv2:listener:80
+                  OptionName: Protocol
+                  Value: HTTP
+
+                - Namespace: aws:elbv2:listener:80
+                  OptionName: DefaultProcess
+                  Value: default
+
+                # =========================================================
+                # CAPACITY (unchanged)
+                # =========================================================
+                - Namespace: aws:autoscaling:asg
+                  OptionName: MinSize
+                  Value: '1'
+
+                - Namespace: aws:autoscaling:asg
+                  OptionName: MaxSize
+                  Value: '1'
+
+                # =========================================================
+                # VPC CONFIG (UNCHANGED - using default subnets)
+                # =========================================================
+                - Namespace: aws:ec2:vpc
+                  OptionName: VPCId
+                  Value: !Ref VPCId
+
+                - Namespace: aws:ec2:vpc
+                  OptionName: Subnets
+                  Value: !Ref SubnetId
+
+                - Namespace: aws:ec2:vpc
+                  OptionName: ELBSubnets
+                  Value: !Ref SubnetId
+
+                - Namespace: aws:ec2:vpc
+                  OptionName: ELBScheme
+                  Value: public
+
+                - Namespace: aws:ec2:vpc
+                  OptionName: AssociatePublicIpAddress
+                  Value: 'true'
+
+                # =========================================================
+                # PROXY / APP (unchanged)
+                # =========================================================
+                - Namespace: aws:elasticbeanstalk:environment:proxy
+                  OptionName: ProxyServer
+                  Value: nginx
+
+                # =========================================================
+                # ENV VARS (unchanged)
+                # =========================================================
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: NODE_ENV
+                  Value: development
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: COGNITO_USER_POOL_ID
+                  Value:
+                      Fn::ImportValue: SoitinStock-UserPoolId
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: COGNITO_CLIENT_ID
+                  Value:
+                      Fn::ImportValue: SoitinStock-UserPoolClientId
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: RDS_HOST
+                  Value:
+                      Fn::ImportValue: SoitinStock-RDSEndpoint
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: RDS_PORT
+                  Value:
+                      Fn::ImportValue: SoitinStock-RDSPort
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: RDS_DB_NAME
+                  Value:
+                      Fn::ImportValue: SoitinStock-DBName
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: RDS_USERNAME
+                  Value:
+                      Fn::ImportValue: SoitinStock-DBUser
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: RDS_PASSWORD
+                  Value: !Ref DBPassword
+
+Outputs:
+    EnvironmentURL:
+        Description: 'Elastic Beanstalk HTTPS environment URL'
+        Value: !GetAtt EBEnvironment.EndpointURL

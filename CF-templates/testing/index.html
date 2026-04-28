@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+    <head>
+        <title>SoitinStock Test</title>
+    </head>
+    <body>
+        <h1>Frontend to Backend Test 4</h1>
+
+        <button onclick="testBackend()">Test Backend Connection</button>
+
+        <pre id="output"></pre>
+
+        <script>
+            async function testBackend() {
+                const output = document.getElementById('output');
+
+                try {
+                    const response = await fetch('/api/test');
+                    const data = await response.json();
+
+                    output.textContent = JSON.stringify(data, null, 2);
+                } catch (err) {
+                    output.textContent = 'Error: ' + err.message;
+                }
+            }
+        </script>
+    </body>
+</html>
