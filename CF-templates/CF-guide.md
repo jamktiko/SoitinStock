@@ -26,3 +26,4 @@ Template naming convention: SoitinStock-ServiceName
 
 When terminating stacks, remember to terminate additional awseb stack which is automatically generated on Elastic Beanstalk stack creation.
 Terminate following stacks:
+SoitinStock-BeanstalkEnv
