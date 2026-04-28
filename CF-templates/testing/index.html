@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+    <head>
+        <title>SoitinStock Test</title>
+    </head>
+    <body>
+        <h1>Frontend to Backend Test 4</h1>
+
+        <button onclick="testBackend()">Test Backend Connection</button>
+
+        <pre id="output"></pre>
+
+        <script>
+            async function testBackend() {
+                const output = document.getElementById('output');
+
+                try {
+                    /*Hardcoded URL, not for real use later.*/
+                    const response = await fetch(
+                        'https://soitinstock-env.eba-25gai4gn.eu-north-1.elasticbeanstalk.com/db-test',
+                    );
+                    const data = await response.json();
+
+                    output.textContent = JSON.stringify(data, null, 2);
+                } catch (err) {
+                    output.textContent = 'Error: ' + err.message;
+                }
+            }
+        </script>
+    </body>
+</html>
