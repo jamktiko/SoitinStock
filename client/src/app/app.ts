@@ -2,7 +2,7 @@ import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/cor
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { ApiService } from './api.service';
+import { ApiService } from './apiService';
 import { NavBar } from './nav-bar/nav-bar';
 import { RouterOutlet, RouterLinkWithHref, RouterLink } from '@angular/router';
 // import { RouterOutlet } from "../../node_modules/@angular/router/types/_router_module-chunk";

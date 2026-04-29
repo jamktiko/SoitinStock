@@ -1,11 +1,21 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+// Delete the parts with comments lines after API implementation
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners,
+  // importProvidersFrom, // this
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { catchError, map } from 'rxjs/operators';
 
 import { routes } from './app.routes';
+// import { InMemoryDataService } from './inMemoryDataService'; //this
+// import { InMemoryWebApiModule } from 'angular-in-memory-web-api'; // this
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes)
-  ]
+    provideRouter(routes),
+
+    // importProvidersFrom(InMemoryWebApiModule.forRoot(InMemoryDataService, { delay: 500 })), //this
+  ],
 };
