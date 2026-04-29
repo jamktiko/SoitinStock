@@ -8,7 +8,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:3000/api/test'; // Backend server url
+  private apiUrl = 'http://localhost:8080'; // Backend server url
 
   constructor(private http: HttpClient) {}
 
