@@ -17,7 +17,7 @@ import { RouterOutlet, RouterLinkWithHref, RouterLink } from '@angular/router';
 export class App implements OnInit {
   private apiService = inject(ApiService); // "Injects" the value of ApiService-component to apiService-property. If there is no value, turns into null
   message = toSignal(
-    this.apiService.getInstruments().pipe(
+    this.apiService.getMessage().pipe(
       catchError((error) => {
         console.error('API Error Details:', error);
         return of(`Error: ${error.status || 'Unknown'}`);

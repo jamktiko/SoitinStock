@@ -8,18 +8,18 @@ import { ProductStore } from '../instrumentstore';
   styleUrl: './products.css',
 })
 export class Products {
-  // injektoidaan eli liitetään storet komponenttiin
-  // komponentilla ei ole omaa tilaa, vaan tila on storessa
+  // Inject, that is, connect the store to the component
+  // The component has no local state; the state is in the store
   readonly pstore = inject(ProductStore);
   // readonly cstore = inject();
 
   constructor() {}
 
   // addToCart(p: Products) {
-  //   // vähennetään tuotteen määrää varastossa
+  //   // Reduce product quantity in inventory
   //   this.pstore.reduceAmount(p.id);
-  //   // uusi tuote ostoskoriin. Määrä alustetaan nollaksi, joka lisääntyy
-  //   // aina yhdellä kun uusi tuote saapuu koriin
+  //   // New product to shopping cart. Quantity is initialized to zero, which increases
+  //   // by one each time a new product arrives in the cart
   //   const prod = {
   //     id: p.id,
   //     name: p.name,
@@ -27,7 +27,7 @@ export class Products {
   //     amount: 0,
   //     totalprice: p.price,
   //   };
-  //   // ostoskorin tila päivittyy cartstoreen
+  //   // Shopping cart state updates to cart store
   //   // this.cstore.addToCart(prod);
   // }
 }

@@ -1,4 +1,4 @@
-// Eri kategorian näyttämistä varten
+// For displaying different categories
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -8,26 +8,26 @@ import { Instruments, RawInstrumentType, RawInstrument } from './.models/instrum
   providedIn: 'root',
 })
 export class ContentService {
-  apiurl = 'api/productCategorys'; // original api/content
+  // apiurl = 'api/productCategorys'; // original api/content
   constructor(
-    private http: HttpClient, // voi käyttää myös private http = inject(HttpClient)
+    private http: HttpClient, // can also use private http = inject(HttpClient)
   ) {}
 
-  // Tehdään palvelimelle pyyntö, jolla haetaan koko content-taulukko
+  // Make a request to table to get the entire content.
   GetContents(): Observable<RawInstrument[]> {
-    return this.http.get<RawInstrument[]>(this.apiurl);
-    //virheenkäsittely voitaisiin tehdä tähän
+    return this.http.get<RawInstrument[]>('api/instruments');
+    // Error handling could be added here
   }
 
   GetContentTypes(): Observable<RawInstrumentType[]> {
-    return this.http.get<RawInstrumentType[]>(this.apiurl);
+    return this.http.get<RawInstrumentType[]>('api/productCategorys');
   }
-  //Hakee yhden content-olion id:n perusteella
+  // Gets a single content object by its id
   GetContentByID(contentid: string): Observable<Instruments> {
-    return this.http.get<Instruments>(this.apiurl + '/' + contentid).pipe(
+    return this.http.get<Instruments>('api/instruments' + '/' + contentid).pipe(
       catchError((error) => {
-        console.error('Tapahtui virhe: ', error);
-        return throwError(() => new Error(error.message || 'Tuntematon virhe'));
+        console.error('An error occurred: ', error);
+        return throwError(() => new Error(error.message || 'Unknown error'));
       }),
     );
   }

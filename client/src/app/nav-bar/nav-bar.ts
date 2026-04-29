@@ -13,7 +13,7 @@ import { RawInstrumentType, RawInstrument } from '../.models/instrument';
 })
 export class NavBar implements OnInit {
   content: RawInstrumentType[] | undefined;
-  //Otetaan contentsevice käyttöön ja haetaan content aina, kun komponentti latautuu muistiin
+  // ContentService is used and content is fetched whenever the component loads into memory
   private cservice = inject(ContentService);
   ngOnInit(): void {
     this.cservice.GetContentTypes().subscribe((data) => (this.content = data));

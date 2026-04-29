@@ -1,14 +1,14 @@
 /* 
-PRODUCTSTORE
+PRODUCT STORE
 
-NgRx Signalstore-kirjaston avulla luotu funktionaalinen store, joka 
-säilyttää sovelluksen tuotteiden tilaa. Tuotteet haetaan valetietokannasta
-storeen, kun sovellus käynnistyy.
+A functional store created with NgRx Signalstore library that maintains the 
+application's product state. Products are fetched from the mock database
+to the store when the application starts.
 
-Store on siis eräänlainen tiedon välivarasto, jonka ansiosta ei tarvitse jatkuvasti 
-päivittää tietokantaa. Saman tiedon välittäminen useisiin komponentteihin on 
-helpompaa, koska ei tarvitse siirtää tietoa komponenttien välillä. Tieto
-kulkee aina pelkästään storesta komponentteihin tai komponenteista storeen.
+So the store is a kind of data buffer, thanks to which we don't need to constantly 
+update the database. Passing the same data to multiple components is easier, 
+because we don't need to transfer data between components. Data always flows 
+only from the store to components or from components to the store.
 */
 
 import { inject } from '@angular/core';
@@ -20,41 +20,41 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 const initialState: Instruments = { instruments: [] };
 /*
-ProductStore on funktionaalinen store, eli funktio,
-jonka argumentteina on funktioita ja olioita
+ProductStore is a functional store, that is, a function
+whose arguments are functions and objects
 */
 export const ProductStore = signalStore(
   { providedIn: 'root' },
-  // storen alkutila, jonka päälle tulee heti uusi tila kannasta
+  // Store's initial state, on top of which comes a new state from the database
   withState(initialState),
-  // storen elinkaarimetodit eli hookit
+  // Store's lifecycle methods, that is, hooks
   withHooks({
-    /* onInit-hookissa voidaan suorittaa tapahtumat jotka tapahtuvat
-       kun store ladataan muistiin. */
+    /* In onInit hook we can execute events that occur
+       when store is loaded into memory. */
     onInit(store, pservice = inject(ContentService)) {
-      // haetaan tuotteet kannasta storeen reaktiivisesti
+      // Fetch products from database to store reactively
       pservice
         .GetContents()
         .pipe(
           takeUntilDestroyed(),
-          // patchState päivittää storen tilaa
+          // patchState updates the store state
           tap((prods) => patchState(store, { instruments: prods })),
         )
         .subscribe();
     },
-    /* onDestroy-hookissa voidaan suorittaa tapahtumat jotka tapahtuvat
-       kun store poistuu muistista. Esim. tuotteiden tilan tallennus
-       kantaan kun sovelluksen käyttö lopetetaan.
+    /* In onDestroy hook we can execute events that occur
+       when store is removed from memory. For example, saving product state
+       to database when application use is terminated.
     */
     onDestroy(store) {
-      // tuotteiden tilan tallennus kantaan voisi olla tässä
-      console.log('ShopStore poistettu muistista', store);
+      // Product state saving to database could be here
+      console.log('ShopStore removed from memory', store);
     },
   }),
-  /* Storen varsinaiset tietoa käsittelevät metodit ovat
-     withMethods-funktiossa. withMethods-funktio sisältää anonyymin funktion, joka sisältää 
-     storen tietoa käsittelevät metodit. products ja store tulevat argumentteina
-     sisään. 
+  /* The store's actual data handling methods are in the
+     withMethods function. The withMethods function contains an anonymous function that contains 
+     the store's data handling methods. products and store come in as
+     arguments. 
   */
   // withMethods(({ instruments, ...store }) => ({
   //   reduceAmount(id: number) {
