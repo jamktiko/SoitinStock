@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-// ActivatedRouten avulla saadaan reitistä id komponenttiin
+// With ActivatedRoute we get id from route to component
 import { ActivatedRoute } from '@angular/router';
-// ContentServicen avulla saadaan palvelimelta sisältö komponenttiin
-// import { ContentService } from '../content.service';
-import { Content } from '../content';
+// With ContentService we get content from server to component
+import { ContentService } from '../content.service';
+import { Instruments, RawInstrument } from '../.models/instrument';
 
 @Component({
   selector: 'app-page',
@@ -11,26 +11,32 @@ import { Content } from '../content';
   styleUrl: './front-page.css',
 })
 export class FrontPage implements OnInit {
-  // esitettävän "sivun" sisältö tulee pageContent-muuttujaan
-  frontpagecontent: Content | undefined;
-  // DI:llä otetaan käyttöön kaksi oliota
-  // cservice = inject(ContentService);
-  route = inject(ActivatedRoute);
+  // The content of the "page" to be displayed comes to pageContent variable
+  frontpagecontent: Instruments | undefined;
+  // With DI we initialize two objects
+  instruments: RawInstrument[] | undefined;
+  private cservice = inject(ContentService);
+  private route = inject(ActivatedRoute);
   // user = inject(user);
   /*
-  Kun komponentti latautuu muistiin, haetaan reitistä id,
-  jonka perusteella haetaan komponenttiin id:tä vastaava sisältö.
+  When component loads into memory, we get id from route,
+  based on which we fetch the corresponding content to the component.
   */
   ngOnInit(): void {
-    // // Haetaan sivun id reitistä.
-    // this.route.paramMap.subscribe((params) => {
-    //   const pageId = Number(params.get('pageId'));
-    //   // Haetaan sisältötaulukko palvelimelta. Se tulee sisään content-muuttujassa
-    //   this.cservice.GetContents().subscribe((content) => {
-    //     // Haetaan sisältötaulukosta olio, jonka id on sama kuin reitistä haettu id.
-    //     // valitun "sivun" sisältö menee pageContent-muuttujaan
-    //     this.pageContent = content.find((content) => content.id === pageId);
-    //   });
-    // });
+    this.route.paramMap.subscribe((params) => {
+      const category = params.get('category');
+
+      if (category) {
+        // Use the service method that handles filtering
+        this.cservice.GetInstrumentsByCategory(category).subscribe((data) => {
+          this.instruments = data;
+        });
+      } else {
+        // Load all instruments for home page
+        this.cservice.GetContents().subscribe((data) => {
+          this.instruments = data;
+        });
+      }
+    });
   }
 }
