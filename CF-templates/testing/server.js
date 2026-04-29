@@ -1,56 +1,75 @@
+/* untested */
+
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
 
 const app = express();
-app.use(cors());
-
-const port = process.env.PORT || 8080;
 
 // --------------------------------------------------
-// Root test
+// CONFIG
+// --------------------------------------------------
+const port = process.env.PORT || 8080;
+
+// CloudFront makes CORS mostly unnecessary, but keep for safety
+app.use(cors());
+app.use(express.json());
+
+// --------------------------------------------------
+// ROOT (used by EB health / direct access)
 // --------------------------------------------------
 app.get('/', (req, res) => {
     res.send('Backend is running');
 });
 
 // --------------------------------------------------
-// DB READ test route (existing)
+// SIMPLE TEST (your working version)
 // --------------------------------------------------
-app.get('/db-test', async (req, res) => {
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'Hello from Backend!' });
+});
+
+// --------------------------------------------------
+// DB CONNECTION HELPER (avoid repetition)
+// --------------------------------------------------
+async function getConnection() {
+    return mysql.createConnection({
+        host: process.env.RDS_HOST,
+        user: process.env.RDS_USERNAME,
+        password: process.env.RDS_PASSWORD,
+        database: process.env.RDS_DB_NAME,
+        port: process.env.RDS_PORT,
+    });
+}
+
+// --------------------------------------------------
+// DB READ test
+// --------------------------------------------------
+app.get('/api/db-test', async (req, res) => {
     try {
-        const connection = await mysql.createConnection({
-            host: process.env.RDS_HOST,
-            user: process.env.RDS_USERNAME,
-            password: process.env.RDS_PASSWORD,
-            database: process.env.RDS_DB_NAME,
-            port: process.env.RDS_PORT,
-        });
+        const connection = await getConnection();
 
         const [rows] = await connection.execute('SELECT 1 as test');
+
         await connection.end();
 
-        res.json({ success: true, result: rows });
+        res.json({
+            success: true,
+            result: rows,
+        });
     } catch (err) {
-        console.error(err);
+        console.error('DB TEST ERROR:', err);
         res.status(500).json({ error: err.message });
     }
 });
 
 // --------------------------------------------------
-// DB WRITE + READ test route (NEW)
+// DB WRITE + READ test
 // --------------------------------------------------
-app.get('/db-write-test', async (req, res) => {
+app.get('/api/db-write-test', async (req, res) => {
     try {
-        const connection = await mysql.createConnection({
-            host: process.env.RDS_HOST,
-            user: process.env.RDS_USERNAME,
-            password: process.env.RDS_PASSWORD,
-            database: process.env.RDS_DB_NAME,
-            port: process.env.RDS_PORT,
-        });
+        const connection = await getConnection();
 
-        // Create test table if it doesn't exist
         await connection.execute(`
             CREATE TABLE IF NOT EXISTS test_table (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -59,13 +78,11 @@ app.get('/db-write-test', async (req, res) => {
             );
         `);
 
-        // Insert test row
         await connection.execute(
             `INSERT INTO test_table (message) VALUES (?)`,
             ['Hello from EB test'],
         );
 
-        // Read latest rows
         const [rows] = await connection.execute(
             `SELECT * FROM test_table ORDER BY id DESC LIMIT 5`,
         );
@@ -78,13 +95,13 @@ app.get('/db-write-test', async (req, res) => {
             data: rows,
         });
     } catch (err) {
-        console.error(err);
+        console.error('DB WRITE ERROR:', err);
         res.status(500).json({ error: err.message });
     }
 });
 
 // --------------------------------------------------
-// Health check
+// HEALTH CHECK (can be used by EB / monitoring)
 // --------------------------------------------------
 app.get('/health', (req, res) => {
     res.json({
@@ -95,30 +112,8 @@ app.get('/health', (req, res) => {
 });
 
 // --------------------------------------------------
-// Start server
+// START SERVER
 // --------------------------------------------------
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
-
-/* TOIMIVA SERVER.JS koodi on tässä säilöttynä!!!
-
-const express = require('express');
-const cors = require('cors');
-const app = express();
-
-const port = parseInt(process.env.PORT || '3000', 10);
-
-// You can actually REMOVE this later when using CloudFront
-app.use(cors());
-
-app.get('/api/test', (req, res) => {
-    res.json({ message: 'Hello from Backend!' });
-});
-
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
-
-
-*/
