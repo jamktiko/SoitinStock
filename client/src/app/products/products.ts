@@ -17,7 +17,7 @@ export class Products {
 
   // addToCart(p: Products) {
   //   // Reduce product quantity in inventory
-  //   this.pstore.reduceAmount(p.id);
+  //   // this.pstore.reduceAmount(p.id);
   //   // New product to shopping cart. Quantity is initialized to zero, which increases
   //   // by one each time a new product arrives in the cart
   //   const prod = {

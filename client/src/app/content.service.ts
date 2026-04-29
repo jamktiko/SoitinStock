@@ -20,7 +20,7 @@ export class ContentService {
   }
 
   GetContentTypes(): Observable<RawInstrumentType[]> {
-    return this.http.get<RawInstrumentType[]>('api/productCategorys');
+    return this.http.get<RawInstrumentType[]>('api/productCategories');
   }
   // Gets a single content object by its id
   GetContentByID(contentid: string): Observable<Instruments> {

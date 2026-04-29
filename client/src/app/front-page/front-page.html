@@ -1,7 +1,8 @@
-<!-- @if (instruments) {
+@if (instruments() && !isLoading()) {
+  <h1>Active page: {{ activeCategory() }}</h1>
 } @else {
-  <h1>Hello user</h1>
-} -->
+  <h1>Loading...</h1>
+}
 
 <!-- } @else {
   @if (user) {
@@ -10,4 +11,4 @@
     <h1>Hello User</h1>
   }
 } -->
-<h1>Hello User</h1>
+<!-- <h1>Hello User</h1> -->
