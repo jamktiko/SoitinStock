@@ -72,20 +72,20 @@ Resources:
                   ToPort: 443
                   CidrIp: 0.0.0.0/0
                 # SSH
+                # - IpProtocol: tcp
+                #   FromPort: 22
+                #   ToPort: 22
+                # CidrIp: YOUR_IP/32 - my IP home
+                # SSH
                 - IpProtocol: tcp
                   FromPort: 22
                   ToPort: 22
-                  # CidrIp: YOUR_IP/32 - my IP home
+                  CidrIp: 172.21.240.1/32 # IP trail
                   # SSH
-                - IpProtocol: tcp
-                  FromPort: 22
-                  ToPort: 22
-                  # CidrIp: YOUR_IP/32 - Minttu's IP home
-                  # SSH
-                - IpProtocol: tcp
-                  FromPort: 22
-                  ToPort: 22
-                  # CidrIp: YOUR_IP/32 - school IP, restrict later or disable SSH entirely
+                # - IpProtocol: tcp
+                #   FromPort: 22
+                #   ToPort: 22
+                # CidrIp: YOUR_IP/32 - school IP, restrict later or disable SSH entirely
 
 Outputs:
     PrivateSubnetAId:
