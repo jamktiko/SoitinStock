@@ -5,17 +5,18 @@
 <a routerLink="/products/drums">Drums</a>
 <a routerLink="/products/accordion">accordion</a> -->
 
-<!--routerLink on Angularin direktiivi. Kertoo selaimelle
-että tämä ei ole tavallinen linkki jossa olisi href, vaan
-Angularin reitti. Kun routerLink on dynaaminen eli sisältää
-muuttujia, joihin vaihtuu arvoja, sen ympärillä pitää olla hakasulut.
-page on muuttuja, joka esiintyy routerLinkin arvona olevassa taulukossa.
-Dynaamisen reitin kaksi osaa ovat taulukossa pilkulla erotettuna.
+<!-- routerLink is an Angular directive. It tells the browser
+that this is not a regular link with href, but an
+Angular route. When routerLink is dynamic, that is, contains
+variables whose values change, it must be surrounded by square brackets.
+page is a variable that appears in the array as the value of routerLink.
+The two parts of the dynamic route are separated by a comma in the array.
 -->
 <nav>
-  @for (page of content; track $index) {
-    <span>
-      <a [routerLink]="['/page', page.id_type]"> {{ page.type_name }}</a>
-    </span>
-  }
+  <span>
+    <a routerLink="/">Frontpage</a>
+    @for (page of content(); track $index) {
+      <a [routerLink]="['/products', page.type_name.toLowerCase()]"> {{ page.type_name }}</a>
+    }
+  </span>
 </nav>

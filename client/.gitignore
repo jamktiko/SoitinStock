@@ -37,8 +37,7 @@ yarn-error.log
 testem.log
 /typings
 __screenshots__/
-db.json
-inMemoryDataService.ts
+
 
 # System files
 .DS_Store

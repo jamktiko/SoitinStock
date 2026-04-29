@@ -6,7 +6,7 @@ import { Page } from './page/page';
 
 export const routes: Routes = [
   { path: '', component: FrontPage },
-  { path: 'products', component: Page },
-  { path: 'products/:category', component: Page },
+  { path: 'products', component: FrontPage },
+  { path: 'products/:category', component: FrontPage },
   { path: '**', redirectTo: '' },
 ];
