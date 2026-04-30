@@ -1,5 +1,6 @@
 @if (instruments() && !isLoading()) {
   <h1>Active page: {{ activeCategory() }}</h1>
+  <app-products [items]="instruments()"></app-products>
 } @else {
   <h1>Loading...</h1>
 }

@@ -6,29 +6,30 @@ import { ContentService } from '../content.service';
 // import { Instruments, RawInstrument } from '../.models/instrument';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, startWith, switchMap } from 'rxjs';
-
+import { Products } from '../products/products';
 @Component({
   selector: 'app-page',
   templateUrl: './front-page.html',
   styleUrl: './front-page.css',
+  imports: [Products],
 })
 export class FrontPage {
   private cservice = inject(ContentService);
   private route = inject(ActivatedRoute);
 
   // Signal for active category from route
-  activeCategory = toSignal(this.route.paramMap.pipe(map((params) => params.get('category'))));
+  activeCategory = toSignal(this.route.paramMap.pipe(map((params) => params.get('category'))), {
+    initialValue: null,
+  });
 
   // Signal for instruments - automatically updates when category changes
   instruments = toSignal(
     this.route.paramMap.pipe(
       switchMap((params) => {
         const category = params.get('category');
-        if (category) {
-          return this.cservice.GetInstrumentsByCategory(category);
-        } else {
-          return this.cservice.GetContents();
-        }
+        return category
+          ? this.cservice.GetInstrumentsByCategory(category)
+          : this.cservice.GetContents();
       }),
     ),
     // Show loading state initially

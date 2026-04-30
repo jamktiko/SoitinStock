@@ -17,8 +17,13 @@ import { Instruments } from './.models/instrument';
 import { ContentService } from './content.service';
 import { tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RawItem } from './.models/item';
 
-const initialState: Instruments = { instruments: [] };
+interface ItemsState {
+  items: RawItem[];
+}
+
+const initialState: ItemsState = { items: [] };
 /*
 ProductStore is a functional store, that is, a function
 whose arguments are functions and objects
@@ -34,11 +39,11 @@ export const ProductStore = signalStore(
     onInit(store, pservice = inject(ContentService)) {
       // Fetch products from database to store reactively
       pservice
-        .GetContents()
+        .GetItems()
         .pipe(
           takeUntilDestroyed(),
           // patchState updates the store state
-          tap((prods) => patchState(store, { instruments: prods })),
+          tap((prods) => patchState(store, { items: prods })),
         )
         .subscribe();
     },

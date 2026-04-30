@@ -1,8 +1,3 @@
-<h2>Tuotteet</h2>
-
-@for (p of pstore.instruments(); track $index) {
-  <p>
-    {{ p.name }}
-    <!-- <button (click)="addToCart(p)">Osta</button> -->
-  </p>
+@for (p of items(); track p.id) {
+  <p>{{ p.name }}</p>
 }
