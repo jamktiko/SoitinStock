@@ -12,11 +12,13 @@ variables whose values change, it must be surrounded by square brackets.
 page is a variable that appears in the array as the value of routerLink.
 The two parts of the dynamic route are separated by a comma in the array.
 -->
-<nav>
-  <span>
-    <a routerLink="/">Frontpage</a>
+<nav class="navbar">
+  <span class="nav-links">
+    <a routerLink="/" class="instrumentlink">Frontpage</a>
     @for (page of content(); track $index) {
-      <a [routerLink]="['/products', page.type_name.toLowerCase()]"> {{ page.type_name }}</a>
+      <a [routerLink]="['/products', page.type_name.toLowerCase()]" class="instrumentlink">
+        {{ page.type_name }}</a
+      >
     }
   </span>
 </nav>
