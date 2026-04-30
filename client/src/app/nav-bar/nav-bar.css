@@ -1,0 +1,47 @@
+/* NAVBAR */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: #ddbf8a;
+  border-bottom: 4px solid black;
+  flex-wrap: wrap;
+}
+
+.menu-toggle {
+  align-items: center;
+  justify-content: center;
+  background: #4b5f33;
+  border: none;
+  width: 45px;
+  height: 45px;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.instrumentlink {
+  font-family: 'Noto Serif', serif;
+  background: transparent;
+  color: black;
+  border: none;
+  font-size: 25px;
+  padding: 0.3rem 0.6rem;
+}
+
+.nav-links button.active {
+  background: #c09440;
+  border-radius: 8px;
+}
+
+a:link {
+  text-decoration: none;
+}
