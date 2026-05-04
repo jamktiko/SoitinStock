@@ -1,0 +1,386 @@
+/* =========================
+   PERUSASETUKSET
+========================= */
+/*
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Serif', serif;
+  background: #ffdbbe;
+  color: black;
+  min-height: 100vh;
+}
+
+
+.background {
+  position: fixed;
+  inset: 0;
+  background: url('/light-brown-brick-wall.jpg') center/cover no-repeat;
+  opacity: 0.3;
+  filter: blur(2px);
+  z-index: -1;
+}
+*/
+/* =========================
+   YLEISET KOMPONENTIT
+========================= */
+
+/* NAPIT (yhteinen pohja) */
+button {
+  font-family: 'Noto Serif', serif;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.openmodal {
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 5px;
+}
+
+.openmodal .modalbutton {
+  font-family: 'Noto Serif', serif;
+  font-size: 20px;
+  /*padding: 0.5rem 0.8rem;*/
+  border: 2px solid black;
+  background: #4e1a1c;
+  color: #ddbf8a;
+  border-radius: 20px;
+  min-width: 400px;
+  max-width: 400px;
+  align-items: center;
+}
+
+/* Musta pääbutton */
+.btn-primary {
+  background: black;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #333;
+}
+
+/* Outline button (logout jne.) */
+.btn-outline {
+  border: 2px solid black;
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background: black;
+  color: white;
+}
+
+/*
+
+.login-container {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+h1 {
+  font-family: 'Noto Serif', serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar svg {
+  width: 60px;
+  height: 60px;
+}
+
+.form-group {
+  font-weight: bold;
+  font-family: 'Noto Serif', serif;
+  font-size: large;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+input {
+  padding: 0.75rem;
+  border: 2px solid black;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: none;
+  border-color: #333;
+}
+*/
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1.5rem;
+}
+
+.top-bar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.menu-btn {
+  font-family: 'Noto Serif', serif;
+  background-color: black;
+  color: white;
+  width: 100%;
+  padding: 1.2rem;
+  font-size: 1.5rem;
+  border-radius: 16px;
+  align-items: center;
+}
+
+.menu-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.menu-btn:active {
+  transform: translateY(0);
+}
+
+/* =========================
+   SOITINVALIKKO
+========================= */
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: #ddbf8a;
+  border-bottom: 4px solid black;
+  flex-wrap: wrap;
+}
+
+.menu-toggle {
+  align-items: center;
+  justify-content: center;
+  background: #4b5f33;
+  border: none;
+  width: 45px;
+  height: 45px;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-links button {
+  background: transparent;
+  border: none;
+  font-size: 25px;
+  padding: 0.3rem 0.6rem;
+}
+
+.nav-links button.active {
+  background: #c09440;
+  border-radius: 8px;
+}
+
+/* KORTIT */
+.instrument-card {
+  min-width: 1200px;
+  display: flex;
+  /*flex-wrap: wrap;*/
+  gap: 1rem;
+  align-items: center;
+  background: #eddcbf;
+  border: 4px solid black;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.instrument-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.instrument-info {
+  flex: 1;
+}
+
+.instrument-info {
+  right: 100%;
+}
+
+.instrument-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.instrument-id {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.instrument-cost {
+  font-size: 1rem;
+  opacity: 0, 8;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.actions button {
+  padding: 0.5rem 0.8rem;
+  border: 2px solid black;
+  background: #4e1a1c;
+  color: #ddbf8a;
+  border-radius: 20px;
+}
+
+.actions button:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* =========================
+   RESPONSIIVISUUS
+========================= */
+
+@media (max-width: 600px) {
+  .instrument-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 748px) {
+  .instrument-name {
+    max-width: 90px;
+  }
+
+  .instrument-id {
+    max-width: 90px;
+  }
+
+  .instrument-info {
+    max-width: 90px;
+  }
+
+  .instrument-card {
+    max-width: 50px;
+  }
+
+  .openmodal {
+    flex-direction: column;
+  }
+
+  .openmodal .modalbutton {
+    max-width: 100px;
+    max-height: 100px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .instrument-card {
+    min-width: 900px;
+  }
+}
+
+@media (max-width: 935px) {
+  .instrument-card {
+    min-width: 800px;
+  }
+}
+
+@media (max-width: 835px) {
+  .instrument-card {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 790px) {
+  .nav-links button {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 695px) {
+  .nav-links button {
+    font-size: 15px;
+  }
+
+  .navbar {
+    gap: 0rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-btn {
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+
+  .login-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+}

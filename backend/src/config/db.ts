@@ -12,20 +12,20 @@ These will go to the .env file and will be read from there
 import mysql from 'mysql2/promise';
 
 const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: Number(process.env.DB_PORT),
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+    host: process.env.RDS_HOST,
+    user: process.env.RDS_USERNAME,
+    password: process.env.RDS_PASSWORD,
+    database: process.env.RDS_DB_NAME,
+    port: Number(process.env.RDS_PORT),
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
 });
 
 async function testConnection() {
-  const connection = await db.getConnection();
-  console.log('✅ Database connected successfully');
-  connection.release();
+    const connection = await db.getConnection();
+    console.log('✅ Database connected successfully');
+    connection.release();
 }
 
 // const db = mysql.createPool({

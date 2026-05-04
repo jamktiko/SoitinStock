@@ -1,3 +1,5 @@
+import { Condition } from './enums';
+
 export interface RawItem {
   id_Item: number;
   barcode: string;
@@ -5,6 +7,6 @@ export interface RawItem {
   rent_week: number;
   rent_month: number;
   is_available: 0 | 1;
-  condition: string;
+  condition: Condition;
   Instrument_id_Instrument: number;
 }

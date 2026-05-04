@@ -8,7 +8,7 @@ import { RawItem } from './.models/item';
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
     // productCategorys-taulukko on valetietokanta, jossa ovat tuotekategoriat
-    const productCategorys: RawInstrumentType[] = [
+    const productCategories: RawInstrumentType[] = [
       { id_type: 1, type_name: 'Guitar' },
       { id_type: 2, type_name: 'Piano' },
       { id_type: 3, type_name: 'Violin' },
@@ -84,7 +84,7 @@ export class InMemoryDataService implements InMemoryDbService {
         id_Item: 2,
         barcode: 'gui-002',
         rent_day: 15.0,
-        rent_week: 85.0,
+        rent_week: 75.0,
         rent_month: 300.0,
         is_available: 1,
         condition: 'good',
@@ -401,6 +401,6 @@ export class InMemoryDataService implements InMemoryDbService {
         Instrument_id_Instrument: 7,
       },
     ];
-    return { productCategorys };
+    return { productCategories, items, instruments };
   }
 }
