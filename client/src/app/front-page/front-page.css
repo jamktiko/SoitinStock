@@ -1,8 +1,9 @@
 .background {
   position: fixed;
   inset: 0;
-  background: url('/pics/light-brown-brick-wall.jpg') center/cover no-repeat;
-  opacity: 0.3;
+  background:
+    linear-gradient(rgba(255, 219, 190, 0.5), rgba(255, 219, 190, 0.5)),
+    url('/pics/light-brown-brick-wall.jpg') /*center/cover no-repeat*/;
   filter: blur(3px);
   z-index: -1;
 }
@@ -10,7 +11,7 @@
 body {
   margin: 0;
   font-family: 'Noto Serif', serif;
-  background: #ffdbbe;
+  /*background: #ffdbbe;*/
   color: black;
   min-height: 100vh;
   justify-content: center;
