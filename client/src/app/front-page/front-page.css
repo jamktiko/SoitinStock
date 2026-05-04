@@ -1,0 +1,19 @@
+.background {
+  position: fixed;
+  inset: 0;
+  background: url('/pics/light-brown-brick-wall.jpg') center/cover no-repeat;
+  opacity: 0.3;
+  filter: blur(3px);
+  z-index: -1;
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Serif', serif;
+  background: #ffdbbe;
+  color: black;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
