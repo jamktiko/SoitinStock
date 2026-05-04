@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError, map, switchMap } from 'rxjs';
 import { Instruments, RawInstrumentType, RawInstrument } from './.models/instrument';
+import { RawItem } from './.models/item';
 @Injectable({
   providedIn: 'root',
 })
@@ -19,8 +20,12 @@ export class ContentService {
     // Error handling could be added here
   }
 
+  GetItems(): Observable<RawItem[]> {
+    return this.http.get<RawItem[]>('api/items');
+    // Error handling could be added here
+  }
   GetContentTypes(): Observable<RawInstrumentType[]> {
-    return this.http.get<RawInstrumentType[]>('api/productCategorys');
+    return this.http.get<RawInstrumentType[]>('api/productCategories');
   }
   // Gets a single content object by its id
   GetContentByID(contentid: string): Observable<Instruments> {

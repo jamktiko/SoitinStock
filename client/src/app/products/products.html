@@ -1,9 +1,27 @@
-<!-- <h2>Tuotteet</h2>
+<!-- <div>
+  @if (pstore.isLoading()) {
+    <p>Loading instruments...</p>
+  } @else {
+    @for (item of items(); track item.id_Item) {
+      <p>{{ getInstrumentName(item.Instrument_id_Instrument) }}</p>
+      <p>Condition: {{ item.condition }}</p>
+      <p>Price/day: {{ item.rent_day | number: '1.2-2' }} €</p>
+    }
+  }
+</div> -->
 
-@for (p of pstore.instruments(); track $index) {
-  <p>
-    {{ p.name }} - hinta {{ p.price }}e - varastossa
-    {{ p.amount }}
-    <button (click)="addToCart(p)">Osta</button>
-  </p>
-} -->
+<div>
+  @if (pstore.isLoading()) {
+    <p>Loading instruments...</p>
+  } @else {
+    @for (instrument of instruments(); track instrument.id_Instrument) {
+      <p>{{ instrument.name }}</p>
+      <p>Model: {{ instrument.model }}</p>
+      <p>Description: {{ instrument.Description }}</p>
+      <button (click)="showModal()">Show Description</button>
+      @if (modal()) {
+        <p>modal works</p>
+      }
+    }
+  }
+</div>
