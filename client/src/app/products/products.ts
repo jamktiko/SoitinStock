@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { ProductStore } from '../instrumentstore';
 import { CommonModule } from '@angular/common';
 
@@ -10,15 +10,23 @@ import { CommonModule } from '@angular/common';
 })
 export class Products {
   items = input<any>([]);
+  instruments = input<any>([]);
+  modal = signal(false);
   // Inject, that is, connect the store to the component
   // The component has no local state; the state is in the store
   readonly pstore = inject(ProductStore);
   // readonly cstore = inject();
-
+  getInstrumentName(instrumentId: number): string {
+    const instrument = this.pstore.instruments().find((i) => i.id_Instrument === instrumentId);
+    return instrument?.name || 'Unknown Instrument';
+  }
   constructor() {
     console.log('Products loaded, instruments:', this.pstore.items());
   }
 
+  showModal() {
+    this.modal.set(!this.modal());
+  }
   // addToCart(p: Products) {
   //   // Reduce product quantity in inventory
   //   // this.pstore.reduceAmount(p.id);

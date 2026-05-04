@@ -13,7 +13,7 @@ only from the store to components or from components to the store.
 
 import { inject } from '@angular/core';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
-import { Instruments } from './.models/instrument';
+import { Instruments, RawInstrument, RawInstrumentType } from './.models/instrument';
 import { ContentService } from './content.service';
 import { tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -21,9 +21,12 @@ import { RawItem } from './.models/item';
 
 interface ItemsState {
   items: RawItem[];
+  instruments: RawInstrument[];
+  types: RawInstrumentType[];
+  isLoading: boolean;
 }
 
-const initialState: ItemsState = { items: [] };
+const initialState: ItemsState = { items: [], instruments: [], types: [], isLoading: true };
 /*
 ProductStore is a functional store, that is, a function
 whose arguments are functions and objects
@@ -37,13 +40,28 @@ export const ProductStore = signalStore(
     /* In onInit hook we can execute events that occur
        when store is loaded into memory. */
     onInit(store, pservice = inject(ContentService)) {
-      // Fetch products from database to store reactively
+      // Load both items and instruments
+      pservice
+        .GetContentTypes()
+        .pipe(
+          takeUntilDestroyed(),
+          tap((types) => patchState(store, { types })),
+        )
+        .subscribe();
+
+      pservice
+        .GetContents()
+        .pipe(
+          takeUntilDestroyed(),
+          tap((instruments) => patchState(store, { instruments })),
+        )
+        .subscribe();
+
       pservice
         .GetItems()
         .pipe(
           takeUntilDestroyed(),
-          // patchState updates the store state
-          tap((prods) => patchState(store, { items: prods })),
+          tap((items) => patchState(store, { items, isLoading: false })),
         )
         .subscribe();
     },
