@@ -2,6 +2,10 @@ import { Component, inject, input, signal } from '@angular/core';
 import { ProductStore } from '../instrumentstore';
 import { CommonModule } from '@angular/common';
 
+import { MatDialog } from '@angular/material/dialog';
+import { Modal } from '../modal/modal';
+import { Instruments } from '../.models/instrument';
+
 @Component({
   selector: 'app-products',
   imports: [CommonModule],
@@ -12,6 +16,7 @@ export class Products {
   items = input<any>([]);
   instruments = input<any>([]);
   modal = signal(false);
+  dialog = inject(MatDialog);
   // Inject, that is, connect the store to the component
   // The component has no local state; the state is in the store
   readonly pstore = inject(ProductStore);
@@ -20,12 +25,13 @@ export class Products {
     const instrument = this.pstore.instruments().find((i) => i.id_Instrument === instrumentId);
     return instrument?.name || 'Unknown Instrument';
   }
-  constructor() {
-    console.log('Products loaded, instruments:', this.pstore.items());
-  }
+  constructor() {}
 
-  showModal() {
-    this.modal.set(!this.modal());
+  showModal(instrument: Instruments) {
+    this.dialog.open(Modal, {
+      width: '500px',
+      data: { instrument },
+    });
   }
   // addToCart(p: Products) {
   //   // Reduce product quantity in inventory
