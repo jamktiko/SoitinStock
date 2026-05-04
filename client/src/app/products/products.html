@@ -10,18 +10,25 @@
   }
 </div> -->
 
-<div>
-  @if (pstore.isLoading()) {
-    <p>Loading instruments...</p>
-  } @else {
+<link
+  href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+
+@if (pstore.isLoading()) {
+  <p>Loading instruments...</p>
+} @else {
+  <div class="instrument-card">
     @for (instrument of instruments(); track instrument.id_Instrument) {
-      <p>{{ instrument.name }}</p>
-      <p>Model: {{ instrument.model }}</p>
-      <p>Description: {{ instrument.Description }}</p>
-      <button (click)="showModal()">Show Description</button>
+      <p class="instrument-name">{{ instrument.name }}</p>
+      <p class="instrument-id">Model: {{ instrument.model }}</p>
+      <p class="instrument-id">Description: {{ instrument.Description }}</p>
+      <div class="openmodal">
+        <button (click)="showModal()" class="modalbutton">Show Description</button>
+      </div>
       @if (modal()) {
         <p>modal works</p>
       }
     }
-  }
-</div>
+  </div>
+}
