@@ -39,9 +39,137 @@ RDS and MySQL Database
 
 - add info here
 
-Cognito
+---
 
-- add info here
+### Cognito Installation Steps:
+
+1. Create test user in cognito
+2. FRONTEND : Add Amplify to Angular with: `npm install aws-amplify`
+
+    Create a file like:  
+     // src/aws-config.ts
+
+    ```
+    export const awsConfig = {
+    Auth: {
+    region: 'eu-north-1', // IMPORTANT: your region
+    userPoolId: 'YOUR_USER_POOL_ID',
+    userPoolWebClientId: 'YOUR_CLIENT_ID',
+    authenticationFlowType: 'USER_PASSWORD_AUTH'
+    }
+    };
+    ```
+
+3. Then in main.ts or app.module.ts:
+    ```
+    import { Amplify } from 'aws-amplify';
+    import { awsConfig } from './aws-config';
+    Amplify.configure(awsConfig);
+    ```
+
+Login example:
+
+```
+import { signIn } from 'aws-amplify/auth';
+
+async function login(email: string, password: string) {
+try {
+const user = await signIn({ username: email, password });
+console.log('Logged in:', user);
+} catch (err) {
+console.error(err);
+}
+}
+```
+
+Get JWT token:
+
+```
+import { fetchAuthSession } from 'aws-amplify/auth';
+
+async function getToken() {
+const session = await fetchAuthSession();
+return session.tokens?.idToken?.toString();
+}
+```
+
+Attach token to API calls
+
+```
+const token = await getToken();
+
+fetch('https://your-api-url', {
+headers: {
+Authorization: `Bearer ${token}`
+}
+});
+```
+
+4. BACKEND install dependencies with
+   `npm install jsonwebtoken jwks-rsa`
+
+    Cognito JWT verification setup
+
+    ```
+    const jwt = require('jsonwebtoken');
+    const jwksClient = require('jwks-rsa');
+
+
+    const client = jwksClient({
+    jwksUri: `https://cognito-idp.eu-north-1.amazonaws.com/YOUR_USER_POOL_ID/.well-known/jwks.json`
+    });
+    ```
+
+5. Helper to get signing key
+
+```
+function getKey(header, callback) {
+  client.getSigningKey(header.kid, function (err, key) {
+    const signingKey = key.getPublicKey();
+    callback(null, signingKey);
+  });
+}
+```
+
+Middleware to protect routes
+
+```
+function authenticate(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ message: 'No token' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  jwt.verify(token, getKey, {
+    audience: 'YOUR_CLIENT_ID',
+    issuer: `https://cognito-idp.eu-north-1.amazonaws.com/YOUR_USER_POOL_ID`
+  }, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    req.user = decoded;
+    next();
+  });
+}
+```
+
+Use it in routes
+
+```
+app.get('/api/protected', authenticate, (req, res) => {
+  res.json({ message: 'Secure data', user: req.user });
+});
+```
+
+## Others:
+
+Network
+
+- security groups and subnet group (with two private subnets as required for RDS to run properly)
 
 ### Termination Overnight
 
