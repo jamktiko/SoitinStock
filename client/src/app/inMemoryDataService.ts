@@ -84,7 +84,7 @@ export class InMemoryDataService implements InMemoryDbService {
         id_Item: 2,
         barcode: 'gui-002',
         rent_day: 15.0,
-        rent_week: 85.0,
+        rent_week: 75.0,
         rent_month: 300.0,
         is_available: 1,
         condition: 'good',
