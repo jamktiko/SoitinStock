@@ -66,10 +66,26 @@ Resources:
                   FromPort: 80
                   ToPort: 80
                   CidrIp: 0.0.0.0/0
+                  #Allow HTTPS from anywhere (for now)
                 - IpProtocol: tcp
                   FromPort: 443
                   ToPort: 443
                   CidrIp: 0.0.0.0/0
+                # SSH
+                # - IpProtocol: tcp
+                #   FromPort: 22
+                #   ToPort: 22
+                # CidrIp: YOUR_IP/32 - my IP home
+                # SSH
+                - IpProtocol: tcp
+                  FromPort: 22
+                  ToPort: 22
+                  CidrIp: 172.21.240.1/32 # IP trail
+                  # SSH
+                # - IpProtocol: tcp
+                #   FromPort: 22
+                #   ToPort: 22
+                # CidrIp: YOUR_IP/32 - school IP, restrict later or disable SSH entirely
 
 Outputs:
     PrivateSubnetAId:

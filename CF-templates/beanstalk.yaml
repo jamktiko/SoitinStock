@@ -92,12 +92,9 @@ Resources:
                 # -------------------------
                 # SSH Configuration
                 # -------------------------
-                # SSH access disabled (no direct EC2 access required)
-                # Logs and debugging handled via Elastic Beanstalk / CloudWatch
-                # ⚠️ SECURITY FIX (was previously open in your setup)
-                # - Namespace: aws:autoscaling:launchconfiguration
-                #   OptionName: SSHSourceRestriction
-                #   Value: 'tcp,22,22,0.0.0.0/0' # TODO: restrict later or disable SSH entirely
+                #- Namespace: aws:autoscaling:launchconfiguration
+                # OptionName: SSHSourceRestriction
+                # Value: Value: tcp,22,22,IP1/32,IP2/32,IP3/32
 
                 # -------------------------
                 # Capacity (Single instance)
