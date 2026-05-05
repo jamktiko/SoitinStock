@@ -80,12 +80,12 @@ Resources:
                 - IpProtocol: tcp
                   FromPort: 22
                   ToPort: 22
-                  CidrIp: 172.21.240.1/32 # IP trail
+                  CidrIp: 195.148.39.81/32 # IP trail
                   # SSH
                 # - IpProtocol: tcp
                 #   FromPort: 22
                 #   ToPort: 22
-                # CidrIp: YOUR_IP/32 - school IP, restrict later or disable SSH entirely
+                # CidrIp: YOUR IP/32 - IP trail
 
 Outputs:
     PrivateSubnetAId:
