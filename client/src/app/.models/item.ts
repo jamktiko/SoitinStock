@@ -7,6 +7,6 @@ export interface RawItem {
   rent_week: number;
   rent_month: number;
   is_available: 0 | 1;
-  condition: Condition;
+  item_condition: Condition;
   Instrument_id_Instrument: number;
 }

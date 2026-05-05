@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
-import { ContentService } from '../content.service';
+// import { ContentService } from '../content.service';
 import { RawInstrumentType, RawInstrument } from '../.models/instrument';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ApiService } from '../apiService';

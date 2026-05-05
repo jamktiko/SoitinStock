@@ -2,7 +2,7 @@ import { Component, inject, OnInit, computed } from '@angular/core';
 // With ActivatedRoute we get id from route to component
 import { ActivatedRoute } from '@angular/router';
 // With ContentService we get content from server to component
-import { ContentService } from '../content.service';
+// import { ContentService } from '../content.service';
 // import { Instruments, RawInstrument } from '../.models/instrument';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, startWith, switchMap, combineLatest } from 'rxjs';
@@ -16,7 +16,7 @@ import { RawItem } from '../.models/item';
   imports: [Products],
 })
 export class FrontPage {
-  private cservice = inject(ContentService);
+  // private cservice = inject(ContentService);
   private route = inject(ActivatedRoute);
   pstore = inject(ProductStore);
 
