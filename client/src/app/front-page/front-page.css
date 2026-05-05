@@ -129,7 +129,7 @@ input:focus {
 
 .top-bar {
   position: absolute;
-  top: 60px;
+  top: 50px;
   right: 20px;
 }
 
@@ -280,7 +280,41 @@ input:focus {
   }
 
   .login-container {
-    margin: 1rem;
     padding: 1.5rem;
+    width: 50%;
+  }
+}
+
+@media (max-width: 780px) {
+  .top-bar {
+    right: 5px;
+  }
+
+  .top-bar .menu-btn {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 670px) {
+  .top-bar .menu-btn {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 620px) {
+  .top-bar {
+    top: 50px;
+  }
+}
+
+@media (max-width: 300px) {
+  .login-container h1 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 220px) {
+  .login-container h1 {
+    font-size: 15px;
   }
 }
