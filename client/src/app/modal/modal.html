@@ -3,10 +3,14 @@
 </div>
 <mat-dialog-content class="mat-typography">
   <div class="modal-content">
-    <img src="" alt="" />
     <p>{{ data.instrument.model }}</p>
-    <p>{{ data.instrument.Description }}</p>
-
+    @if (data.instrument.Description) {
+      <p>
+        {{ data.instrument.Description }}
+      </p>
+    } @else {
+      <p>No Description given</p>
+    }
     <h3>Available Items</h3>
     @if (relatedItems().length === 0) {
       <p>No items available for this instrument</p>
@@ -14,7 +18,7 @@
       @for (item of relatedItems(); track item.id_Item) {
         <div class="item-card">
           <p><strong>Barcode:</strong> {{ item.barcode }}</p>
-          <p><strong>Condition:</strong> {{ item.condition }}</p>
+          <p><strong>Condition:</strong> {{ item.item_condition }}</p>
           <p><strong>Price/day:</strong> {{ item.rent_day | number: '1.2-2' }} €</p>
           <p><strong>Price/week:</strong> {{ item.rent_week | number: '1.2-2' }} €</p>
           <p><strong>Price/month:</strong> {{ item.rent_month | number: '1.2-2' }} €</p>
