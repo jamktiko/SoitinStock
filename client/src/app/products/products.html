@@ -18,14 +18,14 @@
 @if (pstore.isLoading()) {
   <p>Loading instruments...</p>
 } @else {
-  <div class="instrument-card">
-    @for (instrument of instruments(); track instrument.id_Instrument) {
+  @for (instrument of instruments(); track instrument.id_Instrument) {
+    <div class="instrument-card">
       <p class="instrument-name">{{ instrument.name }}</p>
       <p class="instrument-id">Model: {{ instrument.model }}</p>
       <p class="instrument-id">Description: {{ instrument.Description }}</p>
       <div class="openmodal">
         <button (click)="showModal(instrument)" class="modalbutton">Show Description</button>
       </div>
-    }
-  </div>
+    </div>
+  }
 }

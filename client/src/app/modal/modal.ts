@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy, Inject, computed } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../apiService';
 import { RawInstrument } from '../.models/instrument';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-modal',
-  imports: [CommonModule, MatDialogModule],
+  imports: [CommonModule, MatDialogModule, RouterLink],
   templateUrl: './modal.html',
   styleUrl: './modal.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
