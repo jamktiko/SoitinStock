@@ -1,1 +1,67 @@
-<p>renting-form works!</p>
+<h3>Renting Page</h3>
+<form [formGroup]="rentalForm" (ngSubmit)="submitTest()">
+  <!-- Customer Info -->
+  <mat-form-field>
+    <mat-label>First Name</mat-label>
+    <input matInput formControlName="firstName" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Last Name</mat-label>
+    <input matInput formControlName="lastName" required />
+  </mat-form-field>
+
+  <h4>Items to Rent</h4>
+
+  <!-- FormArray for multiple rentals -->
+  <div formArrayName="rentals">
+    @for (rental of rentals.controls; let i = $index; track i) {
+      <div [formGroupName]="i" style="border: 1px solid #ccc; padding: 1rem; margin: 1rem 0">
+        <h5>Item {{ i + 1 }}</h5>
+
+        <mat-form-field>
+          <mat-label>Select Instrument</mat-label>
+          <mat-select formControlName="selectedItem">
+            @for (item of itemsWithDetails(); track item.id_Item) {
+              <mat-option [value]="item.id_Item">
+                <strong>{{ item.instrumentName }}</strong> ({{ item.instrumentModel }}) - Barcode:
+                {{ item.barcode }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Start Date</mat-label>
+          <input matInput type="date" formControlName="startDate" required />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>End Date</mat-label>
+          <input matInput type="date" formControlName="endDate" required />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Rental Type</mat-label>
+          <mat-select formControlName="rentalType">
+            <mat-option value="day">Day</mat-option>
+            <mat-option value="week">Week</mat-option>
+            <mat-option value="month">Month</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        @if (rentals.length > 1) {
+          <button type="button" (click)="removeRentalRow(i)" mat-stroked-button color="warn">
+            Remove
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <button type="button" (click)="addRentalRow()" mat-stroked-button>+ Add Another Item</button>
+
+  <button type="submit" [disabled]="!rentalForm.valid" mat-raised-button color="primary">
+    Rent Now
+  </button>
+</form>
