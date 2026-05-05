@@ -3,6 +3,9 @@ import cors from 'cors';
 import './src/config/db';
 import { setup } from './src/model/setup';
 
+/*Change by Jun! For middleware authentication*/
+import { authMiddleware } from './src/middleware/authMiddleware';
+
 const port = Number(process.env.PORT || 8080);
 
 const app = express();
@@ -12,19 +15,26 @@ app.use(cors()); // Enable CORS
 //also if some function are wanted to acces only on ceratin pade, u can pass it on as a second parameter
 
 async function settingUp() {
-  await setup();
-  app.listen(port, () => {
-    console.log(`Server started on port: ${port}`);
-  });
+    await setup();
+    app.listen(port, () => {
+        console.log(`Server started on port: ${port}`);
+    });
 }
 
 settingUp();
 
-app.get('/api/test', (req, res) => {
-  // console.log('hello');
-  // res.send('helloo');
-  res.json({ message: 'hello from Backend' });
+/* Changes by Jun here! Added import above, and the backend response message*/
+
+app.get('/api/test', authMiddleware, (req, res) => {
+    res.json({ message: 'Secure backend response' });
 });
+
+/*OLd WORKING BACKEND!! Uncomment and remove above + import to revert changes. */
+// app.get('/api/test', (req, res) => {
+//     // console.log('hello');
+//     // res.send('helloo');
+//     res.json({ message: 'hello from Backend' });
+// });
 
 /*
 These worked with AWS 
