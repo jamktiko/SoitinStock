@@ -18,20 +18,21 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Modal {
-  route: ActivatedRoute = inject(ActivatedRoute);
-  apiservice = inject(ApiService);
-  // dialog = inject(MatDialog);
+  // route: ActivatedRoute = inject(ActivatedRoute);
+  // apiservice = inject(ApiService);
+  // // dialog = inject(MatDialog);
 
   dialogRef = inject(MatDialogRef<Modal>);
-  data = inject(MAT_DIALOG_DATA);
+  data = inject(MAT_DIALOG_DATA) as { instrument: RawInstrument };
+
   pstore = inject(ProductStore);
-  protected instrument = toSignal(
-    this.route.paramMap.pipe(
-      map((p) => parseInt(p.get('id') || '0', 10)),
-      switchMap((id) => this.apiservice.getInstrumentId(id)),
-    ),
-    { initialValue: undefined as RawInstrument | undefined },
-  );
+  // protected instrument = toSignal(
+  //   this.route.paramMap.pipe(
+  //     map((p) => parseInt(p.get('id') || '0', 10)),
+  //     switchMap((id) => this.apiservice.getInstrumentId(id)),
+  //   ),
+  //   { initialValue: undefined as RawInstrument | undefined },
+  // );
 
   relatedItems = computed(() => {
     const instrument = this.data?.instrument;

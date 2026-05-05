@@ -39,6 +39,32 @@ Resources:
                 - ALLOW_ADMIN_USER_PASSWORD_AUTH
                 - ALLOW_REFRESH_TOKEN_AUTH
 
+            AllowedOAuthFlowsUserPoolClient: true
+
+            AllowedOAuthFlows:
+                - code
+
+            AllowedOAuthScopes:
+                - email
+                - openid
+                - profile
+
+            SupportedIdentityProviders:
+                - COGNITO
+
+            # Current callback/logout url, update to proper urls later
+            CallbackURLs:
+                - https://d2jvgghzsyqabk.cloudfront.net/
+
+            LogoutURLs:
+                - https://d2jvgghzsyqabk.cloudfront.net/
+
+    UserPoolDomain:
+        Type: AWS::Cognito::UserPoolDomain
+        Properties:
+            Domain: soitinstock-auth-2026
+            UserPoolId: !Ref UserPool
+
 Outputs:
     UserPoolId:
         Value: !Ref UserPool
@@ -49,3 +75,10 @@ Outputs:
         Value: !Ref UserPoolClient
         Export:
             Name: SoitinStock-UserPoolClientId
+
+    CognitoLoginURL:
+        Value: !Sub
+            - 'https://${Domain}/login?client_id=${ClientId}&response_type=code&scope=openid+email&redirect_uri=${Redirect}'
+            - Domain: soitinstock-auth-2026.auth.eu-north-1.amazoncognito.com
+              ClientId: 1b08n5k49r4pnqegckcoodloje
+              Redirect: https://d2jvgghzsyqabk.cloudfront.net/
