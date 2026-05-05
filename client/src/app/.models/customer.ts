@@ -3,5 +3,5 @@ export interface RawCustomer {
   email: string;
   firstname: string;
   lastname: string;
-  phone?: string;
+  phone: string;
 }

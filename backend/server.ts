@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import './src/config/db';
+import { setup } from './src/model/setup';
 
 const port = Number(process.env.PORT || 8080);
 
@@ -9,6 +10,15 @@ app.use(cors()); // Enable CORS
 
 //All middleware that want to access everywhere come up
 //also if some function are wanted to acces only on ceratin pade, u can pass it on as a second parameter
+
+async function settingUp() {
+    await setup();
+    app.listen(port, () => {
+        console.log(`Server started on port: ${port}`);
+    });
+}
+
+settingUp();
 
 app.get('/api/test', (req, res) => {
     // console.log('hello');
@@ -36,13 +46,11 @@ app.use('/api/instruments', instrumentRouter);
 import rentalRouter from './src/routes/rentals';
 app.use('/api/rentals', rentalRouter);
 
+import itemRouter from './src/routes/items';
+app.use('/api/items', itemRouter);
 //api for test
 // import testrouter from './src/routes/test';
 // app.use('/api/test', testrouter);
-
-app.listen(port, () => {
-    console.log(`Server started on port: ${port}`);
-});
 
 /*
 Notes for myself:

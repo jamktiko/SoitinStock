@@ -8,6 +8,7 @@ export interface RawInstrument {
   model?: string;
   Description?: string;
   Instrument_type_id: number;
+  img?: String;
 }
 
 export const mapRawInstrument = (r: RawInstrument) => {
