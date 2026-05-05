@@ -1,11 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'SoitinStock - Frontend (S3 + CloudFront)'
 
-Parameters:
-    BackendDomainName:
-        Type: String
-        Description: 'API backend domain (Elastic Beanstalk URL or ALB DNS)'
-
 Resources:
     # -------------------------
     # S3 Bucket (PRIVATE)
@@ -55,7 +50,7 @@ Resources:
 
                     # Backend API (Elastic Beanstalk)
                     - Id: ApiOrigin
-                      DomainName: !Ref BackendDomainName
+                      DomainName: soitinstock-env.eba-wyncraif.eu-north-1.elasticbeanstalk.com
                       CustomOriginConfig:
                           HTTPPort: 80
                           HTTPSPort: 443

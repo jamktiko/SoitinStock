@@ -11,9 +11,9 @@ app.use(cors()); // Enable CORS
 //also if some function are wanted to acces only on ceratin pade, u can pass it on as a second parameter
 
 app.get('/api/test', (req, res) => {
-  // console.log('hello');
-  // res.send('helloo');
-  res.json({ message: 'hello from Backend' });
+    // console.log('hello');
+    // res.send('helloo');
+    res.json({ message: 'hello from Backend' });
 });
 
 /*
@@ -41,7 +41,7 @@ app.use('/api/rentals', rentalRouter);
 // app.use('/api/test', testrouter);
 
 app.listen(port, () => {
-  console.log(`Server started on port: ${port}`);
+    console.log(`Server started on port: ${port}`);
 });
 
 /*
