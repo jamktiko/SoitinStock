@@ -12,18 +12,18 @@ app.use(cors()); // Enable CORS
 //also if some function are wanted to acces only on ceratin pade, u can pass it on as a second parameter
 
 async function settingUp() {
-  await setup();
-  app.listen(port, () => {
-    console.log(`Server started on port: ${port}`);
-  });
+    await setup();
+    app.listen(port, () => {
+        console.log(`Server started on port: ${port}`);
+    });
 }
 
 settingUp();
 
 app.get('/api/test', (req, res) => {
-  // console.log('hello');
-  // res.send('helloo');
-  res.json({ message: 'hello from Backend' });
+    // console.log('hello');
+    // res.send('helloo');
+    res.json({ message: 'hello from Backend' });
 });
 
 /*
