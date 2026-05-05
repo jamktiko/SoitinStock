@@ -14,7 +14,7 @@ only from the store to components or from components to the store.
 import { inject } from '@angular/core';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { Instruments, RawInstrument, RawInstrumentType } from './.models/instrument';
-import { ContentService } from './content.service';
+import { ApiService } from './apiService';
 import { tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RawItem } from './.models/item';
@@ -39,7 +39,7 @@ export const ProductStore = signalStore(
   withHooks({
     /* In onInit hook we can execute events that occur
        when store is loaded into memory. */
-    onInit(store, pservice = inject(ContentService)) {
+    onInit(store, pservice = inject(ApiService)) {
       // Load both items and instruments
       pservice
         .GetContentTypes()

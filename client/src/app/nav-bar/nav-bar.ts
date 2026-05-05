@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ContentService } from '../content.service';
 import { RawInstrumentType, RawInstrument } from '../.models/instrument';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ApiService } from '../apiService';
 
 @Component({
   standalone: true,
@@ -15,6 +16,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class NavBar {
   // content: RawInstrumentType[] | undefined;
   //Otetaan contentsevice käyttöön ja haetaan content aina, kun komponentti latautuu muistiin
-  private cservice = inject(ContentService);
+  private cservice = inject(ApiService);
   content = toSignal(this.cservice.GetContentTypes(), { initialValue: [] });
 }
