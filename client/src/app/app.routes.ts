@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { FrontPage } from './front-page/front-page';
 // import { Products } from './products/products';
-import { Page } from './page/page';
+// import { Page } from './rentingForm/page';
 // import { NotFoundError } from 'rxjs';
 
 export const routes: Routes = [
