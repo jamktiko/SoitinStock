@@ -1,31 +1,174 @@
 <!doctype html>
 <html>
     <head>
-        <title>SoitinStock Test</title>
+        <meta charset="utf-8" />
+        <title>SoitinStock Cognito Login</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 24px;
+                max-width: 720px;
+            }
+            button {
+                margin: 8px 0;
+                padding: 10px 16px;
+                font-size: 16px;
+            }
+            pre {
+                background: #f4f4f4;
+                border: 1px solid #ddd;
+                padding: 12px;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+        </style>
     </head>
     <body>
-        <h1>Frontend to Backend Test 4</h1>
+        <h1>SoitinStock Cognito Login</h1>
 
-        <!-- VALEFRONTTI! Toimiva. This is a simple frontend page to test the connection to the
-        backend API. -->
+        <p>
+            Use the buttons below to sign in with Cognito and call the protected
+            backend.
+        </p>
 
-        <button onclick="testBackend()">Test Backend Connection</button>
+        <button id="loginButton">Login with Cognito</button>
+        <button id="logoutButton">Logout</button>
+        <button id="callApiButton">Call Protected Backend</button>
 
-        <pre id="output"></pre>
+        <pre id="output">No action yet.</pre>
 
         <script>
-            async function testBackend() {
+            const cognitoDomain =
+                'https://soitinstock-auth-2026.auth.eu-north-1.amazoncognito.com';
+            const clientId = '1b08n5k49r4pnqegckcoodloje';
+            const redirectUri = 'https://d2jvgghzsyqabk.cloudfront.net/';
+
+            const tokenEndpoint = `${cognitoDomain}/oauth2/token`;
+            const authEndpoint = `${cognitoDomain}/oauth2/authorize`;
+
+            function getCode() {
+                const params = new URLSearchParams(window.location.search);
+                return params.get('code');
+            }
+
+            function clearUrl() {
+                window.history.replaceState(
+                    {},
+                    document.title,
+                    window.location.pathname,
+                );
+            }
+
+            function updateButtons() {
+                const isLoggedIn = !!localStorage.getItem('access_token');
+                document.getElementById('loginButton').disabled = isLoggedIn;
+                document.getElementById('logoutButton').disabled = !isLoggedIn;
+            }
+
+            async function exchangeCodeForToken(code) {
+                const body = new URLSearchParams();
+                body.append('grant_type', 'authorization_code');
+                body.append('client_id', clientId);
+                body.append('code', code);
+                body.append('redirect_uri', redirectUri);
+
+                const response = await fetch(tokenEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Token request failed: ${response.status}`);
+                }
+
+                return response.json();
+            }
+
+            function login() {
+                const url = `${authEndpoint}?response_type=code&client_id=${encodeURIComponent(
+                    clientId,
+                )}&redirect_uri=${encodeURIComponent(
+                    redirectUri,
+                )}&scope=openid+profile+email`;
+
+                window.location.href = url;
+            }
+
+            function logout() {
+                localStorage.clear();
+                document.getElementById('output').textContent = 'Logged out.';
+                updateButtons();
+            }
+
+            async function callProtectedBackend() {
                 const output = document.getElementById('output');
+                const token = localStorage.getItem('access_token');
+
+                console.log('TOKEN:', token);
+
+                if (!token) {
+                    output.textContent = 'Not logged in. Please login first.';
+                    return;
+                }
 
                 try {
-                    const response = await fetch('/api/test');
-                    const data = await response.json();
+                    const response = await fetch(`/api/test`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
 
+                    const data = await response.json();
                     output.textContent = JSON.stringify(data, null, 2);
-                } catch (err) {
-                    output.textContent = 'Error: ' + err.message;
+                } catch (error) {
+                    output.textContent = `Backend request failed: ${error.message}`;
                 }
             }
+
+            document
+                .getElementById('loginButton')
+                .addEventListener('click', login);
+            document
+                .getElementById('logoutButton')
+                .addEventListener('click', logout);
+            document
+                .getElementById('callApiButton')
+                .addEventListener('click', callProtectedBackend);
+
+            // Handle redirect after login
+            (async () => {
+                updateButtons();
+
+                const code = getCode();
+                console.log('AUTH CODE:', code);
+
+                if (code) {
+                    try {
+                        const tokens = await exchangeCodeForToken(code);
+
+                        console.log('TOKENS:', tokens);
+
+                        localStorage.setItem('id_token', tokens.id_token);
+                        localStorage.setItem(
+                            'access_token',
+                            tokens.access_token,
+                        );
+
+                        clearUrl();
+                        updateButtons();
+
+                        document.getElementById('output').textContent =
+                            'Login successful!';
+                    } catch (err) {
+                        console.error(err);
+                        document.getElementById('output').textContent =
+                            'Token exchange failed';
+                    }
+                }
+            })();
         </script>
     </body>
 </html>

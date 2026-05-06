@@ -80,6 +80,8 @@ Resources:
 
                       ForwardedValues:
                           QueryString: true
+                          Headers:
+                              - Authorization
                           Cookies:
                               Forward: all
 
