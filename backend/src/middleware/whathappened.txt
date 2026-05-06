@@ -2,10 +2,10 @@ What I did in backend:
 
 
 1. npm install jsonwebtoken jwks-rsa
-2. create new folder and file src/middleware/authMiddleware.ts
+2. created new folder and file src/middleware/authMiddleware.ts
 3. added content to the authMiddleware.ts file 
-4. added one import and a different test app route, commented under Jun's changes
+4. added one import in server.ts, and a different test app route, commented under Jun's changes. 
 5. replaced this "node --env-file=.env dist/server.js" with "node dist/server.js" inside package.json, 
 must not use .env file
 6. changed configurations in db.ts to connect to the proper database, not local. 
-7. 
+7. troubleshooting, etc etc. 
