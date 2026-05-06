@@ -129,7 +129,7 @@ input:focus {
 
 .top-bar {
   position: absolute;
-  top: 50px;
+  top: 70px;
   right: 20px;
 }
 
@@ -160,50 +160,6 @@ input:focus {
 
 .menu-btn:active {
   transform: translateY(0);
-}
-
-/* =========================
-   SOITINVALIKKO
-========================= */
-
-/* NAVBAR */
-.navbar {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.5rem 1rem;
-  background: #ddbf8a;
-  border-bottom: 4px solid black;
-  flex-wrap: wrap;
-}
-
-.menu-toggle {
-  background: #4b5f33;
-  border: none;
-  width: 45px;
-  height: 45px;
-  color: white;
-  font-size: 1.5rem;
-}
-
-.nav-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  flex: 1;
-  justify-content: center;
-}
-
-.nav-links button {
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  padding: 0.3rem 0.6rem;
-}
-
-.nav-links button.active {
-  background: #c09440;
-  border-radius: 8px;
 }
 
 /* KORTIT */
@@ -301,9 +257,19 @@ input:focus {
   }
 }
 
-@media (max-width: 620px) {
+@media (max-width: 610px) {
   .top-bar {
-    top: 50px;
+    top: 66px;
+  }
+
+  header {
+    align-items: center;
+  }
+}
+
+@media (max-width: 395px) {
+  .top-bar {
+    top: 100px;
   }
 }
 
@@ -313,8 +279,33 @@ input:focus {
   }
 }
 
+@media (max-width: 270px) {
+  .menu .menu-btn {
+    padding: 5px;
+    font-size: 15px;
+  }
+}
+
 @media (max-width: 220px) {
   .login-container h1 {
     font-size: 15px;
+  }
+}
+
+@media (max-width: 210px) {
+  .top-bar {
+    top: 160px;
+  }
+}
+
+@media (max-width: 200px) {
+  .menu .menu-btn {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 160px) {
+  .login-container h1 {
+    font-size: 14px;
   }
 }

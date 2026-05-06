@@ -9,7 +9,7 @@
   flex-wrap: wrap;
 }
 
-.menu-toggle {
+.hamburgermenu {
   align-items: center;
   justify-content: center;
   background: #4b5f33;
@@ -44,4 +44,16 @@
 
 a:link {
   text-decoration: none;
+}
+
+@media (max-width: 235px) {
+  .instrumentlink {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 210px) {
+  .navbar {
+    flex-direction: column;
+  }
 }
