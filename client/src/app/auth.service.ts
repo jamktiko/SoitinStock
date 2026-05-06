@@ -85,4 +85,24 @@ export class AuthService {
     this.token = '';
     sessionStorage.removeItem('accesstoken');
   }
+  isAuthenticated(): boolean {
+    const token = sessionStorage.getItem('accesstoken');
+    return !!token && token !== '{}';
+  }
+
+  // Add Cognito login method
+  loginWithCognito(username: string, password: string): Observable<boolean> {
+    // Call your backend which handles Cognito authentication
+    return this.http.post(this.apiUrl, { username, password }).pipe(
+      map((res: any) => {
+        if (res.token) {
+          this.token = res.token;
+          sessionStorage.setItem('accesstoken', JSON.stringify({ token: res.token }));
+          this.subject.next(true);
+          return true;
+        }
+        return false;
+      }),
+    );
+  }
 }

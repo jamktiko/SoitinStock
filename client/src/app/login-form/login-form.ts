@@ -6,7 +6,8 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-login',
   imports: [FormsModule],
-  templateUrl: './login.component.html',
+  templateUrl: './login-form.html',
+  styleUrl: './login-form.css',
 })
 export class LoginForm implements OnInit {
   error = '';
