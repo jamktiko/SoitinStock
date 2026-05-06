@@ -1,1 +1,15 @@
-<p>login-form works!</p>
+<div class="container-fluid">
+  <div class="d-flex mt-3 mb-3">Login</div>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+    <div class="form-group">
+      <label for="tunnus">Tunnus:</label>
+      <input type="text" class="form-control" name="tunnus" ngModel />
+      <label for="salasana">Salasana:</label>
+      <input type="password" class="form-control" name="salasana" ngModel /><br />
+      <button type="submit" class="btn btn-light">Lähetä</button>
+    </div>
+    @if (error) {
+      <div class="alert alert-danger">{{ error }}</div>
+    }
+  </form>
+</div>
