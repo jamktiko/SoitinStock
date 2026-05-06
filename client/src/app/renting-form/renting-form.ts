@@ -7,7 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ApiService } from '../apiService';
 import { RawItem } from '../.models/item';
 import { ProductStore } from '../instrumentstore';
-import { first } from 'rxjs';
+// import { first } from 'rxjs';
 
 @Component({
   selector: 'app-renting-form',
@@ -24,7 +24,7 @@ import { first } from 'rxjs';
 export class RentingForm {
   private pstore = inject(ProductStore);
   private _formBuilder = inject(FormBuilder);
-  private apiService = inject(ApiService);
+  // private apiService = inject(ApiService);
 
   allItems = this.pstore.items;
   allInstruments = this.pstore.instruments;
@@ -47,6 +47,9 @@ export class RentingForm {
   rentalForm: FormGroup = this._formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
+    phone: ['', Validators.required],
+    email: ['', Validators.required],
+
     rentals: this._formBuilder.array([this.createRentalRow()]),
   });
 
