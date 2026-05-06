@@ -19,6 +19,8 @@ The two parts of the dynamic route are separated by a comma in the array.
 />
 
 <nav class="navbar">
+  <button class="hamburgermenu">☰</button>
+
   <span class="nav-links">
     <a routerLink="/" class="instrumentlink">Frontpage</a>
     @for (page of content(); track $index) {
@@ -26,5 +28,6 @@ The two parts of the dynamic route are separated by a comma in the array.
         {{ page.type_name }}</a
       >
     }
+    <a routerLink="/renting" class="instrumentlink">To renting</a>
   </span>
 </nav>

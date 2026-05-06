@@ -12,9 +12,300 @@ body {
   margin: 0;
   font-family: 'Noto Serif', serif;
   /*background: #ffdbbe;*/
-  color: black;
+  /*color: black;*/
   min-height: 100vh;
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+/* =========================
+   YLEISET KOMPONENTIT
+========================= */
+
+/* NAPIT (yhteinen pohja) */
+button {
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+/* Musta pääbutton */
+.btn-primary {
+  background: black;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #333;
+}
+
+/* Outline button (logout jne.) */
+.btn-outline {
+  border: 2px solid black;
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background: black;
+  color: white;
+}
+
+/* =========================
+   LOGIN-SIVU
+========================= */
+
+.login-container {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+h1 {
+  font-family: 'Noto Serif', serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar svg {
+  width: 60px;
+  height: 60px;
+}
+
+.form-group {
+  font-weight: bold;
+  font-family: 'Noto Serif', serif;
+  font-size: large;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+input {
+  padding: 0.75rem;
+  border: 2px solid black;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: none;
+  border-color: #333;
+}
+
+/* =========================
+   ETUSIVU (MENU)
+========================= */
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1.5rem;
+}
+
+.top-bar {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 500px;
+  /*min-height: 515px;*/
+}
+
+.menu-btn {
+  font-family: 'Noto Serif', serif;
+  background-color: black;
+  color: white;
+  width: 100%;
+  padding: 1.2rem;
+  font-size: 1.5rem;
+  border-radius: 16px;
+  align-items: center;
+}
+
+.menu-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.menu-btn:active {
+  transform: translateY(0);
+}
+
+/* KORTIT */
+.instrument-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  background: #eddcbf;
+  border: 4px solid black;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.instrument-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.instrument-info {
+  flex: 1;
+}
+
+.instrument-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.instrument-id {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.actions button {
+  padding: 0.5rem 0.8rem;
+  border: 2px solid black;
+  background: #4e1a1c;
+  color: #ddbf8a;
+}
+
+.actions button:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* =========================
+   RESPONSIIVISUUS
+========================= */
+
+@media (max-width: 600px) {
+  .instrument-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-btn {
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+
+  .login-container {
+    padding: 1.5rem;
+    width: 50%;
+  }
+}
+
+@media (max-width: 780px) {
+  .top-bar {
+    right: 5px;
+  }
+
+  .top-bar .menu-btn {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 670px) {
+  .top-bar .menu-btn {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 610px) {
+  .top-bar {
+    top: 66px;
+  }
+
+  header {
+    align-items: center;
+  }
+}
+
+@media (max-width: 395px) {
+  .top-bar {
+    top: 100px;
+  }
+}
+
+@media (max-width: 300px) {
+  .login-container h1 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 270px) {
+  .menu .menu-btn {
+    padding: 5px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 220px) {
+  .login-container h1 {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 210px) {
+  .top-bar {
+    top: 160px;
+  }
+}
+
+@media (max-width: 200px) {
+  .menu .menu-btn {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 160px) {
+  .login-container h1 {
+    font-size: 14px;
+  }
 }

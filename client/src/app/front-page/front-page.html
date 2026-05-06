@@ -24,11 +24,19 @@
 </div> -->
 <div class="background"></div>
 
-<div>
-  @if (activeCategory() === null) {
-    <p>Hello User</p>
-  } @else {
-    <h2>{{ activeCategory() }}</h2>
-    <app-products [instruments]="filteredItems().instruments"></app-products>
-  }
+<div class="top-bar">
+  <button class="menu-btn" id="logoutBtn">Sign out</button>
 </div>
+
+@if (activeCategory() === null) {
+  <div class="login-container">
+    <main class="menu">
+      <h1 id="greeting">Hello User</h1>
+      <button class="menu-btn" onclick="goTo('soittimet')">Instruments</button>
+      <button class="menu-btn" onclick="goTo('vuokraukset')">Rentals</button>
+    </main>
+  </div>
+} @else {
+  <h2>{{ activeCategory() }}</h2>
+  <app-products [instruments]="filteredItems().instruments"></app-products>
+}
