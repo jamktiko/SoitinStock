@@ -1,31 +1,37 @@
 <h3>Renting Page</h3>
+<div class="background"></div>
 <form [formGroup]="rentalForm" (ngSubmit)="submitTest()">
   <!-- Customer Info -->
-  <mat-form-field>
-    <mat-label>First Name</mat-label>
-    <input matInput formControlName="firstName" required />
-  </mat-form-field>
+  <div class="instrument-card">
+    <mat-form-field>
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" required />
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Last Name</mat-label>
-    <input matInput formControlName="lastName" required />
-  </mat-form-field>
+    <mat-form-field>
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" required />
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Phone number</mat-label>
-    <input matInput formControlName="phone" required />
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Email</mat-label>
-    <input matInput placeholder="put@email.here" formControlName="email" required />
-  </mat-form-field>
-
+    <mat-form-field>
+      <mat-label>Phone number</mat-label>
+      <input matInput formControlName="phone" required />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="put@email.here" formControlName="email" required />
+    </mat-form-field>
+  </div>
   <h4>Items to Rent</h4>
 
+  <div class="top-bar">
+    <button class="menu-btn" id="logoutBtn">Sign out</button>
+  </div>
+
   <!-- FormArray for multiple rentals -->
-  <div formArrayName="rentals">
+  <div formArrayName="rentals" class="instrument-card">
     @for (rental of rentals.controls; let i = $index; track i) {
-      <div [formGroupName]="i" style="border: 1px solid #ccc; padding: 1rem; margin: 1rem 0">
+      <div [formGroupName]="i" class="rental-item">
         <h5>Item {{ i + 1 }}</h5>
 
         <mat-form-field>
@@ -60,7 +66,13 @@
         </mat-form-field>
 
         @if (rentals.length > 1) {
-          <button type="button" (click)="removeRentalRow(i)" mat-stroked-button color="warn">
+          <button
+            type="button"
+            class="remove-btn"
+            (click)="removeRentalRow(i)"
+            mat-stroked-button
+            color="warn"
+          >
             Remove
           </button>
         }
@@ -68,7 +80,9 @@
     }
   </div>
 
-  <button type="button" (click)="addRentalRow()" mat-stroked-button>+ Add Another Item</button>
+  <button class="additem-btn" type="button" (click)="addRentalRow()" mat-stroked-button>
+    + Add Another Item
+  </button>
 
   <button type="submit" [disabled]="!rentalForm.valid" mat-raised-button color="primary">
     Rent Now
