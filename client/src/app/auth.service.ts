@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../environments/environments';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private router = inject(Router);
   cognitoDomain = environment.cognitoDomain;
   clientId = environment.clientId;
   redirectUri = environment.redirectUri;
@@ -22,8 +24,20 @@ export class AuthService {
     window.location.href = url;
   }
 
+  // logout() {
+  //   localStorage.clear();
+  // }
+
   logout() {
     localStorage.clear();
+
+    const logoutUrl = `${this.cognitoDomain}/logout?client_id=${encodeURIComponent(this.clientId)}`;
+
+    // Call Cognito logout (fire and forget)
+    fetch(logoutUrl).catch(console.error);
+
+    // Redirect to login page
+    this.router.navigate(['/login']);
   }
 
   getToken() {
