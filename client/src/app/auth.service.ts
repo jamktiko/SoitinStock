@@ -31,7 +31,7 @@ export class AuthService {
   logout() {
     localStorage.clear();
 
-    const logoutUrl = `${this.cognitoDomain}/logout?client_id=${encodeURIComponent(this.clientId)}`;
+    const logoutUrl = `${this.cognitoDomain}/logout?client_id=${encodeURIComponent(this.clientId)}&logout_uri=${encodeURIComponent(this.redirectUri)}`;
 
     // Call Cognito logout (fire and forget)
     fetch(logoutUrl).catch(console.error);
