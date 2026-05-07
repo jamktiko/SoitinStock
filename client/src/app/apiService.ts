@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Instruments, RawInstrument, RawInstrumentType } from './.models/instrument';
 import { RawItem } from './.models/item';
 import { catchError, Observable, throwError, map, switchMap } from 'rxjs';
+import { environment } from '../environments/environments';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:3000'; // Backend server url
+  private apiUrl = environment.apiUrl; // Backend server url
 
   constructor(private http: HttpClient) {}
 
