@@ -57,9 +57,15 @@ button {
   background: #4e1a1c;
   color: #ddbf8a;
   border-radius: 20px;
-  min-width: 400px;
-  max-width: 400px;
+  min-width: 200px;
+  max-width: 200px;
   align-items: center;
+}
+
+.instrument-card .openmodal {
+  margin-left: auto;
+  display: flex;
+  align-items: flex-end;
 }
 
 /* Musta pääbutton */
@@ -236,7 +242,7 @@ input:focus {
 
 /* KORTIT */
 .instrument-card {
-  min-width: 1200px;
+  min-width: 90%;
   display: flex;
   /*flex-wrap: wrap;*/
   gap: 1rem;
@@ -245,6 +251,10 @@ input:focus {
   border: 4px solid black;
   padding: 1rem;
   border-radius: 12px;
+}
+
+.instrument-list {
+  padding: 10px;
 }
 
 .instrument-card img {
@@ -299,7 +309,7 @@ input:focus {
 /* =========================
    RESPONSIIVISUUS
 ========================= */
-
+/*
 @media (max-width: 600px) {
   .instrument-card {
     flex-direction: column;
@@ -311,8 +321,8 @@ input:focus {
     justify-content: space-between;
   }
 }
-
-@media (max-width: 748px) {
+*/
+/*@media (max-width: 748px) {
   .instrument-name {
     max-width: 90px;
   }
@@ -337,14 +347,14 @@ input:focus {
     max-width: 100px;
     max-height: 100px;
   }
-}
+}*/
 
-@media (max-width: 1200px) {
+/*@media (max-width: 1200px) {
   .instrument-card {
     min-width: 900px;
   }
-}
-
+}*/
+/*
 @media (max-width: 935px) {
   .instrument-card {
     min-width: 800px;
@@ -355,7 +365,7 @@ input:focus {
   .instrument-card {
     min-width: 600px;
   }
-}
+}*/
 
 @media (max-width: 790px) {
   .nav-links button {
@@ -382,5 +392,22 @@ input:focus {
   .login-container {
     margin: 1rem;
     padding: 1.5rem;
+  }
+}
+
+@media (max-width: 570px) {
+  .instrument-card {
+    flex-direction: column;
+  }
+
+  .instrument-list {
+    align-items: center;
+    padding: 5px;
+  }
+}
+
+@media (max-width: 425px) {
+  .instrument-card {
+    min-width: 10%;
   }
 }
