@@ -67,6 +67,12 @@ a:link {
   transform: translateY(0);
 }
 
+button {
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
 @media (max-width: 235px) {
   .instrumentlink {
     font-size: 20px;
