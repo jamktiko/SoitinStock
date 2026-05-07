@@ -1,11 +1,8 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { ApiService } from './apiService';
-import { NavBar } from './nav-bar/nav-bar';
-import { RouterOutlet, RouterLinkWithHref, RouterLink } from '@angular/router';
+import { Component, OnInit, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { AuthService } from './auth.service';
+import { NavBar } from './nav-bar/nav-bar';
+import { RouterOutlet } from '@angular/router';
+import { ApiService } from './apiService';
 // import { RouterOutlet } from "../../node_modules/@angular/router/types/_router_module-chunk";
 
 @Component({
@@ -16,19 +13,11 @@ import { AuthService } from './auth.service';
   imports: [NavBar, RouterOutlet],
 })
 export class App implements OnInit {
-  private apiService = inject(ApiService); // "Injects" the value of ApiService-component to apiService-property. If there is no value, turns into null
+  private apiService = inject(ApiService);
   private authService = inject(AuthService);
-  message = toSignal(
-    this.apiService.getMessage().pipe(
-      catchError((error) => {
-        console.error('API Error Details:', error);
-        return of(`Error: ${error.status || 'Unknown'}`);
-      }),
-    ),
-    { initialValue: '' },
-  ); // toSignal turns apiService from an observable to a signal, which value can be shown in message()
+  message = signal('');
 
   ngOnInit() {
     this.authService.handleLoginCallback();
-  } // Activates App class on start
+  }
 }
