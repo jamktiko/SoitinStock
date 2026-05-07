@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@angular/build": "^21.0.3",
-    "@angular/cli": "^21.0.3",
+    "@angular/cli": "^21.1.2",
     "@angular/compiler-cli": "^21.0.0",
     "angular-in-memory-web-api": "^0.21.0",
     "jsdom": "^27.1.0",

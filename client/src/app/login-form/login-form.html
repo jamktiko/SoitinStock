@@ -1,15 +1,69 @@
-<div class="container-fluid">
-  <div class="d-flex mt-3 mb-3">Login</div>
-  <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
-    <div class="form-group">
-      <label for="tunnus">Tunnus:</label>
-      <input type="text" class="form-control" name="tunnus" ngModel />
-      <label for="salasana">Salasana:</label>
-      <input type="password" class="form-control" name="salasana" ngModel /><br />
-      <button type="submit" class="btn btn-light">Lähetä</button>
-    </div>
-    @if (error) {
-      <div class="alert alert-danger">{{ error }}</div>
-    }
-  </form>
+<div class="login-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Login</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (error) {
+        <div class="error-message">
+          <p>{{ error }}</p>
+        </div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" required />
+          @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+            <mat-error>
+              @if (loginForm.get('username')?.errors?.['required']) {
+                Username is required
+              }
+              @if (loginForm.get('username')?.errors?.['minlength']) {
+                Username must be at least 3 characters
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            required
+          />
+
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <mat-error>
+              @if (loginForm.get('password')?.errors?.['required']) {
+                Password is required
+              }
+              @if (loginForm.get('password')?.errors?.['minlength']) {
+                Password must be at least 6 characters
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <div class="button-container">
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="!loginForm.valid || isLoading"
+          >
+            @if (isLoading) {
+              <mat-spinner diameter="20"></mat-spinner>
+              Logging in...
+            } @else {
+              Login
+            }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>
