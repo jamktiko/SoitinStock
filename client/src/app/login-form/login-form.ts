@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../auth.service';
+
 @Component({
   selector: 'app-login-form',
   imports: [
@@ -27,7 +29,7 @@ export class LoginForm {
   error = '';
   isLoading = false;
   hidePassword = true;
-
+  auth = inject(AuthService);
   loginForm = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -44,5 +46,24 @@ export class LoginForm {
 
   togglePasswordVisibility() {
     this.hidePassword = !this.hidePassword;
+  }
+
+  output = 'No action yet.';
+
+  async callApi() {
+    const token = this.auth.getToken();
+    if (!token) {
+      this.output = 'Not logged in.';
+      return;
+    }
+    try {
+      const response = await fetch('/api/test', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      this.output = JSON.stringify(data, null, 2);
+    } catch (err: any) {
+      this.output = err.message;
+    }
   }
 }
