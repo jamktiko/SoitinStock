@@ -52,7 +52,7 @@ Resources:
             SupportedIdentityProviders:
                 - COGNITO
 
-            # Current callback/logout url, update to proper urls later
+            # HARDCODED! EDIT if change. Current callback/logout url, update to proper urls later
             CallbackURLs:
                 - https://d2jvgghzsyqabk.cloudfront.net/
 
@@ -80,5 +80,6 @@ Outputs:
         Value: !Sub
             - 'https://${Domain}/login?client_id=${ClientId}&response_type=code&scope=openid+email&redirect_uri=${Redirect}'
             - Domain: soitinstock-auth-2026.auth.eu-north-1.amazoncognito.com
-              ClientId: 1b08n5k49r4pnqegckcoodloje
+              # ClientId: 1b08n5k49r4pnqegckcoodloje
+              ClientId: !Ref UserPoolClient
               Redirect: https://d2jvgghzsyqabk.cloudfront.net/

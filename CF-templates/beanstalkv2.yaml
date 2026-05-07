@@ -1,0 +1,237 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SoitinStock - Elastic Beanstalk Layer 1 (Hardened Private EC2 + Public ALB Architecture)'
+
+Parameters:
+    ApplicationName:
+        Type: String
+        Default: SoitinStock
+
+    EnvironmentName:
+        Type: String
+        Default: SoitinStock-env
+
+    InstanceType:
+        Type: String
+        Default: t4g.small
+
+    KeyPairName:
+        Type: String
+        Default: vockey
+
+    VPCId:
+        Type: AWS::EC2::VPC::Id
+        Description: Default VPC ID
+
+    DBPassword:
+        Type: String
+        NoEcho: true
+        Description: 'Database password (temporary, move later to Secrets Manager)'
+
+Resources:
+    # --------------------------------------------------------------------
+    # Elastic Beanstalk Application
+    # --------------------------------------------------------------------
+    EBApplication:
+        Type: AWS::ElasticBeanstalk::Application
+        Properties:
+            ApplicationName: !Ref ApplicationName
+
+    # --------------------------------------------------------------------
+    # Elastic Beanstalk Environment
+    # --------------------------------------------------------------------
+    EBEnvironment:
+        Type: AWS::ElasticBeanstalk::Environment
+        Properties:
+            ApplicationName: !Ref EBApplication
+            EnvironmentName: !Ref EnvironmentName
+
+            SolutionStackName: '64bit Amazon Linux 2023 v6.10.1 running Node.js 24'
+
+            OptionSettings:
+                # ============================================================
+                # Environment Type
+                # ============================================================
+                - Namespace: aws:elasticbeanstalk:environment
+                  OptionName: EnvironmentType
+                  Value: LoadBalanced
+
+                - Namespace: aws:elasticbeanstalk:environment
+                  OptionName: ServiceRole
+                  Value: !ImportValue SoitinStock-ServiceRoleArn
+
+                - Namespace: aws:elasticbeanstalk:environment
+                  OptionName: LoadBalancerType
+                  Value: application
+
+                # ============================================================
+                # EC2 Launch Configuration
+                # ============================================================
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: InstanceType
+                  Value: !Ref InstanceType
+
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: IamInstanceProfile
+                  Value: !ImportValue SoitinStock-InstanceProfileName
+
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: EC2KeyName
+                  Value: !Ref KeyPairName
+
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: DisableIMDSv1
+                  Value: 'true'
+
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: SecurityGroups
+                  Value:
+                      Fn::ImportValue: SoitinStock-EBSecurityGroup
+
+                - Namespace: aws:autoscaling:launchconfiguration
+                  OptionName: AssociatePublicIpAddress
+                  Value: 'false'
+
+                # ============================================================
+                # Capacity
+                # ============================================================
+                - Namespace: aws:autoscaling:asg
+                  OptionName: MinSize
+                  Value: '1'
+
+                - Namespace: aws:autoscaling:asg
+                  OptionName: MaxSize
+                  Value: '1'
+
+                # ============================================================
+                # VPC Configuration
+                # ============================================================
+                - Namespace: aws:ec2:vpc
+                  OptionName: VPCId
+                  Value: !Ref VPCId
+
+                # Private EC2 subnets
+                - Namespace: aws:ec2:vpc
+                  OptionName: Subnets
+                  Value:
+                      Fn::Join:
+                          - ','
+                          - - Fn::ImportValue: SoitinStock-PrivateEC2SubnetA
+                            - Fn::ImportValue: SoitinStock-PrivateEC2SubnetB
+
+                # Public ALB subnets
+                - Namespace: aws:ec2:vpc
+                  OptionName: ELBSubnets
+                  Value:
+                      Fn::Join:
+                          - ','
+                          - - Fn::ImportValue: SoitinStock-PublicSubnetA
+                            - Fn::ImportValue: SoitinStock-PublicSubnetB
+
+                - Namespace: aws:ec2:vpc
+                  OptionName: ELBScheme
+                  Value: public
+
+                # ============================================================
+                # Load Balancer Security Group
+                # ============================================================
+                - Namespace: aws:elbv2:loadbalancer
+                  OptionName: SecurityGroups
+                  Value:
+                      Fn::ImportValue: SoitinStock-ALBSecurityGroup
+
+                # ============================================================
+                # Load Balancer Listener
+                # ============================================================
+                # HTTP only internally.
+                # HTTPS is enforced at CloudFront edge.
+                - Namespace: aws:elbv2:listener:default
+                  OptionName: ListenerEnabled
+                  Value: 'true'
+
+                - Namespace: aws:elbv2:listener:80
+                  OptionName: ListenerEnabled
+                  Value: 'true'
+
+                # ============================================================
+                # Health Check
+                # ============================================================
+                - Namespace: aws:elasticbeanstalk:environment:process:default
+                  OptionName: HealthCheckPath
+                  Value: /
+
+                # ============================================================
+                # Node.js / Proxy
+                # ============================================================
+                - Namespace: aws:elasticbeanstalk:environment:proxy
+                  OptionName: ProxyServer
+                  Value: nginx
+
+                # ============================================================
+                # Logging
+                # ============================================================
+                - Namespace: aws:elasticbeanstalk:cloudwatch:logs
+                  OptionName: StreamLogs
+                  Value: 'true'
+
+                - Namespace: aws:elasticbeanstalk:cloudwatch:logs
+                  OptionName: RetentionInDays
+                  Value: '7'
+
+                # ============================================================
+                # Deployment Configuration
+                # ============================================================
+                - Namespace: aws:elasticbeanstalk:command
+                  OptionName: DeploymentPolicy
+                  Value: AllAtOnce
+
+                - Namespace: aws:elasticbeanstalk:command
+                  OptionName: Timeout
+                  Value: '600'
+
+                # ============================================================
+                # Environment Variables
+                # ============================================================
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: NODE_ENV
+                  Value: production
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: COGNITO_USER_POOL_ID
+                  Value:
+                      Fn::ImportValue: SoitinStock-UserPoolId
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: COGNITO_CLIENT_ID
+                  Value:
+                      Fn::ImportValue: SoitinStock-UserPoolClientId
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: RDS_HOST
+                  Value:
+                      Fn::ImportValue: SoitinStock-RDSEndpoint
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: RDS_PORT
+                  Value:
+                      Fn::ImportValue: SoitinStock-RDSPort
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: RDS_DB_NAME
+                  Value:
+                      Fn::ImportValue: SoitinStock-DBName
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: RDS_USERNAME
+                  Value:
+                      Fn::ImportValue: SoitinStock-DBUser
+
+                - Namespace: aws:elasticbeanstalk:application:environment
+                  OptionName: RDS_PASSWORD
+                  Value: !Ref DBPassword
+
+Outputs:
+    EnvironmentURL:
+        Description: 'Elastic Beanstalk environment URL'
+        Value: !GetAtt EBEnvironment.EndpointURL
+        Export:
+            Name: SoitinStock-EnvironmentURL

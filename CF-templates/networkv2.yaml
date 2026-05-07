@@ -1,0 +1,297 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SoitinStock - Network Stack (Hardened with public/private subnets, NAT, and route tables)'
+
+Parameters:
+    VPCId:
+        Type: AWS::EC2::VPC::Id
+        Description: Default VPC ID
+
+Resources:
+    # --------------------------------------------------------------------
+    # Internet Gateway
+    # --------------------------------------------------------------------
+    InternetGateway:
+        Type: AWS::EC2::InternetGateway
+
+    VPCGatewayAttachment:
+        Type: AWS::EC2::VPCGatewayAttachment
+        Properties:
+            VpcId: !Ref VPCId
+            InternetGatewayId: !Ref InternetGateway
+
+    # --------------------------------------------------------------------
+    # Public Subnets (for ALB + NAT)
+    # --------------------------------------------------------------------
+    PublicSubnetA:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPCId
+            AvailabilityZone: !Select [0, !GetAZs '']
+            CidrBlock: 172.31.48.0/20
+            MapPublicIpOnLaunch: true
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-Public-A
+
+    PublicSubnetB:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPCId
+            AvailabilityZone: !Select [1, !GetAZs '']
+            CidrBlock: 172.31.64.0/20
+            MapPublicIpOnLaunch: true
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-Public-B
+
+    # --------------------------------------------------------------------
+    # NAT Gateway
+    # --------------------------------------------------------------------
+    NatEIP:
+        Type: AWS::EC2::EIP
+        Properties:
+            Domain: vpc
+
+    NatGateway:
+        Type: AWS::EC2::NatGateway
+        Properties:
+            AllocationId: !GetAtt NatEIP.AllocationId
+            SubnetId: !Ref PublicSubnetA
+
+    # --------------------------------------------------------------------
+    # Route Tables
+    # --------------------------------------------------------------------
+    PublicRouteTable:
+        Type: AWS::EC2::RouteTable
+        Properties:
+            VpcId: !Ref VPCId
+
+    PublicRoute:
+        Type: AWS::EC2::Route
+        DependsOn: VPCGatewayAttachment
+        Properties:
+            RouteTableId: !Ref PublicRouteTable
+            DestinationCidrBlock: 0.0.0.0/0
+            GatewayId: !Ref InternetGateway
+
+    PrivateRouteTableForEC2:
+        Type: AWS::EC2::RouteTable
+        Properties:
+            VpcId: !Ref VPCId
+
+    PrivateRouteForEC2:
+        Type: AWS::EC2::Route
+        Properties:
+            RouteTableId: !Ref PrivateRouteTableForEC2
+            DestinationCidrBlock: 0.0.0.0/0
+            NatGatewayId: !Ref NatGateway
+
+    PrivateRouteTableForRDS:
+        Type: AWS::EC2::RouteTable
+        Properties:
+            VpcId: !Ref VPCId
+
+    # --------------------------------------------------------------------
+    # Public Route Table Associations
+    # --------------------------------------------------------------------
+    PublicSubnetARouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            SubnetId: !Ref PublicSubnetA
+            RouteTableId: !Ref PublicRouteTable
+
+    PublicSubnetBRouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            SubnetId: !Ref PublicSubnetB
+            RouteTableId: !Ref PublicRouteTable
+
+    # --------------------------------------------------------------------
+    # Private Subnets for RDS (fully isolated)
+    # --------------------------------------------------------------------
+    PrivateSubnetA:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPCId
+            AvailabilityZone: !Select [0, !GetAZs '']
+            CidrBlock: 172.31.80.0/20
+            MapPublicIpOnLaunch: false
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-Private-RDS-A
+
+    PrivateSubnetB:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPCId
+            AvailabilityZone: !Select [1, !GetAZs '']
+            CidrBlock: 172.31.96.0/20
+            MapPublicIpOnLaunch: false
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-Private-RDS-B
+
+    PrivateSubnetARouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            SubnetId: !Ref PrivateSubnetA
+            RouteTableId: !Ref PrivateRouteTableForRDS
+
+    PrivateSubnetBRouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            SubnetId: !Ref PrivateSubnetB
+            RouteTableId: !Ref PrivateRouteTableForRDS
+
+    # --------------------------------------------------------------------
+    # Private Subnets for Elastic Beanstalk EC2 (via NAT)
+    # --------------------------------------------------------------------
+    PrivateSubnetEC2A:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPCId
+            AvailabilityZone: !Select [0, !GetAZs '']
+            CidrBlock: 172.31.112.0/20
+            MapPublicIpOnLaunch: false
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-Private-EC2-A
+
+    PrivateSubnetEC2B:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPCId
+            AvailabilityZone: !Select [1, !GetAZs '']
+            CidrBlock: 172.31.128.0/20
+            MapPublicIpOnLaunch: false
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-Private-EC2-B
+
+    PrivateSubnetEC2ARouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            SubnetId: !Ref PrivateSubnetEC2A
+            RouteTableId: !Ref PrivateRouteTableForEC2
+
+    PrivateSubnetEC2BRouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            SubnetId: !Ref PrivateSubnetEC2B
+            RouteTableId: !Ref PrivateRouteTableForEC2
+
+    # --------------------------------------------------------------------
+    # DB Subnet Group
+    # --------------------------------------------------------------------
+    DBSubnetGroup:
+        Type: AWS::RDS::DBSubnetGroup
+        Properties:
+            DBSubnetGroupDescription: 'SoitinStock RDS subnet group'
+            DBSubnetGroupName: soitinstock-db-subnet-group
+            SubnetIds:
+                - !Ref PrivateSubnetA
+                - !Ref PrivateSubnetB
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-DBSubnetGroup
+
+    # --------------------------------------------------------------------
+    # Application Load Balancer Security Group
+    # --------------------------------------------------------------------
+    ALBSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupDescription: 'Application Load Balancer security group'
+            VpcId: !Ref VPCId
+            SecurityGroupIngress:
+                - IpProtocol: tcp
+                  FromPort: 80
+                  ToPort: 80
+                  CidrIp: 0.0.0.0/0
+
+                - IpProtocol: tcp
+                  FromPort: 443
+                  ToPort: 443
+                  CidrIp: 0.0.0.0/0
+
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-ALB-SG
+
+    # --------------------------------------------------------------------
+    # Elastic Beanstalk EC2 Security Group
+    # --------------------------------------------------------------------
+    EBSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupDescription: 'Elastic Beanstalk EC2 instances security group'
+            VpcId: !Ref VPCId
+
+            SecurityGroupIngress:
+                # HTTP traffic only from ALB
+                - IpProtocol: tcp
+                  FromPort: 80
+                  ToPort: 80
+                  SourceSecurityGroupId: !Ref ALBSecurityGroup
+
+                # HTTPS traffic only from ALB
+                - IpProtocol: tcp
+                  FromPort: 443
+                  ToPort: 443
+                  SourceSecurityGroupId: !Ref ALBSecurityGroup
+
+                # SSH access for administration/debugging
+                - IpProtocol: tcp
+                  FromPort: 22
+                  ToPort: 22
+                  CidrIp: 195.148.39.81/32
+
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-EB-SG
+
+Outputs:
+    PublicSubnetAId:
+        Value: !Ref PublicSubnetA
+        Export:
+            Name: SoitinStock-PublicSubnetA
+
+    PublicSubnetBId:
+        Value: !Ref PublicSubnetB
+        Export:
+            Name: SoitinStock-PublicSubnetB
+
+    PrivateSubnetAId:
+        Value: !Ref PrivateSubnetA
+        Export:
+            Name: SoitinStock-PrivateSubnetA
+
+    PrivateSubnetBId:
+        Value: !Ref PrivateSubnetB
+        Export:
+            Name: SoitinStock-PrivateSubnetB
+
+    PrivateSubnetEC2AId:
+        Value: !Ref PrivateSubnetEC2A
+        Export:
+            Name: SoitinStock-PrivateEC2SubnetA
+
+    PrivateSubnetEC2BId:
+        Value: !Ref PrivateSubnetEC2B
+        Export:
+            Name: SoitinStock-PrivateEC2SubnetB
+
+    DBSubnetGroupName:
+        Value: !Ref DBSubnetGroup
+        Export:
+            Name: SoitinStock-DBSubnetGroup
+
+    ALBSecurityGroupId:
+        Value: !Ref ALBSecurityGroup
+        Export:
+            Name: SoitinStock-ALBSecurityGroup
+
+    EBSecurityGroupId:
+        Value: !Ref EBSecurityGroup
+        Export:
+            Name: SoitinStock-EBSecurityGroup
