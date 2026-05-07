@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { ApiService } from './apiService';
 import { NavBar } from './nav-bar/nav-bar';
 import { RouterOutlet, RouterLinkWithHref, RouterLink } from '@angular/router';
+import { AuthService } from './auth.service';
 // import { RouterOutlet } from "../../node_modules/@angular/router/types/_router_module-chunk";
 
 @Component({
@@ -16,6 +17,7 @@ import { RouterOutlet, RouterLinkWithHref, RouterLink } from '@angular/router';
 })
 export class App implements OnInit {
   private apiService = inject(ApiService); // "Injects" the value of ApiService-component to apiService-property. If there is no value, turns into null
+  private authService = inject(AuthService);
   message = toSignal(
     this.apiService.getMessage().pipe(
       catchError((error) => {
@@ -26,5 +28,7 @@ export class App implements OnInit {
     { initialValue: '' },
   ); // toSignal turns apiService from an observable to a signal, which value can be shown in message()
 
-  ngOnInit() {} // Activates App class on start
+  ngOnInit() {
+    this.authService.handleLoginCallback();
+  } // Activates App class on start
 }
