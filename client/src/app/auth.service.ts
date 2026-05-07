@@ -75,4 +75,8 @@ export class AuthService {
         .catch(console.error);
     }
   }
+  isAuthenticated(): boolean {
+    const token = sessionStorage.getItem('accesstoken');
+    return !!token && token !== '{}';
+  }
 }

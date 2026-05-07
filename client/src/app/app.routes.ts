@@ -5,10 +5,14 @@ import { RentingForm } from './renting-form/renting-form';
 // import { Page } from './rentingForm/page';
 // import { NotFoundError } from 'rxjs';
 
+import { LoginForm } from './login-form/login-form';
+import { AuthGuard } from './auth.guard';
+
 export const routes: Routes = [
-  { path: '', component: FrontPage },
-  { path: 'products', component: FrontPage },
-  { path: 'products/:category', component: FrontPage },
-  { path: 'renting', component: RentingForm },
+  { path: 'login', component: LoginForm },
+  { path: '', component: FrontPage, canActivate: [AuthGuard] },
+  { path: 'products', component: FrontPage, canActivate: [AuthGuard] },
+  { path: 'products/:category', component: FrontPage, canActivate: [AuthGuard] },
+  { path: 'renting', component: RentingForm, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '' },
 ];
