@@ -1,1 +1,71 @@
-<p>login-form works!</p>
+<div class="login-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Login</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (error) {
+        <div class="error-message">
+          <p>{{ error }}</p>
+        </div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" required />
+          @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+            <mat-error>
+              @if (loginForm.get('username')?.errors?.['required']) {
+                Username is required
+              }
+              @if (loginForm.get('username')?.errors?.['minlength']) {
+                Username must be at least 3 characters
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            required
+          />
+
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <mat-error>
+              @if (loginForm.get('password')?.errors?.['required']) {
+                Password is required
+              }
+              @if (loginForm.get('password')?.errors?.['minlength']) {
+                Password must be at least 6 characters
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <div class="button-container">
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="!loginForm.valid || isLoading"
+          >
+            @if (isLoading) {
+              <mat-spinner diameter="20"></mat-spinner>
+              Logging in...
+            } @else {
+              Login
+            }
+          </button>
+          <button (click)="callApi()">Call Protected Backend</button>
+          <pre>{{ output }}</pre>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
