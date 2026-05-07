@@ -129,7 +129,7 @@ input:focus {
 
 .top-bar {
   position: absolute;
-  top: 70px;
+  top: 10%;
   right: 20px;
 }
 

@@ -23,7 +23,7 @@
 .nav-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 5px;
   flex: 1;
   justify-content: center;
 }
@@ -33,7 +33,7 @@
   background: transparent;
   color: black;
   border: none;
-  font-size: 25px;
+  font-size: 20px;
   padding: 0.3rem 0.6rem;
 }
 
@@ -44,6 +44,27 @@
 
 a:link {
   text-decoration: none;
+}
+
+.menu-btn {
+  font-family: 'Noto Serif', serif;
+  background-color: black;
+  color: white;
+  max-width: 100px;
+  max-height: 100px;
+  padding: 15px;
+  font-size: 15px;
+  border-radius: 16px;
+  align-items: center;
+}
+
+.menu-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.menu-btn:active {
+  transform: translateY(0);
 }
 
 @media (max-width: 235px) {

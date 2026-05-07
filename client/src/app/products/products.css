@@ -404,10 +404,22 @@ input:focus {
     align-items: center;
     padding: 5px;
   }
+
+  .instrument-card .openmodal {
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 425px) {
   .instrument-card {
     min-width: 10%;
+  }
+}
+
+@media (max-width: 235px) {
+  .openmodal .modalbutton {
+    min-width: 100px;
+    max-height: 100px;
+    font-size: 15px;
   }
 }
