@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Instruments, RawInstrument, RawInstrumentType } from './.models/instrument';
 import { RawItem } from './.models/item';
 import { catchError, Observable, throwError, map, switchMap } from 'rxjs';
+import { environment } from '../environments/environments';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:3000'; // Backend server url
+  // private apiUrl = environment.apiUrl; // Backend server url
+  private apiUrl = 'http://localhost:3000/api'; // LocalhostUrl
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +21,7 @@ export class ApiService {
   }
 
   getMessage(): Observable<string> {
-    return this.http.get<string>(`${this.apiUrl}/api/test`, { responseType: 'text' as 'json' });
+    return this.http.get<string>(`${this.apiUrl}/test`, { responseType: 'text' as 'json' });
   }
   // Request the root endpoint and returns instruments as a observable
   // getInstruments(): Observable<RawInstrument[]> {
@@ -31,20 +33,20 @@ export class ApiService {
     return this.http.get<RawInstrument>(url).pipe(catchError(this.handleError));
   }
   GetContents(): Observable<RawInstrument[]> {
-    return this.http.get<RawInstrument[]>(`${this.apiUrl}/api/instruments`);
+    return this.http.get<RawInstrument[]>(`${this.apiUrl}/instruments`);
     // Error handling could be added here
   }
 
   GetItems(): Observable<RawItem[]> {
-    return this.http.get<RawItem[]>(`${this.apiUrl}/api/items`);
+    return this.http.get<RawItem[]>(`${this.apiUrl}/items`);
     // Error handling could be added here
   }
   GetContentTypes(): Observable<RawInstrumentType[]> {
-    return this.http.get<RawInstrumentType[]>(`${this.apiUrl}/api/types`);
+    return this.http.get<RawInstrumentType[]>(`${this.apiUrl}/types`);
   }
   // Gets a single content object by its id
   GetContentByID(contentid: string): Observable<Instruments> {
-    return this.http.get<Instruments>('api/instruments' + '/' + contentid).pipe(
+    return this.http.get<Instruments>(`${this.apiUrl}/instruments/${contentid}`).pipe(
       catchError((error) => {
         console.error('An error occurred: ', error);
         return throwError(() => new Error(error.message || 'Unknown error'));
