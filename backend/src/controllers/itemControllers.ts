@@ -22,3 +22,14 @@ export async function getItemsByInstrumentName(req: Request, res: Response) {
     throw err;
   }
 }
+
+export async function getItemsByAvailability(req: Request, res: Response) {
+  try {
+    const [rows] = await db.execute('SELECT * FROM Item WHERE is_available=?', [
+      req.params.value,
+    ]);
+    res.json(rows);
+  } catch (err) {
+    throw err;
+  }
+}

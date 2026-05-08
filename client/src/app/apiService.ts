@@ -9,7 +9,8 @@ import { environment } from '../environments/environments';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = environment.apiUrl; // Backend server url
+  // private apiUrl = environment.apiUrl; // Backend server url
+  private apiUrl = 'http://localhost:3000/api'; // LocalhostUrl
 
   constructor(private http: HttpClient) {}
 
