@@ -37,8 +37,8 @@
         <mat-form-field>
           <mat-label>Select Instrument</mat-label>
           <mat-select formControlName="selectedItem">
-            @for (item of itemsWithDetails(); track item.id_Item) {
-              <mat-option [value]="item.id_Item">
+            @for (item of itemsWithDetails(); track item.barcode) {
+              <mat-option [value]="item.barcode">
                 <strong>{{ item.instrumentName }}</strong> ({{ item.instrumentModel }}) - Barcode:
                 {{ item.barcode }}
               </mat-option>
