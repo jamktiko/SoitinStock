@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'SoitinStock - Elastic Beanstalk Layer 1 (Hardened Private EC2 + Public ALB Architecture)'
+Description: 'SoitinStock - Elastic Beanstalk Layer 1 (Load Balanced Hardened)'
 
 Parameters:
     ApplicationName:
@@ -22,10 +22,14 @@ Parameters:
         Type: AWS::EC2::VPC::Id
         Description: Default VPC ID
 
+    SubnetId:
+        Type: AWS::EC2::Subnet::Id
+        Description: Public subnet for Elastic Beanstalk instances
+
     DBPassword:
         Type: String
         NoEcho: true
-        Description: 'Database password (temporary, move later to Secrets Manager)'
+        Description: 'Database password'
 
 Resources:
     # --------------------------------------------------------------------
@@ -59,12 +63,8 @@ Resources:
                   OptionName: ServiceRole
                   Value: !ImportValue SoitinStock-ServiceRoleArn
 
-                - Namespace: aws:elasticbeanstalk:environment
-                  OptionName: LoadBalancerType
-                  Value: application
-
                 # ============================================================
-                # EC2 Launch Configuration
+                # EC2 Instance Configuration
                 # ============================================================
                 - Namespace: aws:autoscaling:launchconfiguration
                   OptionName: InstanceType
@@ -82,14 +82,23 @@ Resources:
                   OptionName: DisableIMDSv1
                   Value: 'true'
 
+                # Use hardened EB security group
                 - Namespace: aws:autoscaling:launchconfiguration
                   OptionName: SecurityGroups
                   Value:
                       Fn::ImportValue: SoitinStock-EBSecurityGroup
 
-                - Namespace: aws:autoscaling:launchconfiguration
-                  OptionName: AssociatePublicIpAddress
-                  Value: 'false'
+                # ============================================================
+                # Load Balancer Configuration
+                # ============================================================
+                - Namespace: aws:elbv2:loadbalancer
+                  OptionName: SecurityGroups
+                  Value:
+                      Fn::ImportValue: SoitinStock-ALBSecurityGroup
+
+                - Namespace: aws:elbv2:listener:default
+                  OptionName: ListenerEnabled
+                  Value: 'true'
 
                 # ============================================================
                 # Capacity
@@ -109,65 +118,36 @@ Resources:
                   OptionName: VPCId
                   Value: !Ref VPCId
 
-                # Private EC2 subnets
+                # EC2 instances
                 - Namespace: aws:ec2:vpc
                   OptionName: Subnets
-                  Value:
-                      Fn::Join:
-                          - ','
-                          - - Fn::ImportValue: SoitinStock-PrivateEC2SubnetA
-                            - Fn::ImportValue: SoitinStock-PrivateEC2SubnetB
+                  Value: !Ref SubnetId
 
-                # Public ALB subnets
+                # ALB subnets
                 - Namespace: aws:ec2:vpc
                   OptionName: ELBSubnets
-                  Value:
-                      Fn::Join:
-                          - ','
-                          - - Fn::ImportValue: SoitinStock-PublicSubnetA
-                            - Fn::ImportValue: SoitinStock-PublicSubnetB
+                  Value: !Ref SubnetId
 
+                # Internet-facing ALB
                 - Namespace: aws:ec2:vpc
                   OptionName: ELBScheme
                   Value: public
 
-                # ============================================================
-                # Load Balancer Security Group
-                # ============================================================
-                - Namespace: aws:elbv2:loadbalancer
-                  OptionName: SecurityGroups
-                  Value:
-                      Fn::ImportValue: SoitinStock-ALBSecurityGroup
-
-                # ============================================================
-                # Load Balancer Listener
-                # ============================================================
-                # HTTP only internally.
-                # HTTPS is enforced at CloudFront edge.
-                - Namespace: aws:elbv2:listener:default
-                  OptionName: ListenerEnabled
-                  Value: 'true'
-
-                - Namespace: aws:elbv2:listener:80
-                  OptionName: ListenerEnabled
+                # EC2 still receives public IP
+                # safer migration path for existing environment
+                - Namespace: aws:ec2:vpc
+                  OptionName: AssociatePublicIpAddress
                   Value: 'true'
 
                 # ============================================================
-                # Health Check
-                # ============================================================
-                - Namespace: aws:elasticbeanstalk:environment:process:default
-                  OptionName: HealthCheckPath
-                  Value: /
-
-                # ============================================================
-                # Node.js / Proxy
+                # Application Proxy
                 # ============================================================
                 - Namespace: aws:elasticbeanstalk:environment:proxy
                   OptionName: ProxyServer
                   Value: nginx
 
                 # ============================================================
-                # Logging
+                # Health / Monitoring
                 # ============================================================
                 - Namespace: aws:elasticbeanstalk:cloudwatch:logs
                   OptionName: StreamLogs
@@ -177,8 +157,13 @@ Resources:
                   OptionName: RetentionInDays
                   Value: '7'
 
+                # Healthcheck configuration add later. (?)
+                # - Namespace: aws:elasticbeanstalk:application
+                #   OptionName: Application Healthcheck URL
+                #   Value: /health
+
                 # ============================================================
-                # Deployment Configuration
+                # Deployment Strategy
                 # ============================================================
                 - Namespace: aws:elasticbeanstalk:command
                   OptionName: DeploymentPolicy
