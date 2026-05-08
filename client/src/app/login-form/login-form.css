@@ -53,6 +53,7 @@ button {
 ========================= */
 
 .login-container {
+  font-family: 'Noto Serif', serif;
   background: rgba(255, 255, 255, 0.9);
   padding: 2rem;
   border-radius: 16px;
@@ -63,6 +64,26 @@ button {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.login {
+  font-family: 'Noto Serif', serif;
+  font-weight: 700;
+  font-size: large;
+}
+
+mat-card-title {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.login-form .login {
+  font-weight: bolder;
+  font-size: large;
+}
+
+.login-form {
+  align-items: center;
 }
 
 .avatar {
