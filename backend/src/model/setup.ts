@@ -1,7 +1,6 @@
 //this will setup the database
 import db from '../config/db';
 import fs from 'fs';
-import 'dotenv/config';
 
 async function runFile(filename: string) {
   const sql = fs.readFileSync(filename, 'utf8');
