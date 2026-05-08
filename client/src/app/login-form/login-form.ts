@@ -35,9 +35,4 @@ export class LoginForm {
       this.output = err.message;
     }
   }
-  forceLogin() {
-    // Set fake tokens for development
-    localStorage.setItem('access_token', 'dev-fake-token');
-    localStorage.setItem('id_token', 'dev-fake-id-token');
-  }
 }
