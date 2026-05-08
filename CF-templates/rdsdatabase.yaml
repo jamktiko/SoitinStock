@@ -40,6 +40,10 @@ Resources:
                 - !Ref PrivateSubnet1
                 - !Ref PrivateSubnet2
 
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-RDS-Private
+
     # --------------------------------------------------
     # RDS Security Group
     # --------------------------------------------------

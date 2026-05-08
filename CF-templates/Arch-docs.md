@@ -1,21 +1,8 @@
-## CloudFormation Template Guide
-
-In order to set up our environment, the templates should be run in CloudFormation in the following order (required by interdependencies):
-
-1. roles.yaml ----------- no dependencies
-2. network.yaml --------- no dependencies
-3. rdsdatabase.yaml ----- depends on network yaml for private subnets
-4. cognito.yaml --------- depends
-5. beanstalk.yaml ------- depends on roles, rds environment variables
-6. s3cloudfront2.yaml --- depends on beanstalk
-
-FIX THIS!!
-
-Template naming convention: SoitinStock-ServiceName
+## AWS Architecture Documentation
 
 ---
 
-### About
+### About CloudFormation Templates
 
 _Roles_
 
@@ -31,6 +18,7 @@ _Network_
 
 - The Network template provisions the RDS-required database subnet group including two "private" subnets.
 - It additionally defines Elastic Beanstalk security groups enabling SSH access into the EC2 instance and therefore RDS for development purposes.
+- For production purposes, a new VPC network should be defined, containing the required private subnets for moving EC2 instance(s) behind an ALB, additional configurations for RDS subnets, relevant routing tables, and a NAT gateway.
 
 _RDS and MySQL Database_
 
@@ -46,7 +34,7 @@ _Beanstalk_
 - This template also includes environment variables for RDS and Cognito.
 - When setting up, make sure to choose the default VPC and subnet.
 - Once this has been provisioned, you may add your backend code zip file with the Upload and Deploy button.
-- Due to development and budget constraints, an Application Load Balancer and fully private subnets have not been integrated. Production level networking was not in the scope of this educational project.
+- Due to development and budget constraints, an Application Load Balancer and fully private subnets have not been integrated. Production level networking was not in the scope of this educational project, and could not be implemented at later stages due to infrastructural drift and stack bidirectional interdependencies.
 
 _S3 and CloudFront_
 
@@ -56,5 +44,20 @@ _S3 and CloudFront_
 - The Cloudfront template also includes important caching settings allowing authorization headers to reach the backend, for Cognito integration.
 - Once this has launched, you can upload your frontend code into the bucket.
 - The frontend code (index.html in development, /dist in production) must have fetch('/api/test') or similar to work.
-- The backend code (minimum server.js, package.json, package-lock.json) must have the environment port set up, as well as an app.get('/api/test'...). The combination ensures correct communication between frontend and backend.
+- The backend code (minimum server.js, package.json, package-lock.json) must have the environment port set up, as well as an app.get('/api/test'...). This combination ensures correct communication between frontend and backend, api's and routing can be further developed as needed.
 - The website may be viewed through the CloudFront distribution domain name link.
+
+---
+
+### Setting up the environment
+
+The AWS environment can be set up differently depending on usage. Production scale projects should implement...
+
+1. roles.yaml ----------- no dependencies
+2. network.yaml --------- no dependencies
+3. rdsdatabase.yaml ----- depends on network yaml for private subnets
+4. cognito.yaml --------- depends
+5. beanstalk.yaml ------- depends on roles, rds environment variables
+6. s3cloudfront2.yaml --- depends on beanstalk
+
+Template naming convention: SoitinStock-ServiceName
