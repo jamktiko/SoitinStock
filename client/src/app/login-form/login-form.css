@@ -116,6 +116,7 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  align-items: center;
 }
 
 input {
@@ -303,15 +304,32 @@ input:focus {
   }
 }
 
-@media (max-width: 220px) {
-  .login-container h1 {
+@media (max-width: 260px) {
+  .form-group p {
     font-size: 15px;
+  }
+
+  .avatar {
+    width: 50%;
+    height: 50%;
+  }
+
+  .form-group .menu-btn {
+    width: 50%;
+    height: 50%;
+    font-size: 10px;
+    padding: 10px;
+  }
+
+  .login-form .login {
+    font-weight: 200px;
+    font-size: 5px;
   }
 }
 
-@media (max-width: 210px) {
-  .top-bar {
-    top: 160px;
+@media (max-width: 220px) {
+  .login-container h1 {
+    font-size: 15px;
   }
 }
 
