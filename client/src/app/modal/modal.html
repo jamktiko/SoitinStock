@@ -11,13 +11,12 @@
     } @else {
       <p>No Description given</p>
     }
-    <a routerLink="/renting" (click)="closeModal()">To Renting</a>
 
     <h3>Available Items</h3>
     @if (relatedItems().length === 0) {
       <p>No items available for this instrument</p>
     } @else {
-      @for (item of relatedItems(); track item.id_Item) {
+      @for (item of filteredItems(); track item.barcode) {
         <div class="item-card">
           <p><strong>Barcode:</strong> {{ item.barcode }}</p>
           <p><strong>Condition:</strong> {{ item.item_condition }}</p>
@@ -25,6 +24,9 @@
           <p><strong>Price/week:</strong> {{ item.rent_week | number: '1.2-2' }} €</p>
           <p><strong>Price/month:</strong> {{ item.rent_month | number: '1.2-2' }} €</p>
           <p><strong>Available:</strong> {{ item.is_available ? 'Yes' : 'No' }}</p>
+          <button type="button" (click)="addToCart(item)" [disabled]="!item.is_available">
+            Add to Cart
+          </button>
         </div>
       }
     }

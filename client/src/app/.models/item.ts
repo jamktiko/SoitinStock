@@ -10,3 +10,8 @@ export interface RawItem {
   item_condition: Condition;
   Instrument_id_Instrument: number;
 }
+
+export interface RentalItem extends RawItem {
+  amount: number;
+  totalprice: number;
+}

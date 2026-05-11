@@ -23,7 +23,7 @@
       <div class="instrument-card">
         <p class="instrument-name">{{ instrument.name }}</p>
         <p class="instrument-id">Model: {{ instrument.model }}</p>
-        <p class="instrument-id">Description: {{ instrument.Description }}</p>
+        <p class="instrument-id">Available Items: {{ getItemCount(instrument.id_Instrument) }}</p>
         <div class="openmodal">
           <button (click)="showModal(instrument)" class="modalbutton">Show Description</button>
         </div>

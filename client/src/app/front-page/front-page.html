@@ -28,7 +28,7 @@
   <button class="menu-btn" id="logoutBtn">Sign out</button>
 </div>-->
 
-@if (activeCategory() === null) {
+@if (activeCategory() === null && auth.isLoggedIn()) {
   <div class="login-container">
     <main class="menu">
       <h1 id="greeting">Hello User</h1>

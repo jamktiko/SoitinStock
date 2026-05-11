@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, signal, computed } from '@angular/core';
 import { ProductStore } from '../instrumentstore';
 import { CommonModule } from '@angular/common';
 
@@ -20,10 +20,29 @@ export class Products {
   // Inject, that is, connect the store to the component
   // The component has no local state; the state is in the store
   readonly pstore = inject(ProductStore);
+  allItems = this.pstore.items;
   // readonly cstore = inject();
   getInstrumentName(instrumentId: number): string {
     const instrument = this.pstore.instruments().find((i) => i.id_Instrument === instrumentId);
     return instrument?.name || 'Unknown Instrument';
+  }
+
+  itemCountByInstrument = computed(() => {
+    const items = this.allItems();
+    const counts = new Map<number, number>();
+
+    items.forEach((item) => {
+      if (item.is_available) {
+        const id = item.Instrument_id_Instrument;
+        counts.set(id, (counts.get(id) || 0) + 1);
+      }
+    });
+
+    return counts;
+  });
+
+  getItemCount(instrumentId: number): number {
+    return this.itemCountByInstrument().get(instrumentId) || 0;
   }
   constructor() {}
 
@@ -33,19 +52,4 @@ export class Products {
       data: { instrument },
     });
   }
-  // addToCart(p: Products) {
-  //   // Reduce product quantity in inventory
-  //   // this.pstore.reduceAmount(p.id);
-  //   // New product to shopping cart. Quantity is initialized to zero, which increases
-  //   // by one each time a new product arrives in the cart
-  //   const prod = {
-  //     id: p.id,
-  //     name: p.name,
-  //     price: p.price,
-  //     amount: 0,
-  //     totalprice: p.price,
-  //   };
-  //   // Shopping cart state updates to cart store
-  //   // this.cstore.addToCart(prod);
-  // }
 }

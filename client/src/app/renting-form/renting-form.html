@@ -24,37 +24,17 @@
   </div>
   <h4>Items to Rent</h4>
 
-  <!--<div class="top-bar">
-    <button class="menu-btn" id="logoutBtn">Sign out</button>
-  </div>-->
-
   <!-- FormArray for multiple rentals -->
   <div formArrayName="rentals" class="instrument-card">
     @for (rental of rentals.controls; let i = $index; track i) {
       <div [formGroupName]="i" class="rental-item">
         <h5>Item {{ i + 1 }}</h5>
 
-        <mat-form-field>
-          <mat-label>Select Instrument</mat-label>
-          <mat-select formControlName="selectedItem">
-            @for (item of itemsWithDetails(); track item.barcode) {
-              <mat-option [value]="item.barcode">
-                <strong>{{ item.instrumentName }}</strong> ({{ item.instrumentModel }}) - Barcode:
-                {{ item.barcode }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Start Date</mat-label>
-          <input matInput type="date" formControlName="startDate" required />
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>End Date</mat-label>
-          <input matInput type="date" formControlName="endDate" required />
-        </mat-form-field>
+        <!-- Display item info (read-only) -->
+        <p>
+          <strong>{{ cartItemsWithDetails()[i]?.instrumentName }}</strong>
+        </p>
+        <p>Barcode: {{ cartItems()[i]?.barcode }}</p>
 
         <mat-form-field>
           <mat-label>Rental Type</mat-label>
@@ -65,24 +45,18 @@
           </mat-select>
         </mat-form-field>
 
-        @if (rentals.length > 1) {
-          <button
-            type="button"
-            class="remove-btn"
-            (click)="removeRentalRow(i)"
-            mat-stroked-button
-            color="warn"
-          >
-            Remove
-          </button>
+        <!-- Display calculated end date -->
+        @if (rental.get('startDate')?.value) {
+          <p>
+            <strong>End Date:</strong>
+            {{ calculateEndDate(rental.get('startDate')?.value, rental.get('rentalType')?.value) }}
+          </p>
         }
+
+        <button type="button" (click)="removeRentalRow(i)">Remove Item</button>
       </div>
     }
   </div>
-
-  <button class="additem-btn" type="button" (click)="addRentalRow()" mat-stroked-button>
-    + Add Another Item
-  </button>
 
   <button type="submit" [disabled]="!rentalForm.valid" mat-raised-button color="primary">
     Rent Now

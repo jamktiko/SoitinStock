@@ -5,14 +5,14 @@ import { RawInstrument } from '../.models/instrument';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, switchMap } from 'rxjs';
 // import { MatDialog } from '@angular/material/dialog';
-
+import { RentalStore } from '../rentalStore';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { ProductStore } from '../instrumentstore';
 import { CommonModule } from '@angular/common';
-
+import { RawItem, RentalItem } from '../.models/item';
 @Component({
   selector: 'app-modal',
-  imports: [CommonModule, MatDialogModule, RouterLink],
+  imports: [CommonModule, MatDialogModule],
   templateUrl: './modal.html',
   styleUrl: './modal.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,7 +24,7 @@ export class Modal {
 
   dialogRef = inject(MatDialogRef<Modal>);
   data = inject(MAT_DIALOG_DATA) as { instrument: RawInstrument };
-
+  rstore = inject(RentalStore);
   pstore = inject(ProductStore);
   // protected instrument = toSignal(
   //   this.route.paramMap.pipe(
@@ -47,7 +47,16 @@ export class Modal {
   //   public dialogRef: MatDialogRef<Modal>,
   //   @Inject(MAT_DIALOG_DATA) public data: any,
   // ) {}
+  // products.ts
 
+  filteredItems = computed(() => {
+    const cartIds = this.rstore.cartItemBarcodes();
+    return this.relatedItems().filter((item) => !cartIds.includes(item.barcode));
+  });
+
+  addToCart(item: RawItem) {
+    this.rstore.addToCart({ ...item, amount: 1 } as RentalItem);
+  }
   constructor() {}
 
   closeModal() {
