@@ -1,15 +1,30 @@
+<head>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<div class="background"></div>
 <div class="login-container">
-  <mat-card>
-    <mat-card-header>
+  <div class="avatar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+    </svg>
+  </div>
+  <mat-card class="login-form">
+    <mat-card-header class="login">
       <mat-card-title>Login</mat-card-title>
     </mat-card-header>
 
-    <mat-card-content>
+    <mat-card-content class="form-group">
       <p>Please log in with Cognito to access the application.</p>
 
-      <button mat-raised-button color="primary" (click)="login()">Login with Cognito</button>
+      <button mat-raised-button color="primary" class="menu-btn" (click)="login()">
+        Login with Cognito
+      </button>
 
-      <button (click)="callApi()">Call Protected Backend</button>
+      <button (click)="callApi()" class="menu-btn">Call Protected Backend</button>
       <pre>{{ output }}</pre>
     </mat-card-content>
   </mat-card>
