@@ -52,6 +52,9 @@ app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 */
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 //api for instruments
 import instrumentRouter from './src/routes/instruments';

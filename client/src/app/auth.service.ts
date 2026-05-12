@@ -27,6 +27,7 @@ export class AuthService {
   // logout() {
   //   localStorage.clear();
   // }
+  //
 
   logout() {
     localStorage.clear();
@@ -87,6 +88,7 @@ export class AuthService {
       this.exchangeCodeForToken(code)
         .then(() => {
           window.history.replaceState({}, document.title, window.location.pathname);
+          // added route to products page after successful login (test by jun)
           this.router.navigate(['/products']);
         })
         .catch(console.error);
