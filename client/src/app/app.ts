@@ -13,7 +13,6 @@ import { ApiService } from './apiService';
   imports: [NavBar, RouterOutlet],
 })
 export class App implements OnInit {
-  private apiService = inject(ApiService);
   private authService = inject(AuthService);
   message = signal('');
 

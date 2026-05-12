@@ -9,8 +9,8 @@ import { environment } from '../environments/environments';
   providedIn: 'root',
 })
 export class ApiService {
-  // private apiUrl = environment.apiUrl; // Backend server url
-  private apiUrl = 'http://localhost:3000/api'; // LocalhostUrl
+  private apiUrl = environment.apiUrl; // Backend server url
+  // private apiUrl = 'http://localhost:3000/api'; // LocalhostUrl
 
   constructor(private http: HttpClient) {}
 
@@ -71,5 +71,5 @@ export class ApiService {
   }
   submitRental(rental: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/rentals`, rental);
-  } 
+  }
 }
