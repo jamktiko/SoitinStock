@@ -109,7 +109,7 @@ export class RentingForm {
     });
   }
 
-  submitTest() {
+  submitRentForm() {
     const formValue = this.rentalForm.value;
     const rentalType = formValue.rentals[0]?.rentalType;
 
