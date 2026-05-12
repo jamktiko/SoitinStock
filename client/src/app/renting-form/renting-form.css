@@ -25,9 +25,14 @@ body {
 
 /* NAPIT (yhteinen pohja) */
 button {
+  font-family: 'Noto Serif', serif;
   cursor: pointer;
   border-radius: 10px;
   transition: 0.2s;
+
+  display: flex;
+  justify-content: center; /* center text horizontally */
+  align-items: center; /* center text vertically */
 }
 
 /* Musta pääbutton */
@@ -142,38 +147,11 @@ input:focus {
   /*min-height: 515px;*/
 }
 
+.additem-btn,
+.remove-btn,
 .menu-btn {
-  font-family: 'Noto Serif', serif;
-  background-color: black;
-  color: white;
-  width: 100%;
-  padding: 1.2rem;
-  font-size: 1.5rem;
-  border-radius: 16px;
-  align-items: center;
-}
-
-.additem-btn {
-  font-family: 'Noto Serif', serif;
-  background-color: black;
-  color: white;
-  width: 50%;
-  padding: 1.2rem;
-  font-size: 1.5rem;
-  border-radius: 16px;
-  align-items: center;
-}
-
-.remove-btn {
-  font-family: 'Noto Serif', serif;
-  font-size: 20px;
-  /*padding: 0.5rem 0.8rem;*/
-  border: 2px solid black;
-  background: #4e1a1c;
-  color: #ddbf8a;
-  border-radius: 20px;
-  min-width: 400px;
-  max-width: 400px;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
@@ -181,6 +159,9 @@ input:focus {
   border: 1px solid #000000;
   padding: 1rem;
   margin: 1rem 0;
+
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -213,8 +194,10 @@ input:focus {
 
 /* KORTIT */
 .instrument-card {
+  width: fit-content;
+  margin: 0 auto;
   display: flex;
-  flex-wrap: wrap;
+  /*flex-wrap: wrap;*/
   gap: 1rem;
   align-items: center;
   justify-content: center;
@@ -222,6 +205,37 @@ input:focus {
   border: 4px solid black;
   padding: 1rem;
   border-radius: 12px;
+  flex-direction: column;
+}
+
+.renter-card {
+  margin: 0 auto;
+  max-width: 90%;
+  display: flex;
+  /*flex-wrap: wrap;*/
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  background: #eddcbf;
+  border: 4px solid black;
+  padding: 1rem;
+  border-radius: 12px;
+  /*flex-direction: column;*/
+}
+
+.instrument-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* horizontal centering */
+  justify-content: center;
+  width: 100%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .instrument-card img {
