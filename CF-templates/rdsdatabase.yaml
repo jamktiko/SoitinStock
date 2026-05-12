@@ -13,7 +13,7 @@ Parameters:
     DBPassword:
         Type: String
         NoEcho: true
-        Description: 'Database password (temporary, move to Secrets Manager later)'
+        Description: 'Database password (temporary, move to Secrets Manager if time permits)'
 
     VPCId:
         Type: AWS::EC2::VPC::Id
