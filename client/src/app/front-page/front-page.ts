@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, computed } from '@angular/core';
 // With ActivatedRoute we get id from route to component
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 // With ContentService we get content from server to component
 // import { ContentService } from '../content.service';
 // import { Instruments, RawInstrument } from '../.models/instrument';
@@ -15,7 +15,7 @@ import { AuthService } from '../auth.service';
   selector: 'app-page',
   templateUrl: './front-page.html',
   styleUrl: './front-page.css',
-  imports: [Products],
+  imports: [Products, RouterLink],
 })
 export class FrontPage {
   // private cservice = inject(ContentService);

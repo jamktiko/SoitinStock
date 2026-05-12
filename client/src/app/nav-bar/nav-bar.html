@@ -30,7 +30,7 @@ The two parts of the dynamic route are separated by a comma in the array.
     }
     <a routerLink="/renting" class="instrumentlink">To renting</a>
   </span>
-  @if (auth.isLoggedIn()) {
+  @if (auth.loginState()) {
     <button class="menu-btn" (click)="logout()">Sign Out</button>
   }
 </nav>

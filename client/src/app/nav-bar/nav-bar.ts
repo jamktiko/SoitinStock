@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, effect } from '@angular/core';
 
 import { RouterLink, Router } from '@angular/router';
 // import { ContentService } from '../content.service';
@@ -15,12 +15,23 @@ import { AuthService } from '../auth.service';
   styleUrl: './nav-bar.css',
 })
 export class NavBar {
-  // content: RawInstrumentType[] | undefined;
-  //Otetaan contentsevice käyttöön ja haetaan content aina, kun komponentti latautuu muistiin
   private cservice = inject(ApiService);
-  content = toSignal(this.cservice.GetContentTypes(), { initialValue: [] });
   auth = inject(AuthService);
   router = inject(Router);
+
+  content = signal<RawInstrumentType[]>([]);
+
+  constructor() {
+    // Reactive effect: runs whenever auth.isLoggedIn() changes
+    effect(() => {
+      if (this.auth.loginState()) {
+        this.cservice.GetContentTypes().subscribe((data) => {
+          this.content.set(data);
+        });
+      }
+    });
+  }
+
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);

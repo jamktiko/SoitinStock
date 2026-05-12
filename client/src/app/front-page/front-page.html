@@ -28,12 +28,12 @@
   <button class="menu-btn" id="logoutBtn">Sign out</button>
 </div>-->
 
-@if (activeCategory() === null && auth.isLoggedIn()) {
+@if (activeCategory() === null && auth.loginState()) {
   <div class="login-container">
     <main class="menu">
       <h1 id="greeting">Hello User</h1>
-      <button class="menu-btn" onclick="goTo('soittimet')">Instruments</button>
-      <button class="menu-btn" onclick="goTo('vuokraukset')">Rentals</button>
+      <button class="menu-btn" routerLink="/products">Instruments</button>
+      <button class="menu-btn" routerLink="/renting">Rentals</button>
     </main>
   </div>
 } @else {

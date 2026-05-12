@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../environments/environments';
 import { Router } from '@angular/router';
 
@@ -10,6 +10,7 @@ export class AuthService {
   cognitoDomain = environment.cognitoDomain;
   clientId = environment.clientId;
   redirectUri = environment.redirectUri;
+  loginState = signal(false); // New signal
 
   tokenEndpoint = `${this.cognitoDomain}/oauth2/token`;
   authEndpoint = `${this.cognitoDomain}/oauth2/authorize`;
@@ -38,18 +39,19 @@ export class AuthService {
       `&logout_uri=${encodeURIComponent(this.redirectUri)}`;
 
     window.location.href = logoutUrl;
+    this.loginState.set(false); // Update signal
 
     // Redirect to login page
-    this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
   }
 
   getToken() {
     return localStorage.getItem('access_token');
   }
 
-  isLoggedIn(): boolean {
-    return !!this.getToken();
-  }
+  // isLoggedIn(): boolean {
+  //   return !!this.getToken();
+  // }
 
   async exchangeCodeForToken(code: string) {
     const body = new URLSearchParams();
@@ -75,6 +77,7 @@ export class AuthService {
 
     localStorage.setItem('id_token', tokens.id_token);
     localStorage.setItem('access_token', tokens.access_token);
+    this.loginState.set(true); // Update signal
 
     return tokens;
   }
@@ -94,4 +97,5 @@ export class AuthService {
         .catch(console.error);
     }
   }
+ 
 }
