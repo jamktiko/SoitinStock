@@ -86,7 +86,13 @@
       + Add Another Item
     </button>
 
-    <button type="submit" [disabled]="!rentalForm.valid" mat-raised-button color="primary">
+    <button
+      class="additem-btn"
+      type="submit"
+      [disabled]="!rentalForm.valid"
+      mat-raised-button
+      color="primary"
+    >
       Rent Now
     </button>
   </form>

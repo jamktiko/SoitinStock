@@ -147,21 +147,54 @@ input:focus {
   /*min-height: 515px;*/
 }
 
-.additem-btn,
-.remove-btn,
 .menu-btn {
+  font-family: 'Noto Serif', serif;
+  background-color: black;
+  color: white;
+  width: 100%;
+  padding: 1.2rem;
+  font-size: 1.5rem;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.additem-btn {
+  font-family: 'Noto Serif', serif;
+  background-color: black;
+  color: white;
+  width: 50%;
+  padding: 1.2rem;
+  font-size: 1.5rem;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.remove-btn {
+  font-family: 'Noto Serif', serif;
+  font-size: 20px;
+  /*padding: 0.5rem 0.8rem;*/
+  border: 2px solid black;
+  background: #4e1a1c;
+  color: #ddbf8a;
+  border-radius: 20px;
+  min-width: 100px;
+  max-width: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .rental-item {
-  border: 1px solid #000000;
+  /*border: 1px solid #000000;*/
   padding: 1rem;
   margin: 1rem 0;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
 }
 
@@ -194,7 +227,7 @@ input:focus {
 
 /* KORTIT */
 .instrument-card {
-  width: fit-content;
+  max-width: 90%;
   margin: 0 auto;
   display: flex;
   /*flex-wrap: wrap;*/
