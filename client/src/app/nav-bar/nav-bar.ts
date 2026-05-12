@@ -32,6 +32,20 @@ export class NavBar {
     });
   }
 
+  // Jun added: converting raw values to user-friendly display names
+  displayName(type: string): string {
+    const labels: Record<string, string> = {
+      guitar: 'Guitars',
+      piano: 'Pianos',
+      violin: 'Violins',
+      drums: 'Drums',
+      harp: 'Harps',
+      accordion: 'Accordions',
+    };
+
+    return labels[type.toLowerCase()] || type;
+  }
+
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);
