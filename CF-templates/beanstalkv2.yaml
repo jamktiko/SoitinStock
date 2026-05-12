@@ -158,9 +158,9 @@ Resources:
                   Value: '7'
 
                 # Healthcheck configuration add later. (?)
-                # - Namespace: aws:elasticbeanstalk:application
-                #   OptionName: Application Healthcheck URL
-                #   Value: /health
+                - Namespace: aws:elasticbeanstalk:application
+                  OptionName: Application Healthcheck URL
+                  Value: /health
 
                 # ============================================================
                 # Deployment Strategy
