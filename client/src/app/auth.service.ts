@@ -40,7 +40,7 @@ export class AuthService {
     window.location.href = logoutUrl;
 
     // Redirect to login page
-    this.router.navigate(['/login']);
+  //  this.router.navigate(['/login']);
   }
 
   getToken() {
