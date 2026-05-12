@@ -9,6 +9,8 @@ import { map, startWith, switchMap, combineLatest } from 'rxjs';
 import { Products } from '../products/products';
 import { ProductStore } from '../instrumentstore';
 import { RawItem } from '../.models/item';
+import { AuthService } from '../auth.service';
+
 @Component({
   selector: 'app-page',
   templateUrl: './front-page.html',
@@ -19,6 +21,7 @@ export class FrontPage {
   // private cservice = inject(ContentService);
   private route = inject(ActivatedRoute);
   pstore = inject(ProductStore);
+  auth = inject(AuthService);
 
   activeCategory = toSignal(this.route.paramMap.pipe(map((params) => params.get('category'))), {
     initialValue: null,

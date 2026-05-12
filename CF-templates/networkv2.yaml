@@ -38,6 +38,35 @@ Resources:
                   Value: SoitinStock-Private-B
 
     # --------------------------------------------------------------------
+    # Isolated Route Table (NO INTERNET ACCESS)
+    # --------------------------------------------------------------------
+    PrivateRouteTable:
+        Type: AWS::EC2::RouteTable
+        Properties:
+            VpcId: !Ref VPCId
+
+            Tags:
+                - Key: Name
+                  Value: SoitinStock-Private-RT
+
+    # --------------------------------------------------------------------
+    # Associate Private Subnet A
+    # --------------------------------------------------------------------
+    PrivateSubnetARouteAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            SubnetId: !Ref PrivateSubnetA
+            RouteTableId: !Ref PrivateRouteTable
+
+    # --------------------------------------------------------------------
+    # Associate Private Subnet B
+    # --------------------------------------------------------------------
+    PrivateSubnetBRouteAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            SubnetId: !Ref PrivateSubnetB
+            RouteTableId: !Ref PrivateRouteTable
+    # --------------------------------------------------------------------
     # DB Subnet Group
     # --------------------------------------------------------------------
     DBSubnetGroup:
