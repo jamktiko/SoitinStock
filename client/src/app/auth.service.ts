@@ -38,6 +38,9 @@ export class AuthService {
       `&logout_uri=${encodeURIComponent(this.redirectUri)}`;
 
     window.location.href = logoutUrl;
+
+    // Redirect to login page
+  //  this.router.navigate(['/login']);
   }
 
   getToken() {
