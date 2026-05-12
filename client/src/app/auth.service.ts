@@ -31,10 +31,12 @@ export class AuthService {
   logout() {
     localStorage.clear();
 
-    const logoutUrl = `${this.cognitoDomain}/logout?client_id=${encodeURIComponent(this.clientId)}&logout_uri=${encodeURIComponent(this.redirectUri)}`;
+    const logoutUrl =
+      `${this.cognitoDomain}/logout` +
+      `?client_id=${encodeURIComponent(this.clientId)}` +
+      `&logout_uri=${encodeURIComponent(this.redirectUri)}`;
 
-    // Call Cognito logout (fire and forget)
-    fetch(logoutUrl).catch(console.error);
+    window.location.href = logoutUrl;
 
     // Redirect to login page
     this.router.navigate(['/login']);
@@ -85,6 +87,7 @@ export class AuthService {
       this.exchangeCodeForToken(code)
         .then(() => {
           window.history.replaceState({}, document.title, window.location.pathname);
+          this.router.navigate(['/products']);
         })
         .catch(console.error);
     }

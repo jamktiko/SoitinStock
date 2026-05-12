@@ -17,6 +17,7 @@ import { ApiService } from '../apiService';
 // import { RawItem } from '../.models/item';
 import { ProductStore } from '../instrumentstore';
 import { RentalStore } from '../rentalStore';
+import { CurrencyPipe } from '@angular/common';
 // import { first } from 'rxjs';
 
 @Component({
@@ -27,6 +28,7 @@ import { RentalStore } from '../rentalStore';
     MatInputModule,
     MatCheckboxModule,
     MatSelectModule,
+    CurrencyPipe,
   ],
   templateUrl: './renting-form.html',
   styleUrl: './renting-form.css',
@@ -40,6 +42,22 @@ export class RentingForm {
 
   allInstruments = this.pstore.instruments;
 
+  selectedRentalType = signal<string>('day'); // Track the selected type
+
+  totalPrice = computed(() => {
+    const rentalType = this.selectedRentalType();
+
+    return this.cartItems().reduce((sum, item) => {
+      const pricePerUnit =
+        rentalType === 'week'
+          ? item.rent_week
+          : rentalType === 'month'
+            ? item.rent_month
+            : item.rent_day;
+
+      return sum + pricePerUnit * item.amount;
+    }, 0);
+  });
   cartItemsWithDetails = computed(() => {
     return this.cartItems().map((item) => {
       const instrument = this.allInstruments().find(
@@ -72,6 +90,12 @@ export class RentingForm {
         this.rentals.push(this.createRentalRow(item.barcode));
       });
     });
+    effect(() => {
+      const rentalType = this.rentalForm.get('rentals.0.rentalType')?.value;
+      if (rentalType) {
+        this.selectedRentalType.set(rentalType);
+      }
+    });
   }
 
   createRentalRow(barcode?: string): FormGroup {
@@ -87,6 +111,7 @@ export class RentingForm {
 
   submitTest() {
     const formValue = this.rentalForm.value;
+    const rentalType = formValue.rentals[0]?.rentalType;
 
     // Calculate end dates for each rental
     const rentalsWithEndDates = formValue.rentals.map((rental: any) => ({
@@ -102,8 +127,7 @@ export class RentingForm {
       phone: formValue.phone,
       items: this.cartItems().map((item) => item.barcode),
       end_date: rentalsWithEndDates[0]?.endDate, // Use first rental's end date (or handle multiple)
-      rentalType: formValue.rentals[0]?.rentalType,
-      total_price: 0, // Calculate if needed
+      total_price: this.totalPrice(),
     };
 
     this.apiService.submitRental(payload).subscribe({

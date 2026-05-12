@@ -58,6 +58,10 @@
     }
   </div>
 
+  <p>
+    <strong>Total price</strong>
+    {{ totalPrice() | currency }}
+  </p>
   <button type="submit" [disabled]="!rentalForm.valid" mat-raised-button color="primary">
     Rent Now
   </button>
