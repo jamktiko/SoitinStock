@@ -22,7 +22,7 @@ The two parts of the dynamic route are separated by a comma in the array.
   <button class="hamburgermenu">☰</button>
 
   <span class="nav-links">
-    <a routerLink="/" class="instrumentlink">Frontpage</a>
+    <a routerLink="/products" class="instrumentlink">Frontpage</a>
     @for (page of content(); track $index) {
       <a [routerLink]="['/products', page.type_name.toLowerCase()]" class="instrumentlink">
         {{ page.type_name }}</a
