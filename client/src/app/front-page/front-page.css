@@ -19,6 +19,22 @@ body {
   display: flex;
 }
 
+/*Global products page title styling*/
+.category-title {
+  font-family: 'Noto Serif', serif;
+
+  font-size: 2.2rem;
+  font-weight: 700;
+
+  margin: 1rem 0 2rem 0;
+
+  color: #2e2418;
+
+  border-bottom: 3px solid #4b5f33;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
 /* =========================
    YLEISET KOMPONENTIT
 ========================= */

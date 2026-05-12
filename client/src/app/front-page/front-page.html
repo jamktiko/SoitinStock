@@ -37,6 +37,8 @@
     </main>
   </div>
 } @else {
-  <h2>{{ activeCategory() }}</h2>
+  <h2 class="category-title">
+    {{ displayCategory(activeCategory()) }}
+  </h2>
   <app-products [instruments]="filteredItems().instruments"></app-products>
 }
