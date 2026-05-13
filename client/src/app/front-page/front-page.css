@@ -19,6 +19,12 @@ body {
   display: flex;
 }
 
+.front-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /*Global products page title styling*/
 .category-title {
   font-family: 'Noto Serif', serif;
@@ -252,6 +258,12 @@ input:focus {
   }
 }
 
+@media (max-width: 485px) {
+  #greeting {
+    font-size: 1rem;
+  }
+}
+
 @media (max-width: 480px) {
   .menu-btn {
     font-size: 1.2rem;
@@ -302,7 +314,7 @@ input:focus {
   }
 }
 
-@media (max-width: 270px) {
+@media (max-width: 290px) {
   .menu .menu-btn {
     padding: 5px;
     font-size: 15px;
@@ -321,7 +333,7 @@ input:focus {
   }
 }
 
-@media (max-width: 200px) {
+@media (max-width: 220px) {
   .menu .menu-btn {
     font-size: 10px;
   }
