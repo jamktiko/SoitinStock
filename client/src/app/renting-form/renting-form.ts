@@ -72,9 +72,10 @@ export class RentingForm {
   rentalForm: FormGroup = this._formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    phone: ['', Validators.required],
-    email: ['', Validators.required],
+    phone: ['', [Validators.required, Validators.pattern(/\d{10}$/)]],
+    email: ['', [Validators.required, Validators.email]],
     rentals: this._formBuilder.array([]),
+    rentalType: ['day', Validators.required],
   });
 
   get rentals(): FormArray {
@@ -90,11 +91,8 @@ export class RentingForm {
         this.rentals.push(this.createRentalRow(item.barcode));
       });
     });
-    effect(() => {
-      const rentalType = this.rentalForm.get('rentals.0.rentalType')?.value;
-      if (rentalType) {
-        this.selectedRentalType.set(rentalType);
-      }
+    this.rentalForm.get('rentalType')?.valueChanges.subscribe((value) => {
+      this.selectedRentalType.set(value);
     });
   }
 
@@ -104,14 +102,12 @@ export class RentingForm {
     return this._formBuilder.group({
       selectedItem: [barcode || '', Validators.required],
       startDate: [{ value: today, disabled: true }, Validators.required], // Set today and disable
-      endDate: [''],
-      rentalType: ['day', Validators.required],
     });
   }
 
   submitRentForm() {
-    const formValue = this.rentalForm.value;
-    const rentalType = formValue.rentals[0]?.rentalType;
+    const formValue = this.rentalForm.getRawValue();
+    // const rentalType = formValue.rentals[0]?.rentalType;
 
     // Calculate end dates for each rental
     const rentalsWithEndDates = formValue.rentals.map((rental: any) => ({

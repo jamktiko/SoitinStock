@@ -22,15 +22,15 @@ The two parts of the dynamic route are separated by a comma in the array.
   <button class="hamburgermenu">☰</button>
 
   <span class="nav-links">
-    <a routerLink="/products" class="instrumentlink">Frontpage</a>
+    <a routerLink="/products" class="instrumentlink">Front Page</a>
     @for (page of content(); track $index) {
       <a [routerLink]="['/products', page.type_name.toLowerCase()]" class="instrumentlink">
         {{ page.type_name }}</a
       >
     }
-    <a routerLink="/renting" class="instrumentlink">To renting</a>
+    <a routerLink="/renting" class="instrumentlink">Renting</a>
   </span>
   @if (auth.loginState()) {
-    <button class="menu-btn" (click)="logout()">Sign Out</button>
+    <button class="menu-btn" (click)="logout()">Log Out</button>
   }
 </nav>
