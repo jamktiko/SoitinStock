@@ -18,6 +18,8 @@ import { ApiService } from '../apiService';
 import { ProductStore } from '../instrumentstore';
 import { RentalStore } from '../rentalStore';
 import { CurrencyPipe } from '@angular/common';
+import { RentPopUp } from '../rent-pop-up/rent-pop-up';
+import { MatDialog } from '@angular/material/dialog';
 // import { first } from 'rxjs';
 
 @Component({
@@ -38,6 +40,7 @@ export class RentingForm {
   private rstore = inject(RentalStore);
   private _formBuilder = inject(FormBuilder);
   private apiService = inject(ApiService);
+  private dialog = inject(MatDialog);
   cartItems = this.rstore.products;
 
   allInstruments = this.pstore.instruments;
@@ -130,6 +133,7 @@ export class RentingForm {
       next: () => {
         console.log('Rental submitted successfully');
         this.rstore.clearCart();
+        this.dialog.open(RentPopUp); // Show dialog
       },
       error: (err) => console.error('Rental failed:', err),
     });
