@@ -29,12 +29,15 @@
 </div>-->
 
 @if (activeCategory() === null && auth.loginState()) {
-  <div class="login-container">
-    <main class="menu">
-      <h1 id="greeting">Hello User</h1>
-      <button class="menu-btn" routerLink="/products/guitar">Instruments</button>
-      <button class="menu-btn" routerLink="/renting">Renting</button>
-    </main>
+  ¨
+  <div class="front-page">
+    <div class="login-container">
+      <main class="menu">
+        <h1 id="greeting">Hello User</h1>
+        <button class="menu-btn" routerLink="/products/guitar">Instruments</button>
+        <button class="menu-btn" routerLink="/renting">Renting</button>
+      </main>
+    </div>
   </div>
 } @else {
   <h2 class="category-title">
