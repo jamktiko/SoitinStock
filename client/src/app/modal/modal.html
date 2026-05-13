@@ -3,6 +3,19 @@
 </div>
 <mat-dialog-content class="mat-typography">
   <div class="modal-content">
+    <div class="image-container">
+      @if (imageIsLoading()) {
+        <div class="image-placeholder">
+          <p>Loading image...</p>
+        </div>
+      } @else {
+        <img
+          [src]="getInstrumentImage()"
+          alt="{{ data.instrument.name }}"
+          class="instrument-image"
+        />
+      }
+    </div>
     <p>{{ data.instrument.model }}</p>
     @if (data.instrument.Description) {
       <p>

@@ -1,15 +1,23 @@
-import { Component, inject, ChangeDetectionStrategy, Inject, computed } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ApiService } from '../apiService';
+import {
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+  computed,
+  signal,
+  effect,
+} from '@angular/core';
+// import { ActivatedRoute, RouterLink } from '@angular/router';
+// import { ApiService } from '../apiService';
 import { RawInstrument } from '../.models/instrument';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map, switchMap } from 'rxjs';
+// import { toSignal } from '@angular/core/rxjs-interop';
+// import { map, switchMap } from 'rxjs';
 // import { MatDialog } from '@angular/material/dialog';
 import { RentalStore } from '../rentalStore';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { ProductStore } from '../instrumentstore';
 import { CommonModule } from '@angular/common';
 import { RawItem, RentalItem } from '../.models/item';
+import { image_map } from '../.models/imageMap';
 @Component({
   selector: 'app-modal',
   imports: [CommonModule, MatDialogModule],
@@ -21,6 +29,7 @@ export class Modal {
   // route: ActivatedRoute = inject(ActivatedRoute);
   // apiservice = inject(ApiService);
   // // dialog = inject(MatDialog);
+  imageIsLoading = signal(true);
 
   dialogRef = inject(MatDialogRef<Modal>);
   data = inject(MAT_DIALOG_DATA) as { instrument: RawInstrument };
@@ -57,9 +66,25 @@ export class Modal {
   addToCart(item: RawItem) {
     this.rstore.addToCart({ ...item, amount: 1 } as RentalItem);
   }
-  constructor() {}
+  constructor() {
+    effect(() => {
+      this.data.instrument.id_Instrument;
 
+      this.imageIsLoading.set(true);
+
+      setTimeout(() => {
+        this.imageIsLoading.set(false);
+      }, 1000);
+    });
+  }
+  getInstrumentImage() {
+    const imageUrl = image_map[this.data.instrument.Instrument_type_id];
+    return imageUrl || '/pics/placeholder.jpg';
+  }
   closeModal() {
     this.dialogRef.close();
+  }
+  imageLoad() {
+    this.imageIsLoading.set(false);
   }
 }
