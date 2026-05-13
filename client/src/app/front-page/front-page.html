@@ -32,11 +32,13 @@
   <div class="login-container">
     <main class="menu">
       <h1 id="greeting">Hello User</h1>
-      <button class="menu-btn" routerLink="/products">Instruments</button>
+      <button class="menu-btn" routerLink="/products/guitar">Instruments</button>
       <button class="menu-btn" routerLink="/renting">Renting</button>
     </main>
   </div>
 } @else {
-  <h2>{{ activeCategory() }}</h2>
+  <h2 class="category-title">
+    {{ displayCategory(activeCategory()) }}
+  </h2>
   <app-products [instruments]="filteredItems().instruments"></app-products>
 }

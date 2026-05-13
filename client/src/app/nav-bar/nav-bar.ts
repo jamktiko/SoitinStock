@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal, effect } from '@angular/core';
 
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 // import { ContentService } from '../content.service';
 import { RawInstrumentType, RawInstrument } from '../.models/instrument';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -10,7 +10,7 @@ import { AuthService } from '../auth.service';
 @Component({
   standalone: true,
   selector: 'app-nav-bar',
-  imports: [RouterLink],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.css',
 })
@@ -30,6 +30,20 @@ export class NavBar {
         });
       }
     });
+  }
+
+  // Jun added: converting raw values to user-friendly display names
+  displayName(type: string): string {
+    const labels: Record<string, string> = {
+      guitar: 'Guitars',
+      piano: 'Pianos',
+      violin: 'Violins',
+      drums: 'Drums',
+      harp: 'Harps',
+      accordion: 'Accordions',
+    };
+
+    return labels[type.toLowerCase()] || type;
   }
 
   logout() {

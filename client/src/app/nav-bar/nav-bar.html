@@ -19,16 +19,27 @@ The two parts of the dynamic route are separated by a comma in the array.
 />
 
 <nav class="navbar">
-  <button class="hamburgermenu">☰</button>
+  <!-- <button class="hamburgermenu">☰</button> -->
 
   <span class="nav-links">
-    <a routerLink="/products" class="instrumentlink">Front Page</a>
+    <a
+      routerLink="/products"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="instrumentlink"
+    >
+      Frontpage
+    </a>
     @for (page of content(); track $index) {
-      <a [routerLink]="['/products', page.type_name.toLowerCase()]" class="instrumentlink">
-        {{ page.type_name }}</a
+      <a
+        [routerLink]="['/products', page.type_name.toLowerCase()]"
+        routerLinkActive="active-link"
+        class="instrumentlink"
       >
+        {{ displayName(page.type_name) }}
+      </a>
     }
-    <a routerLink="/renting" class="instrumentlink">Renting</a>
+    <a routerLink="/renting" routerLinkActive="active-link" class="instrumentlink"> Renting </a>
   </span>
   @if (auth.loginState()) {
     <button class="menu-btn" (click)="logout()">Log Out</button>
