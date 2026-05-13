@@ -46,7 +46,7 @@ button {
   transition: 0.2s;
 }
 
-/* Musta pääbutton */
+/* Black Button*/
 .btn-primary {
   background: black;
   color: white;
