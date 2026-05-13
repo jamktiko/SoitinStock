@@ -27,6 +27,21 @@ export class FrontPage {
     initialValue: null,
   });
 
+  displayCategory(category: string | null): string {
+    if (!category) return '';
+
+    const labels: Record<string, string> = {
+      guitar: 'Guitars',
+      piano: 'Pianos',
+      violin: 'Violins',
+      drums: 'Drums',
+      harp: 'Harps',
+      accordion: 'Accordions',
+    };
+
+    return labels[category.toLowerCase()] || category;
+  }
+
   filteredItems = computed(() => {
     const category = this.activeCategory();
     const items = this.pstore.items();

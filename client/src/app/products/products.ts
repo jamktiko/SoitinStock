@@ -27,6 +27,19 @@ export class Products {
     return instrument?.name || 'Unknown Instrument';
   }
 
+  displayInstrumentName(name: string): string {
+    const labels: Record<string, string> = {
+      guitar: 'Guitars',
+      piano: 'Pianos',
+      violin: 'Violins',
+      drums: 'Drums',
+      harp: 'Harps',
+      accordion: 'Accordions',
+    };
+
+    return labels[name.toLowerCase()] || name;
+  }
+
   itemCountByInstrument = computed(() => {
     const items = this.allItems();
     const counts = new Map<number, number>();
