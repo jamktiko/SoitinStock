@@ -8,9 +8,8 @@ describe('RentingForm', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RentingForm]
-    })
-    .compileComponents();
+      imports: [RentingForm],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RentingForm);
     component = fixture.componentInstance;
