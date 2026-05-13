@@ -5,63 +5,82 @@
     <mat-form-field>
       <mat-label>First Name</mat-label>
       <input matInput formControlName="firstName" required />
+      @if (rentalForm.get('firstName')?.hasError('required')) {
+        <mat-error>First name is required</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Last Name</mat-label>
       <input matInput formControlName="lastName" required />
+      @if (rentalForm.get('lastName')?.hasError('required')) {
+        <mat-error>Last name is required</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Phone number</mat-label>
       <input matInput formControlName="phone" required />
+      @if (rentalForm.get('phone')?.hasError('required')) {
+        <mat-error>Phone is required</mat-error>
+      }
+      @if (rentalForm.get('phone')?.hasError('pattern')) {
+        <mat-error>Phone must be 10 digits</mat-error>
+      }
     </mat-form-field>
+
     <mat-form-field>
       <mat-label>Email</mat-label>
       <input matInput placeholder="put@email.here" formControlName="email" required />
+      @if (rentalForm.get('email')?.hasError('required')) {
+        <mat-error>Email is required</mat-error>
+      }
+      @if (rentalForm.get('email')?.hasError('email')) {
+        <mat-error>Invalid email format</mat-error>
+      }
     </mat-form-field>
   </div>
   <h4>Items to Rent</h4>
 
   <!-- FormArray for multiple rentals -->
-  <div formArrayName="rentals" class="instrument-card">
-    @for (rental of rentals.controls; let i = $index; track i) {
-      <div [formGroupName]="i" class="rental-item">
-        <h5>Item {{ i + 1 }}</h5>
-
-        <!-- Display item info (read-only) -->
-        <p>
-          <strong>{{ cartItemsWithDetails()[i]?.instrumentName }}</strong>
-        </p>
-        <p>Barcode: {{ cartItems()[i]?.barcode }}</p>
-
-        <mat-form-field>
-          <mat-label>Rental Type</mat-label>
-          <mat-select formControlName="rentalType">
-            <mat-option value="day">Day</mat-option>
-            <mat-option value="week">Week</mat-option>
-            <mat-option value="month">Month</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- Display calculated end date -->
-        @if (rental.get('startDate')?.value) {
+  <div class="instrument-card">
+    <div formArrayName="rentals">
+      @for (rental of rentals.controls; let i = $index; track i) {
+        <div [formGroupName]="i" class="rental-item">
+          <h5>Item {{ i + 1 }}</h5>
           <p>
-            <strong>End Date:</strong>
-            {{ calculateEndDate(rental.get('startDate')?.value, rental.get('rentalType')?.value) }}
+            <strong>{{ cartItemsWithDetails()[i]?.instrumentName }}</strong>
           </p>
-        }
+          <p>Barcode: {{ cartItems()[i]?.barcode }}</p>
+          <button type="button" (click)="removeRentalRow(i)">Remove Item</button>
+        </div>
+      }
+    </div>
 
-        <button type="button" (click)="removeRentalRow(i)">Remove Item</button>
-      </div>
+    <!-- Rental Type, End Date, Total Price - OUTSIDE formArrayName but INSIDE card -->
+    <mat-form-field>
+      <mat-label>Rental Type</mat-label>
+      <mat-select formControlName="rentalType">
+        <mat-option value="day">Day</mat-option>
+        <mat-option value="week">Week</mat-option>
+        <mat-option value="month">Month</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    @if (rentals.controls[0]?.get('startDate')?.value) {
+      <p>
+        <strong>End Date:</strong>
+        {{ calculateEndDate(rentals.controls[0]?.get('startDate')?.value, selectedRentalType()) }}
+      </p>
     }
-  </div>
 
-  <p>
-    <strong>Total price</strong>
-    {{ totalPrice() | currency }}
-  </p>
-  <button type="submit" [disabled]="!rentalForm.valid" mat-raised-button color="primary">
-    Rent Now
-  </button>
+    <p>
+      <strong>Total price</strong>
+      {{ totalPrice() | currency }}
+    </p>
+
+    <button type="submit" [disabled]="!rentalForm.valid" mat-raised-button color="primary">
+      Rent Now
+    </button>
+  </div>
 </form>

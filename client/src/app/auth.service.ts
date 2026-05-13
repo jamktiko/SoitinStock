@@ -42,7 +42,7 @@ export class AuthService {
     this.loginState.set(false); // Update signal
 
     // Redirect to login page
-  //  this.router.navigate(['/login']);
+    //  this.router.navigate(['/login']);
   }
 
   getToken() {
@@ -97,5 +97,4 @@ export class AuthService {
         .catch(console.error);
     }
   }
- 
 }

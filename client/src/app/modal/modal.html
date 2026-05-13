@@ -24,9 +24,9 @@
           <p><strong>Price/week:</strong> {{ item.rent_week | number: '1.2-2' }} €</p>
           <p><strong>Price/month:</strong> {{ item.rent_month | number: '1.2-2' }} €</p>
           <p><strong>Available:</strong> {{ item.is_available ? 'Yes' : 'No' }}</p>
-          <button type="button" (click)="addToCart(item)" [disabled]="!item.is_available">
-            Add to Cart
-          </button>
+          @if (item.is_available) {
+            <button type="button" (click)="addToCart(item)">Add to Cart</button>
+          }
         </div>
       }
     }

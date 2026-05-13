@@ -39,9 +39,9 @@ The two parts of the dynamic route are separated by a comma in the array.
         {{ displayName(page.type_name) }}
       </a>
     }
-    <a routerLink="/renting" routerLinkActive="active-link" class="instrumentlink"> To renting </a>
+    <a routerLink="/renting" routerLinkActive="active-link" class="instrumentlink"> Renting </a>
   </span>
   @if (auth.loginState()) {
-    <button class="menu-btn" (click)="logout()">Sign Out</button>
+    <button class="menu-btn" (click)="logout()">Log Out</button>
   }
 </nav>
