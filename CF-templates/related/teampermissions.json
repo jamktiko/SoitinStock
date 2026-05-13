@@ -1,0 +1,93 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowS3FullBucketAccessDev",
+            "Effect": "Allow",
+            "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
+            "Resource": "*"
+        },
+        {
+            "Sid": "AllowS3ObjectAccessDev",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:AbortMultipartUpload",
+                "s3:ListMultipartUploadParts"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "CognitoFullDevAccess",
+            "Effect": "Allow",
+            "Action": ["cognito-idp:*"],
+            "Resource": "*"
+        },
+        {
+            "Sid": "RDSDescribeAndDataAccessSupport",
+            "Effect": "Allow",
+            "Action": [
+                "rds:Describe*",
+                "rds:ListTagsForResource",
+                "rds:DownloadDBLogFilePortion",
+                "rds:DescribeDBLogFiles"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "CloudWatchLogsDebugging",
+            "Effect": "Allow",
+            "Action": [
+                "logs:*",
+                "cloudwatch:Describe*",
+                "cloudwatch:Get*",
+                "cloudwatch:List*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "AllowElasticBeanstalkDev",
+            "Effect": "Allow",
+            "Action": [
+                "elasticbeanstalk:*",
+                "cloudformation:*",
+                "ec2:Describe*",
+                "autoscaling:Describe*",
+                "elasticloadbalancing:Describe*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "DenyIAMDangerousStuff",
+            "Effect": "Deny",
+            "Action": [
+                "iam:CreateUser",
+                "iam:DeleteUser",
+                "iam:CreateAccessKey",
+                "iam:DeleteAccessKey",
+                "iam:AttachUserPolicy",
+                "iam:DetachUserPolicy",
+                "iam:UpdateAssumeRolePolicy"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "DenyBillingAndOrgChanges",
+            "Effect": "Deny",
+            "Action": ["organizations:*", "account:*", "billing:*"],
+            "Resource": "*"
+        },
+        {
+            "Sid": "DenyCriticalDeletesOnly",
+            "Effect": "Deny",
+            "Action": [
+                "rds:DeleteDBInstance",
+                "rds:DeleteDBCluster",
+                "s3:DeleteBucket"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
