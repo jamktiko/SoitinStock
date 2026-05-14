@@ -179,18 +179,27 @@ input:focus {
 
 .remove-btn {
   font-family: 'Noto Serif', serif;
-  font-size: 20px;
-  padding: 2px;
+  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
   border: 2px solid black;
+  border-radius: 12px;
   background: #4e1a1c;
   color: #ddbf8a;
-  border-radius: 20px;
-  width: fit-content;
-  min-width: 100px;
-  max-width: 200px;
-  display: flex;
+  width: auto;
+  min-width: unset;
+  max-width: fit-content;
+  display: inline-flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  line-height: 1;
+}
+
+.rentals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 }
 
 .rental-item {
@@ -214,7 +223,7 @@ input:focus {
 
 .rental-item p {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 0.9rem;
 }
 
 .rental-item strong {
@@ -419,7 +428,7 @@ button {
     align-items: flex-start;
   }
   .remove-btn {
-    width: 100%;
+    width: auto;
   }
   .rent-title {
     font-size: 1.6rem;

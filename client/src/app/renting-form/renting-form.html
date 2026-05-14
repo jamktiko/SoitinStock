@@ -45,7 +45,7 @@
 
   <!-- FormArray for multiple rentals -->
   <div class="instrument-card">
-    <div formArrayName="rentals">
+    <div formArrayName="rentals" class="rentals-list">
       @for (rental of rentals.controls; let i = $index; track i) {
         <div [formGroupName]="i" class="rental-item">
           <h5>Item {{ i + 1 }}</h5>
