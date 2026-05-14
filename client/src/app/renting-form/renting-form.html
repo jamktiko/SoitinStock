@@ -1,6 +1,7 @@
 <div class="background"></div>
 <form [formGroup]="rentalForm" (ngSubmit)="submitRentForm()">
   <!-- Customer Info -->
+  <h4 class="rent-title">Customer Information</h4>
   <div class="instrument-card">
     <mat-form-field>
       <mat-label>First Name</mat-label>
@@ -40,11 +41,11 @@
       }
     </mat-form-field>
   </div>
-  <h4>Items to Rent</h4>
+  <h4 class="rent-title">Items to Rent</h4>
 
   <!-- FormArray for multiple rentals -->
   <div class="instrument-card">
-    <div formArrayName="rentals">
+    <div formArrayName="rentals" class="rentals-list">
       @for (rental of rentals.controls; let i = $index; track i) {
         <div [formGroupName]="i" class="rental-item">
           <h5>Item {{ i + 1 }}</h5>
@@ -52,7 +53,7 @@
             <strong>{{ cartItemsWithDetails()[i]?.instrumentName }}</strong>
           </p>
           <p>Barcode: {{ cartItems()[i]?.barcode }}</p>
-          <button type="button" (click)="removeRentalRow(i)">Remove Item</button>
+          <button type="button" class="remove-btn" (click)="removeRentalRow(i)">Remove Item</button>
         </div>
       }
     </div>
@@ -79,8 +80,6 @@
       {{ totalPrice() | currency }}
     </p>
 
-    <button type="submit" [disabled]="!rentalForm.valid" mat-raised-button color="primary">
-      Rent Now
-    </button>
+    <button type="submit" class="menu-btn" [disabled]="!rentalForm.valid">Rent Now</button>
   </div>
 </form>
