@@ -1,28 +1,177 @@
-.modal-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 20px;
+.instrument-modal {
+  font-family: 'Noto Serif', serif;
+  width: 100%;
+  max-width: 1800px;
+
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f5f5f5;
 }
 
+.pic-code-desc {
+  gap: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.code-desc {
+  font-family: 'Noto Serif', serif;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ::ng-deep .mat-mdc-dialog-container {
+  padding: 0 !important;
+} */
+
+mat-dialog-content {
+  max-height: unset !important;
+  /* overflow: hidden; */
+}
+
+/* HEADER */
+.modal-header {
+  font-family: 'Noto Serif', serif;
+  /* background: #2f5d7c;
+  color: white; */
+  padding: 20px 30px;
+}
+
+.modal-header h2 {
+  font-family: 'Noto Serif', serif;
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+/* CONTENT */
 .modal-content {
-  padding: 24px;
-  color: #666;
+  font-family: 'Noto Serif', serif;
+  padding: 30px;
+  color: #222;
+}
+
+/* TOP SECTION */
+.instrument-info {
+  font-family: 'Noto Serif', serif;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+/* IMAGE */
+.image-container {
+  flex-shrink: 0;
+}
+
+.instrument-image,
+.image-placeholder {
+  font-family: 'Noto Serif', serif;
+  width: 200px;
+  height: 200px;
+  /* background: #2f5d7c; */
+  border: 3px solid #173042;
+  object-fit: cover;
+}
+
+/* DETAILS */
+.instrument-details {
+  font-family: 'Noto Serif', serif;
+  flex: 1;
+}
+
+.instrument-details p {
+  font-family: 'Noto Serif', serif;
+  margin: 0 0 14px;
+  font-size: 18px;
   line-height: 1.6;
 }
 
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 16px;
-  border-top: 1px solid #eee;
+.price-info {
+  font-family: 'Noto Serif', serif;
+  margin-top: 30px;
+  font-size: 24px;
+  font-weight: bold;
 }
 
+/* ITEMS LIST */
+.items-list {
+  font-family: 'Noto Serif', serif;
+  margin-top: 20px;
+}
+
+/* ITEM CARD */
+.item-card {
+  font-family: 'Noto Serif', serif;
+  display: grid;
+  grid-template-columns: 200px 1fr 150px 160px;
+  align-items: center;
+
+  background: white;
+  padding: 18px 24px;
+  margin-bottom: 16px;
+
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+.item-card .modal-actions {
+  font-family: 'Noto Serif', serif;
+  right: 100%;
+}
+
+/* BLACK BOX */
+.item-icon {
+  font-family: 'Noto Serif', serif;
+  width: 60px;
+  height: 60px;
+  background: black;
+  border-radius: 12px;
+}
+
+/* TEXT */
+.item-name {
+  font-family: 'Noto Serif', serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.item-condition {
+  font-family: 'Noto Serif', serif;
+  font-size: 18px;
+}
+
+.item-price {
+  font-family: 'Noto Serif', serif;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: right;
+}
+
+/* BUTTONS */
 button {
-  padding: 8px 16px;
-  background: #667eea;
+  font-family: 'Noto Serif', serif;
+  padding: 10px 18px;
+  background: #2f5d7c;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #24465d;
+}
+
+/* FOOTER */
+.modal-actions {
+  font-family: 'Noto Serif', serif;
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 30px;
+  border-top: 1px solid #ddd;
+  background: white;
 }
