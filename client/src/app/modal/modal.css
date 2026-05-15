@@ -1,11 +1,26 @@
+:host {
+  font-family: 'Noto Serif', serif;
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  font-family: 'Noto Serif', serif !important;
+}
+
+::ng-deep .mat-mdc-dialog-surface {
+  background: #eddcbf !important;
+  border-radius: 18px !important;
+  border: 2px solid black !important;
+  overflow: hidden;
+}
+
 .instrument-modal {
   font-family: 'Noto Serif', serif;
   width: 100%;
   max-width: 1800px;
 
-  border-radius: 8px;
+  border-radius: 18px;
   overflow: hidden;
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
 }
 
 .pic-code-desc {
@@ -16,9 +31,16 @@
 
 .code-desc {
   font-family: 'Noto Serif', serif;
-  font-weight: bold;
   display: flex;
   flex-direction: column;
+}
+
+.field-title {
+  font-weight: 700;
+}
+
+.field-value {
+  font-weight: 400;
 }
 
 /* ::ng-deep .mat-mdc-dialog-container {
@@ -35,6 +57,8 @@ mat-dialog-content {
   font-family: 'Noto Serif', serif;
   /* background: #2f5d7c;
   color: white; */
+  background: #e3cda8;
+  border-bottom: 2px solid black;
   padding: 20px 30px;
 }
 
@@ -96,6 +120,18 @@ mat-dialog-content {
   font-weight: bold;
 }
 
+.field-title {
+  font-weight: 700;
+  margin: 0.5rem 0 0.25rem;
+  font-size: 0.95rem;
+}
+
+.field-value {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
 /* ITEMS LIST */
 .items-list {
   font-family: 'Noto Serif', serif;
@@ -108,13 +144,12 @@ mat-dialog-content {
   display: grid;
   grid-template-columns: 200px 1fr 150px 160px;
   align-items: center;
-
-  background: white;
+  background: #fff8eb;
   padding: 18px 24px;
   margin-bottom: 16px;
 
   border-radius: 12px;
-  border: 1px solid #ddd;
+  border: 2px solid black;
 }
 
 .item-card .modal-actions {
@@ -151,19 +186,20 @@ mat-dialog-content {
 }
 
 /* BUTTONS */
+
 button {
   font-family: 'Noto Serif', serif;
   padding: 10px 18px;
-  background: #2f5d7c;
+  background: black;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
   transition: 0.2s;
 }
 
 button:hover {
-  background: #24465d;
+  background: #333;
 }
 
 /* FOOTER */
@@ -172,6 +208,6 @@ button:hover {
   display: flex;
   justify-content: flex-end;
   padding: 20px 30px;
-  border-top: 1px solid #ddd;
-  background: white;
+  border-top: 2px solid black;
+  background: #e3cda8;
 }
