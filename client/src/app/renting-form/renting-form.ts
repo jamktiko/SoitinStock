@@ -38,7 +38,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class RentingForm {
   private pstore = inject(ProductStore);
   private rstore = inject(RentalStore);
-  private _formBuilder = inject(FormBuilder);
+  private _formBuilder = inject(FormBuilder); // Auttaa formien teossa
   private apiService = inject(ApiService);
   private dialog = inject(MatDialog);
   cartItems = this.rstore.products;
@@ -60,7 +60,7 @@ export class RentingForm {
 
       return sum + pricePerUnit * item.amount;
     }, 0);
-  });
+  }); //Returns totalprice based on cost, amount of items and rentalType
   cartItemsWithDetails = computed(() => {
     return this.cartItems().map((item) => {
       const instrument = this.allInstruments().find(
@@ -71,7 +71,7 @@ export class RentingForm {
         instrumentName: instrument?.name || 'Unknown',
       };
     });
-  });
+  }); // Finds the details of the items
   rentalForm: FormGroup = this._formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
@@ -79,7 +79,7 @@ export class RentingForm {
     email: ['', [Validators.required, Validators.email]],
     rentals: this._formBuilder.array([]),
     rentalType: ['day', Validators.required],
-  });
+  }); // Needed fields in the rentalForm
 
   get rentals(): FormArray {
     return this.rentalForm.get('rentals') as FormArray;
@@ -112,13 +112,11 @@ export class RentingForm {
     const formValue = this.rentalForm.getRawValue();
     // const rentalType = formValue.rentals[0]?.rentalType;
 
-    // Calculate end dates for each rental
     const rentalsWithEndDates = formValue.rentals.map((rental: any) => ({
       ...rental,
       endDate: this.calculateEndDate(rental.startDate, rental.rentalType),
-    }));
+    })); // Calculate end dates for each rental
 
-    // Build payload the backend expects
     const payload = {
       email: formValue.email,
       firstname: formValue.firstName,
@@ -127,7 +125,7 @@ export class RentingForm {
       items: this.cartItems().map((item) => item.barcode),
       end_date: rentalsWithEndDates[0]?.endDate, // Use first rental's end date (or handle multiple)
       total_price: this.totalPrice(),
-    };
+    }; // Build payload the backend expects
 
     this.apiService.submitRental(payload).subscribe({
       next: () => {
@@ -138,7 +136,7 @@ export class RentingForm {
         this.dialog.open(RentPopUp);
       },
       error: (err) => console.error('Rental failed:', err),
-    });
+    }); // Laittaa submitRental-funktioon payloadin, ja sen jälkeen tyhjentää korin ja lataa storen uudestaan
   }
 
   calculateEndDate(startDate: string, rentalType: string): string {
