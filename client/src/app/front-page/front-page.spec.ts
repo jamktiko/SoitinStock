@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FrontPage } from './front-page';
 
+// testing dependencies
 import { ActivatedRoute } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { of } from 'rxjs';
@@ -13,6 +14,7 @@ describe('FrontPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FrontPage],
+      // testing providers with mock values
       providers: [
         {
           provide: ActivatedRoute,
@@ -33,6 +35,11 @@ describe('FrontPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-});
 
-// TESTING CHANGES for Activated Route and MatDialogRef errors
+  // CUSTOM TESTS:
+
+  // tests that the displayCategory method correctly formats the category name
+  it('should display category correctly', () => {
+    expect(component.displayCategory('guitar')).toBe('Guitars');
+  });
+});

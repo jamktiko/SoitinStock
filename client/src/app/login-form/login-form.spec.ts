@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginForm } from './login-form';
 
+// testing dependencies
 import { ActivatedRoute } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -11,6 +12,7 @@ describe('LoginForm', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LoginForm],
+      // testing providers with mock values
       providers: [
         { provide: ActivatedRoute, useValue: {} },
         { provide: MatDialogRef, useValue: {} },

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Modal } from './modal';
 
+// testing dependencies
 import { ActivatedRoute } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -12,6 +13,7 @@ describe('Modal', () => {
     await TestBed.configureTestingModule({
       imports: [Modal],
       providers: [
+        // testing providers with mock values
         { provide: ActivatedRoute, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
         {
