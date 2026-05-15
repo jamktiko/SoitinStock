@@ -22,7 +22,7 @@ export class ApiService {
 
   getMessage(): Observable<string> {
     return this.http.get<string>(`${this.apiUrl}/test`, { responseType: 'text' as 'json' });
-  }
+  } // for debugging
   // Request the root endpoint and returns instruments as a observable
   // getInstruments(): Observable<RawInstrument[]> {
   //   return this.http.get<RawInstrument[]>(this.apiUrl).pipe(catchError(this.handleError));
@@ -31,20 +31,20 @@ export class ApiService {
   getInstrumentId(id: number): Observable<RawInstrument | undefined> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.get<RawInstrument>(url).pipe(catchError(this.handleError));
-  }
+  } // returns instrument by id
   GetContents(): Observable<RawInstrument[]> {
     return this.http.get<RawInstrument[]>(`${this.apiUrl}/instruments`);
-    // Error handling could be added here
+    //Gets all instruments
   }
 
   GetItems(): Observable<RawItem[]> {
     return this.http.get<RawItem[]>(`${this.apiUrl}/items`);
-    // Error handling could be added here
+    // Gets all items
   }
   GetContentTypes(): Observable<RawInstrumentType[]> {
     return this.http.get<RawInstrumentType[]>(`${this.apiUrl}/types`);
+    // Gets all instrument types
   }
-  // Gets a single content object by its id
   GetContentByID(contentid: string): Observable<Instruments> {
     return this.http.get<Instruments>(`${this.apiUrl}/instruments/${contentid}`).pipe(
       catchError((error) => {
@@ -52,6 +52,7 @@ export class ApiService {
         return throwError(() => new Error(error.message || 'Unknown error'));
       }),
     );
+    // Gets a single content object by its id
   }
   GetInstrumentsByCategory(categoryName: string): Observable<RawInstrument[]> {
     return this.GetContentTypes().pipe(

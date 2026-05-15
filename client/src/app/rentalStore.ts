@@ -14,7 +14,7 @@ export const RentalStore = signalStore(
   withComputed(({ products }) => ({
     totalcount: computed(() => products().reduce((sum, p) => sum + p.amount, 0)),
     totalsum: computed(() => products().reduce((sum, p) => sum + p.totalprice, 0)),
-    cartItemBarcodes: computed(() => products().map((p) => p.barcode)), // Changed from barcode
+    cartItemBarcodes: computed(() => products().map((p) => p.barcode)),
   })),
 
   withMethods(({ products, ...store }) => ({

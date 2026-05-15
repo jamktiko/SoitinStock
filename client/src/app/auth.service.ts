@@ -10,7 +10,7 @@ export class AuthService {
   cognitoDomain = environment.cognitoDomain;
   clientId = environment.clientId;
   redirectUri = environment.redirectUri;
-  loginState = signal(false); // New signal
+  loginState = signal(false); // Signal for checking if user is logged in
 
   tokenEndpoint = `${this.cognitoDomain}/oauth2/token`;
   authEndpoint = `${this.cognitoDomain}/oauth2/authorize`;
