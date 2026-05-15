@@ -6,7 +6,7 @@ to the store when the application starts.
 
 */
 
-import { effect, inject } from '@angular/core';
+import { DestroyRef, effect, inject } from '@angular/core';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { Instruments, RawInstrument, RawInstrumentType } from './.models/instrument';
 import { ApiService } from './apiService';
@@ -35,22 +35,38 @@ export const ProductStore = signalStore(
   withHooks({
     /* In onInit hook we can execute events that occur
        when store is loaded into memory. */
-    onInit(store, pservice = inject(ApiService), auth = inject(AuthService)) {
+    onInit(
+      store,
+      pservice = inject(ApiService),
+      auth = inject(AuthService),
+      destroyRef = inject(DestroyRef),
+    ) {
       effect(() => {
         if (auth.loginState()) {
           pservice
             .GetContentTypes()
-            .pipe(tap((types) => patchState(store, { types })))
+            .pipe(
+              takeUntilDestroyed(destroyRef),
+
+              tap((types) => patchState(store, { types })),
+            )
             .subscribe();
 
           pservice
             .GetContents()
-            .pipe(tap((instruments) => patchState(store, { instruments })))
+            .pipe(
+              takeUntilDestroyed(destroyRef),
+
+              tap((instruments) => patchState(store, { instruments })),
+            )
             .subscribe();
 
           pservice
             .GetItems()
-            .pipe(tap((items) => patchState(store, { items, isLoading: false })))
+            .pipe(
+              takeUntilDestroyed(destroyRef),
+              tap((items) => patchState(store, { items, isLoading: false })),
+            )
             .subscribe();
         }
       });
@@ -62,11 +78,14 @@ export const ProductStore = signalStore(
      arguments. 
   */
   }),
-  withMethods(({ ...store }, pservice = inject(ApiService)) => ({
+  withMethods(({ ...store }, pservice = inject(ApiService), destroyRef = inject(DestroyRef)) => ({
     refreshItems() {
       pservice
         .GetItems()
-        .pipe(tap((items) => patchState(store, { items })))
+        .pipe(
+          tap((items) => patchState(store, { items })),
+          takeUntilDestroyed(destroyRef),
+        )
         .subscribe();
     },
   })),
