@@ -39,6 +39,7 @@ The two parts of the dynamic route are separated by a comma in the array.
         {{ displayName(page.type_name) }}
       </a>
     }
+    <!-- loads all the categories and displays new links based on them -->
     <a routerLink="/renting" routerLinkActive="active-link" class="instrumentlink"> Renting </a>
   </span>
   @if (auth.loginState()) {

@@ -33,6 +33,7 @@ export class Modal {
 
   dialogRef = inject(MatDialogRef<Modal>);
   data = inject(MAT_DIALOG_DATA) as { instrument: RawInstrument };
+  // Makes instrument into an injection token, that is then inserted into data, and used in dialog
   rstore = inject(RentalStore);
   pstore = inject(ProductStore);
   // protected instrument = toSignal(
@@ -52,6 +53,8 @@ export class Modal {
       .items()
       .filter((item) => item.Instrument_id_Instrument === instrument.id_Instrument);
   });
+  // Filters items based on id
+
   // constructor(
   //   public dialogRef: MatDialogRef<Modal>,
   //   @Inject(MAT_DIALOG_DATA) public data: any,
@@ -61,11 +64,11 @@ export class Modal {
   filteredItems = computed(() => {
     const cartIds = this.rstore.cartItemBarcodes();
     return this.relatedItems().filter((item) => !cartIds.includes(item.barcode));
-  });
+  }); //Filters items based on barcodes.
 
   addToCart(item: RawItem) {
     this.rstore.addToCart({ ...item, amount: 1 } as RentalItem);
-  }
+  } // adds item to cart
   constructor() {
     effect(() => {
       this.data.instrument.id_Instrument;
@@ -76,11 +79,13 @@ export class Modal {
         this.imageIsLoading.set(false);
       }, 1000);
     });
+    // Used for Image showing
   }
   getInstrumentImage() {
     const imageUrl = image_map[this.data.instrument.Instrument_type_id];
     return imageUrl || '/pics/placeholder.jpg';
-  }
+  } // Gets imageUrl based on number on the imagemap
+
   closeModal() {
     this.dialogRef.close();
   }

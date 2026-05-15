@@ -35,5 +35,5 @@ export class LoginForm {
     } catch (err: any) {
       this.output = err.message;
     }
-  }
+  } // Used for debugging.
 }

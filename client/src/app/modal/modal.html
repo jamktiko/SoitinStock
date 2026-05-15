@@ -15,6 +15,7 @@
           class="instrument-image"
         />
       }
+      <!-- Gets the image of the instrument- -->
     </div>
     <p>{{ data.instrument.model }}</p>
     @if (data.instrument.Description) {
@@ -24,7 +25,7 @@
     } @else {
       <p>No Description given</p>
     }
-
+    <!-- description and model -->
     <h3>Available Items</h3>
     @if (relatedItems().length === 0) {
       <p>No items available for this instrument</p>
@@ -43,6 +44,7 @@
         </div>
       }
     }
+    <!-- Shows all related items of instrument selected. -->
   </div>
 </mat-dialog-content>
 <div class="modal-actions">

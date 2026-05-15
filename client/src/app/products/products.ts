@@ -15,6 +15,7 @@ import { Instruments } from '../.models/instrument';
 export class Products {
   items = input<any>([]);
   instruments = input<any>([]);
+  // Reactive inputs, that triggers effects and computed signals when changed
   modal = signal(false);
   dialog = inject(MatDialog);
   // Inject, that is, connect the store to the component
@@ -25,7 +26,7 @@ export class Products {
   getInstrumentName(instrumentId: number): string {
     const instrument = this.pstore.instruments().find((i) => i.id_Instrument === instrumentId);
     return instrument?.name || 'Unknown Instrument';
-  }
+  } // Gets the name of the instrument based on id
 
   displayInstrumentName(name: string): string {
     const labels: Record<string, string> = {
@@ -52,7 +53,7 @@ export class Products {
     });
 
     return counts;
-  });
+  }); // Displays the amount of items based on id
 
   getItemCount(instrumentId: number): number {
     return this.itemCountByInstrument().get(instrumentId) || 0;
