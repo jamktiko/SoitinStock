@@ -22,10 +22,11 @@ export class FrontPage {
   private route = inject(ActivatedRoute);
   pstore = inject(ProductStore);
   auth = inject(AuthService);
+  // All the needed services, stores and routes are injected
 
   activeCategory = toSignal(this.route.paramMap.pipe(map((params) => params.get('category'))), {
     initialValue: null,
-  });
+  }); // Used for getting the active category.
 
   displayCategory(category: string | null): string {
     if (!category) return '';
@@ -67,5 +68,5 @@ export class FrontPage {
     );
 
     return { instruments: filteredInstruments, items: filteredItemsList };
-  });
+  }); // Filters items and instruments based on the active category.
 }

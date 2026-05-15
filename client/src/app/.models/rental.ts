@@ -14,3 +14,4 @@ export interface RawRentalsHasItem {
   Rentals_id: number;
   Item_id: number;
 }
+// Interfaces made for rentalpage, that was cut for budgetary constraints.

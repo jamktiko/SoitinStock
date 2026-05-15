@@ -22,3 +22,6 @@ export const mapRawInstrument = (r: RawInstrument) => {
 export interface Instruments {
   instruments: RawInstrument[];
 }
+
+// different instrument-interfaces used in the project.
+// Made at the very start of the project, so some may be unused

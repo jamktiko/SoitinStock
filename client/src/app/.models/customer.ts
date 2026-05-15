@@ -5,3 +5,5 @@ export interface RawCustomer {
   lastname: string;
   phone: string;
 }
+
+// Interface for the customer.

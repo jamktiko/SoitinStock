@@ -15,3 +15,5 @@ export interface RentalItem extends RawItem {
   amount: number;
   totalprice: number;
 }
+
+// Interfaces for items. RentalItem is used with Renting-Form and cartStore
