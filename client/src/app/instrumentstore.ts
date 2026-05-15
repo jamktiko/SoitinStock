@@ -1,17 +1,12 @@
 /* 
-PRODUCT STORE
 
 A functional store created with NgRx Signalstore library that maintains the 
-application's product state. Products are fetched from the mock database
+application's product state. Products are fetched from the database
 to the store when the application starts.
 
-So the store is a kind of data buffer, thanks to which we don't need to constantly 
-update the database. Passing the same data to multiple components is easier, 
-because we don't need to transfer data between components. Data always flows 
-only from the store to components or from components to the store.
 */
 
-import { effect, inject } from '@angular/core';
+import { DestroyRef, effect, inject } from '@angular/core';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { Instruments, RawInstrument, RawInstrumentType } from './.models/instrument';
 import { ApiService } from './apiService';
@@ -29,7 +24,7 @@ interface ItemsState {
 
 const initialState: ItemsState = { items: [], instruments: [], types: [], isLoading: true };
 /*
-ProductStore is a functional store, that is, a function
+InstrumentStore is a functional store, that is, a function
 whose arguments are functions and objects
 */
 export const ProductStore = signalStore(
@@ -40,45 +35,58 @@ export const ProductStore = signalStore(
   withHooks({
     /* In onInit hook we can execute events that occur
        when store is loaded into memory. */
-    onInit(store, pservice = inject(ApiService), auth = inject(AuthService)) {
+    onInit(
+      store,
+      pservice = inject(ApiService),
+      auth = inject(AuthService),
+      destroyRef = inject(DestroyRef),
+    ) {
       effect(() => {
         if (auth.loginState()) {
           pservice
             .GetContentTypes()
-            .pipe(tap((types) => patchState(store, { types })))
+            .pipe(
+              takeUntilDestroyed(destroyRef),
+
+              tap((types) => patchState(store, { types })),
+            )
             .subscribe();
 
           pservice
             .GetContents()
-            .pipe(tap((instruments) => patchState(store, { instruments })))
+            .pipe(
+              takeUntilDestroyed(destroyRef),
+
+              tap((instruments) => patchState(store, { instruments })),
+            )
             .subscribe();
 
           pservice
             .GetItems()
-            .pipe(tap((items) => patchState(store, { items, isLoading: false })))
+            .pipe(
+              takeUntilDestroyed(destroyRef),
+              tap((items) => patchState(store, { items, isLoading: false })),
+            )
             .subscribe();
         }
       });
     },
-    /* In onDestroy hook we can execute events that occur
-       when store is removed from memory. For example, saving product state
-       to database when application use is terminated.
-    */
 
     /* The store's actual data handling methods are in the
      withMethods function. The withMethods function contains an anonymous function that contains 
      the store's data handling methods. products and store come in as
      arguments. 
   */
-    // withMethods(({ instruments, ...store }) => ({
-    //   reduceAmount(id: number) {
-    //     const updated = instruments().map((i) => (i.id_Instrument === id ? { ...i, amount: i.amount - 1 } : i));
-    //     patchState(store, { instruments: updated });
-    //   },
-    //   addAmount(id: number) {
-    //     const updated = instruments().map((i) => (i.id === id ? { ...i, amount: i.amount + 1 } : i));
-    //     patchState(store, { instruments: updated });
-    //   },
-    // })),
   }),
+  withMethods(({ ...store }, pservice = inject(ApiService), destroyRef = inject(DestroyRef)) => ({
+    refreshItems() {
+      pservice
+        .GetItems()
+        .pipe(
+          tap((items) => patchState(store, { items })),
+          takeUntilDestroyed(destroyRef),
+        )
+        .subscribe();
+    },
+  })),
 );

@@ -133,7 +133,9 @@ export class RentingForm {
       next: () => {
         console.log('Rental submitted successfully');
         this.rstore.clearCart();
-        this.dialog.open(RentPopUp); // Show dialog
+        this.pstore.refreshItems();
+
+        this.dialog.open(RentPopUp);
       },
       error: (err) => console.error('Rental failed:', err),
     });
