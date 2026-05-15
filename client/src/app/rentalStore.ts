@@ -1,8 +1,8 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { RawItem, RentalItem } from './.models/item';
+import { RentalItem } from './.models/item';
 
 import { computed } from '@angular/core';
-import { RawInstrument } from './.models/instrument';
+// import { RawInstrument } from './.models/instrument';
 
 const initialState: { products: RentalItem[] } = {
   products: [],

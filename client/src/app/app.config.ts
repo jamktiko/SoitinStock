@@ -5,8 +5,8 @@ import {
   // importProvidersFrom, // this
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { catchError, map } from 'rxjs/operators';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+// import { catchError, map } from 'rxjs/operators';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { tokenInterceptor } from './auth.tokenInterceptor';
 
 import { routes } from './app.routes';

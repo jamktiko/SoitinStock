@@ -1,9 +1,9 @@
-import { Component, inject, OnInit, signal, effect } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 // import { ContentService } from '../content.service';
 import { RawInstrumentType, RawInstrument } from '../.models/instrument';
-import { toSignal } from '@angular/core/rxjs-interop';
+// import { toSignal } from '@angular/core/rxjs-interop';
 import { ApiService } from '../apiService';
 import { AuthService } from '../auth.service';
 

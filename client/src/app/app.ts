@@ -2,7 +2,7 @@ import { Component, OnInit, inject, ChangeDetectionStrategy, signal } from '@ang
 import { AuthService } from './auth.service';
 import { NavBar } from './nav-bar/nav-bar';
 import { RouterOutlet } from '@angular/router';
-import { ApiService } from './apiService';
+// import { ApiService } from './apiService';
 // import { RouterOutlet } from "../../node_modules/@angular/router/types/_router_module-chunk";
 
 @Component({
