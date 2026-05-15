@@ -138,6 +138,12 @@ Resources:
                   ToPort: 22
                   CidrIp: 195.148.39.81/32
 
+                  # SSH access for administration
+                # - IpProtocol: tcp
+                #   FromPort: 22
+                #   ToPort: 22
+                #   CidrIp: YOUR_IP_ADDRESS/32
+
             Tags:
                 - Key: Name
                   Value: SoitinStock-EB-SG

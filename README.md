@@ -1,6 +1,6 @@
 # SoitinStock
 
-SoitinStock is a web-based inventory and rental management system designed for a musical instrument rental shop. It enables employees to track instrument availability, manage customer rentals, and monitor inventory in real time through a centralized interface.
+SoitinStock is a web-based inventory and rental management system designed for a musical instrument rental shop. It enables employees to track instrument availability, rent instruments to customers, and monitor inventory through a centralized interface.
 
 ## Description
 
@@ -11,6 +11,8 @@ The system is primarily intended for use within a physical store environment, wh
 SoitinStock follows a modern web application architecture, with a frontend built using Angular and a backend powered by a Node.js and Express REST API. Data is stored in a relational MySQL database hosted on Amazon RDS. Authentication is handled through AWS Cognito, providing secure user access via JWT-based authentication.
 
 The goal of the project is to deliver a simple, functional, and cost-efficient system that demonstrates practical use of cloud services, full-stack development, and infrastructure as code. The design prioritizes ease of use, maintainability, and alignment with AWS Free Tier constraints, making it suitable for both learning purposes and small-scale real-world scenarios.
+
+---
 
 ## Getting Started
 
@@ -28,7 +30,7 @@ Frameworks:
 
 Libraries and Dependencies:
 
-- Frontend: Angular Material & CDK, NgRx Signals, RxJS, Angular In-Memory Web API
+- Frontend: Angular Material & CDK, NgRx Signals, RxJS, (dev: Angular In-Memory Web API)
 - Backend: MySQL2, JWT & JWKS-RSA, CORS
 - Shared: TypeScript, Rimraf, Vitest
 
@@ -69,29 +71,64 @@ Please be aware that login credenials are set up to work solely through AWS Cogn
 - start backend with `npm run dev` and frontend with `ng serve`
 - open locally in `http://localhost:4200`
 
-To integrate AWS please refer to the CF-guide provided in the CF-templates directory.
+To integrate AWS please refer to the Arch-docs documentation guide provided in the /CF-templates directory.
+
+---
 
 ## Help
 
-<!-- Any advise for common problems or issues.
+#### API requests return 404
 
+Ensure frontend API calls use the `/api/...` path format, for example:
+
+```javascript
+fetch('/api/test');
 ```
-command to run if program contains helper info
+
+#### Frontend does not load correctly
+
+Verify that the built frontend files from /dist are uploaded to the root of the S3 bucket.
+
+#### Backend does not start in Elastic Beanstalk
+
+Ensure the backend application listens on the environment port:
+
+```javascript
+const PORT = process.env.PORT || 3000;
+app.listen(PORT);
 ```
--->
+
+Also ensure that Elastic Beanstalk is using the correct environment variables.
+
+#### CORS or mixed-content issues
+
+Use the CloudFront distribution URL for both frontend and backend communication instead of directly calling the Elastic Beanstalk endpoint.
+
+---
 
 ## Authors
 
-Jun Fengari, Oskari Puranen, Minttu Räisänen, Thomas Vainikainen
+#### Jun Fengari, Oskari Puranen, Minttu Räisänen, Thomas Vainikainen
 
 ## Version History
 
-<!--
-- 0.2
-    - Various bug fixes and optimizations
+- 1.0
+    - Initial full-stack cloud deployment
+    - Angular frontend hosted through S3 and CloudFront
+    - Node.js backend deployed with Elastic Beanstalk
+    - MySQL database integration with RDS
+    - API routing configured through CloudFront
+    - Cognito authentication integration
+    - Frontend UI and responsive styling improvements
+
+- 0.5
+    - Backend API and database connectivity implemented
+    - CloudFormation infrastructure templates added
+    - Initial frontend product views and navigation created
+
 - 0.1
-    - Initial Release
--->
+    - Initial project setup
+    - Repository structure and development environment configured
 
 ## License
 
@@ -104,4 +141,7 @@ This project is licensed under the CC BY-SA 4.0 License - see the LICENSE.md fil
 
 ## Acknowledgments
 
-<!-- Inspiration, code snippets, etc. -->
+- AWS documentation and service guides for CloudFront, S3, Elastic Beanstalk, RDS, and Cognito configuration
+- JAMK course materials and cloud computing guidance
+- IAM role template structure adapted from https://github.com/jamktiko/elastic-beanstalk-node-angular-boilerplate
+- Angular and Node.js official documentation
