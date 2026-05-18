@@ -257,4 +257,13 @@ button:hover {
   .product-info {
     flex-direction: column;
   }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .instrument-image {
+    width: 100px;
+    height: 100px;
+  }
 }
