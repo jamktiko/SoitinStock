@@ -3,19 +3,21 @@
 </div>
 <mat-dialog-content class="mat-typography">
   <div class="modal-content">
-    <div class="pic-code-desc">
-      <div class="image-container">
-        @if (imageIsLoading()) {
-          <div class="image-placeholder">
-            <p>Loading image...</p>
-          </div>
-        } @else {
-          <img
-            [src]="getInstrumentImage()"
-            alt="{{ data.instrument.name }}"
-            class="instrument-image"
-          />
-        }
+    <div class="product-info">
+      <div class="pic-code-desc">
+        <div class="image-container">
+          @if (imageIsLoading()) {
+            <div class="image-placeholder">
+              <p>Loading image...</p>
+            </div>
+          } @else {
+            <img
+              [src]="getInstrumentImage()"
+              alt="{{ data.instrument.name }}"
+              class="instrument-image"
+            />
+          }
+        </div>
 
         <!-- Gets the image of the instrument- -->
       </div>
@@ -39,14 +41,20 @@
     } @else {
       @for (item of filteredItems(); track item.barcode) {
         <div class="item-card">
-          <p><strong>Barcode:</strong> {{ item.barcode }}</p>
-          <p><strong>Condition:</strong> {{ item.item_condition }}</p>
-          <p><strong>Price/day:</strong> {{ item.rent_day | number: '1.2-2' }} €</p>
-          <p><strong>Price/week:</strong> {{ item.rent_week | number: '1.2-2' }} €</p>
-          <p><strong>Price/month:</strong> {{ item.rent_month | number: '1.2-2' }} €</p>
-          <p><strong>Available:</strong> {{ item.is_available ? 'Yes' : 'No' }}</p>
+          <div class="item-info">
+            <p><strong>Barcode:</strong> {{ item.barcode }}</p>
+            <p><strong>Condition:</strong> {{ item.item_condition }}</p>
+            <p><strong>Available:</strong> {{ item.is_available ? 'Yes' : 'No' }}</p>
+          </div>
+
+          <div class="price-group">
+            <p><strong>Price/day:</strong> {{ item.rent_day | number: '1.2-2' }} €</p>
+            <p><strong>Price/week:</strong> {{ item.rent_week | number: '1.2-2' }} €</p>
+            <p><strong>Price/month:</strong> {{ item.rent_month | number: '1.2-2' }} €</p>
+          </div>
+
           @if (item.is_available) {
-            <button type="button" (click)="addToCart(item)">Add to Cart</button>
+            <button type="button" class="cart-button" (click)="addToCart(item)">Add to Cart</button>
           }
         </div>
       }
