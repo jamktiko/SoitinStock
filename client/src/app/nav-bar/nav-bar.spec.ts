@@ -12,7 +12,6 @@ describe('NavBar', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NavBar],
-      // testing providers with mock values
       providers: [
         { provide: ActivatedRoute, useValue: {} },
         { provide: MatDialogRef, useValue: {} },

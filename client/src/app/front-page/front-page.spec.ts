@@ -42,4 +42,14 @@ describe('FrontPage', () => {
   it('should display category correctly', () => {
     expect(component.displayCategory('guitar')).toBe('Guitars');
   });
+
+  // tests that unknown categories return the original value
+  it('should return original category if no mapping exists', () => {
+    expect(component.displayCategory('banjo')).toBe('banjo');
+  });
+
+  // tests that null category returns empty string
+  it('should return empty string for null category', () => {
+    expect(component.displayCategory(null)).toBe('');
+  });
 });
