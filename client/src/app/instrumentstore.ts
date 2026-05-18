@@ -80,13 +80,10 @@ export const ProductStore = signalStore(
   }),
   withMethods(({ ...store }, pservice = inject(ApiService), destroyRef = inject(DestroyRef)) => ({
     refreshItems() {
-      pservice
-        .GetItems()
-        .pipe(
-          tap((items) => patchState(store, { items })),
-          takeUntilDestroyed(destroyRef),
-        )
-        .subscribe();
+      return pservice.GetItems().pipe(
+        tap((items) => patchState(store, { items })),
+        takeUntilDestroyed(destroyRef),
+      );
     },
   })),
 );

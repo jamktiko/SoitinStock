@@ -123,13 +123,16 @@ export class RentingForm {
         console.log('Rental submitted successfully');
         this.rstore.clearCart();
 
-        // Use pstore.refreshItems() to update the store AND fetch new data
-        this.pstore.refreshItems();
-
-        // Small delay to ensure store is updated before dialog opens
-        setTimeout(() => {
-          this.dialog.open(RentPopUp);
-        }, 300);
+        // Now wait for refreshItems to complete
+        this.pstore.refreshItems().subscribe({
+          next: () => {
+            this.dialog.open(RentPopUp);
+          },
+          error: (err) => {
+            console.error('Failed to refresh items:', err);
+            this.dialog.open(RentPopUp);
+          },
+        });
       },
       error: (err: Error) => console.error('Rental failed:', err),
     }); // Laittaa submitRental-funktioon payloadin, ja sen jälkeen tyhjentää korin ja lataa storen uudestaan
