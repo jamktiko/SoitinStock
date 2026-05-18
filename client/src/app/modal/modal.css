@@ -57,7 +57,7 @@ mat-dialog-content {
   font-family: 'Noto Serif', serif;
   /* background: #2f5d7c;
   color: white; */
-  background: #e3cda8;
+  background: #ba8c64;
   border-bottom: 2px solid black;
   padding: 20px 30px;
 }
@@ -207,7 +207,7 @@ button:hover {
   font-family: 'Noto Serif', serif;
   display: flex;
   justify-content: flex-end;
-  padding: 20px 30px;
+  padding: 10px 30px;
   border-top: 2px solid black;
-  background: #e3cda8;
+  background: #eddcbf;
 }
