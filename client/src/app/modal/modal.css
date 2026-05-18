@@ -141,15 +141,17 @@ mat-dialog-content {
 /* ITEM CARD */
 .item-card {
   font-family: 'Noto Serif', serif;
-  display: grid;
-  grid-template-columns: 200px 1fr 150px 160px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+
   background: #fff8eb;
   padding: 18px 24px;
   margin-bottom: 16px;
 
   border-radius: 12px;
   border: 2px solid black;
+  gap: 30px;
 }
 
 .item-card .modal-actions {
@@ -210,4 +212,58 @@ button:hover {
   padding: 10px 30px;
   border-top: 2px solid black;
   background: #eddcbf;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.price-group {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-left: auto;
+  flex-direction: column;
+}
+
+.price-group p {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.cart-button {
+  margin-left: 20px;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .item-card {
+    flex-direction: column;
+  }
+
+  .price-group {
+    margin-left: 0%;
+  }
+}
+
+@media (max-width: 520px) {
+  .product-info {
+    flex-direction: column;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .instrument-image {
+    width: 100px;
+    height: 100px;
+  }
 }
