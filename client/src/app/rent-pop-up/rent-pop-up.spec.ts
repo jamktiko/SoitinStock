@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RentPopUp } from './rent-pop-up';
+
+// testing dependencies
+import { ActivatedRoute } from '@angular/router';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 describe('RentPopUp', () => {
   let component: RentPopUp;
@@ -8,9 +11,14 @@ describe('RentPopUp', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RentPopUp]
-    })
-    .compileComponents();
+      imports: [RentPopUp],
+      // testing providers with mock values
+      providers: [
+        { provide: ActivatedRoute, useValue: {} },
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RentPopUp);
     component = fixture.componentInstance;
