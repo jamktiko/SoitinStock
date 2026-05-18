@@ -62,7 +62,9 @@ export class Products {
 
   showModal(instrument: Instruments) {
     this.dialog.open(Modal, {
-      width: '500px',
+      width: '1800px',
+      maxWidth: '95vw',
+      height: '90vh',
       data: { instrument },
     });
   }

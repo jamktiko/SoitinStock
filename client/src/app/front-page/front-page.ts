@@ -1,14 +1,14 @@
-import { Component, inject, OnInit, computed } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 // With ActivatedRoute we get id from route to component
 import { ActivatedRoute, RouterLink } from '@angular/router';
 // With ContentService we get content from server to component
 // import { ContentService } from '../content.service';
 // import { Instruments, RawInstrument } from '../.models/instrument';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map, startWith, switchMap, combineLatest } from 'rxjs';
+import { map } from 'rxjs';
 import { Products } from '../products/products';
 import { ProductStore } from '../instrumentstore';
-import { RawItem } from '../.models/item';
+// import { RawItem } from '../.models/item';
 import { AuthService } from '../auth.service';
 
 @Component({

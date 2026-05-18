@@ -3,28 +3,35 @@
 </div>
 <mat-dialog-content class="mat-typography">
   <div class="modal-content">
-    <div class="image-container">
-      @if (imageIsLoading()) {
-        <div class="image-placeholder">
-          <p>Loading image...</p>
-        </div>
-      } @else {
-        <img
-          [src]="getInstrumentImage()"
-          alt="{{ data.instrument.name }}"
-          class="instrument-image"
-        />
-      }
-      <!-- Gets the image of the instrument- -->
+    <div class="pic-code-desc">
+      <div class="image-container">
+        @if (imageIsLoading()) {
+          <div class="image-placeholder">
+            <p>Loading image...</p>
+          </div>
+        } @else {
+          <img
+            [src]="getInstrumentImage()"
+            alt="{{ data.instrument.name }}"
+            class="instrument-image"
+          />
+        }
+
+        <!-- Gets the image of the instrument- -->
+      </div>
+      <div class="code-desc">
+        <p class="field-title">Model name:</p>
+        <p>{{ data.instrument.model }}</p>
+        <p class="field-title">Description:</p>
+        @if (data.instrument.Description) {
+          <p>
+            {{ data.instrument.Description }}
+          </p>
+        } @else {
+          <p>No Description given</p>
+        }
+      </div>
     </div>
-    <p>{{ data.instrument.model }}</p>
-    @if (data.instrument.Description) {
-      <p>
-        {{ data.instrument.Description }}
-      </p>
-    } @else {
-      <p>No Description given</p>
-    }
     <!-- description and model -->
     <h3>Available Items</h3>
     @if (relatedItems().length === 0) {
