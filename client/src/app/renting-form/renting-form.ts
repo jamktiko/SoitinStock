@@ -122,11 +122,16 @@ export class RentingForm {
       next: () => {
         console.log('Rental submitted successfully');
         this.rstore.clearCart();
+
+        // Use pstore.refreshItems() to update the store AND fetch new data
         this.pstore.refreshItems();
 
-        this.dialog.open(RentPopUp);
+        // Small delay to ensure store is updated before dialog opens
+        setTimeout(() => {
+          this.dialog.open(RentPopUp);
+        }, 300);
       },
-      error: (err) => console.error('Rental failed:', err),
+      error: (err: Error) => console.error('Rental failed:', err),
     }); // Laittaa submitRental-funktioon payloadin, ja sen jälkeen tyhjentää korin ja lataa storen uudestaan
   }
 
@@ -150,6 +155,10 @@ export class RentingForm {
   // }
 
   removeRentalRow(index: number) {
+    const itemToRemove = this.cartItems()[index];
+    if (itemToRemove) {
+      this.rstore.removeItem(itemToRemove); // Remove from store
+    }
     this.rentals.removeAt(index);
   }
 }
