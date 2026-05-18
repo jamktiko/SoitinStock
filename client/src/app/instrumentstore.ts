@@ -8,7 +8,7 @@ to the store when the application starts.
 
 import { DestroyRef, effect, inject } from '@angular/core';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
-import { Instruments, RawInstrument, RawInstrumentType } from './.models/instrument';
+import { RawInstrument, RawInstrumentType } from './.models/instrument';
 import { ApiService } from './apiService';
 import { tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -80,13 +80,10 @@ export const ProductStore = signalStore(
   }),
   withMethods(({ ...store }, pservice = inject(ApiService), destroyRef = inject(DestroyRef)) => ({
     refreshItems() {
-      pservice
-        .GetItems()
-        .pipe(
-          tap((items) => patchState(store, { items })),
-          takeUntilDestroyed(destroyRef),
-        )
-        .subscribe();
+      return pservice.GetItems().pipe(
+        tap((items) => patchState(store, { items })),
+        takeUntilDestroyed(destroyRef),
+      );
     },
   })),
 );
