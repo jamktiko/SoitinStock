@@ -479,6 +479,12 @@ button {
   }
 }
 
+@media (max-width: 345px) {
+  .rent-title {
+    font-size: 20px;
+  }
+}
+
 @media (max-width: 300px) {
   .login-container h1 {
     font-size: 20px;
