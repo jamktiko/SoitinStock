@@ -1,6 +1,6 @@
 ## AWS Architecture Documentation
 
-The SoitinStock platform is built on a modular AWS infrastructure and follows a traditional three-tier model.
+The SoitinStock application platform is built on a modular AWS infrastructure and follows a traditional three-tier model.
 
 Content Delivery & Routing: A CloudFront distribution serves as the primary entry point, providing a single unified domain for both the frontend and backend. It leverages S3 for secure, private static web hosting and implements a path-based routing strategy (/api/\*) to proxy requests to the application layer. This eliminates Cross-Origin Resource Sharing (CORS) complexities and ensures encrypted communication via HTTPS.
 
@@ -9,6 +9,8 @@ Application Logic: The backend is powered by AWS Elastic Beanstalk, orchestratin
 Data & Identity: Persistance is managed by a private RDS MySQL instance, deployed in a required multi-AZ subnet group. User authentication and authorization are handled by Amazon Cognito, which is integrated into the backend via a secure JWT-based middleware, providing an identity provider (IdP) for the platform.
 
 This "Infrastructure-as-Code" (IaC) approach ensures that the environment is reproducible with appropriate modification, version-controlled, and ready for future transitions into production projects.
+
+The archicture:
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/jamktiko/SoitinStock/main/CF-templates/related/Arch-Diagram.drawio.png" alt="SoitinStock AWS Architecture Diagram" width="700">
@@ -20,11 +22,11 @@ This "Infrastructure-as-Code" (IaC) approach ensures that the environment is rep
 
 _Roles_
 
-- The roles template assures that beanstalk has the appropriate roles for provisioning infrastructure and allowing communication between the application and services.
+- The roles template assures that beanstalk has the appropriate roles for provisioning infrastructure and allowing communication between the application and services. This template was provided by our lecturer Juha-Tapio Teno from the following boilerplate: https://github.com/jamktiko/elastic-beanstalk-node-angular-boilerplate
 
 _Network_
 
-- The Network template provisions the RDS-required database subnet group including two "private" subnets. These subnets do not allow public access.
+- The Network template provisions the RDS-required database subnet group including two private subnets and their relevant routing table which is not connected to the internet. These subnets do not allow public access.
 - It additionally defines Elastic Beanstalk security groups enabling SSH access into the EC2 instance and therefore further into RDS for development purposes.
 - For production purposes, a new custom VPC network should be defined, containing the required private subnets for moving EC2 instance(s) behind an ALB, additional configurations for RDS subnets, relevant routing tables, and a NAT gateway.
 
@@ -49,26 +51,34 @@ _S3 and CloudFront_
 
 - The s3 and cloudfront template creates a private S3 bucket, and a CloudFront distribution in front of it.
 - The CloudFront distribution we launch includes the cache behaviour /api/\* in order to route requests from the frontend to the backend properly. The viewer protocol policy is allow-all, which enables both HTTP and HTTPS. This combination of settings avoids browser mixed-content and routing conflicts.
-- CloudFront will need to be relaunched if the EC2 environment is re-initialized, as CloudFront does not automatically update backend addresses. In our templates, the backend address has been hardcoded to avoid the aforementioned problems.
+- CloudFront will need to be relaunched if the EC2 environment is re-initialized, as CloudFront does not automatically update backend addresses. In our templates, the backend address has been hardcoded to avoid the aforementioned inheritance problems.
 - The CloudFront template also includes important caching settings allowing authorization headers to reach the backend, for Cognito integration.
 - Once this has launched, you can upload your frontend code into the S3 bucket.
-- The frontend application must send API requests using the /api/\* path format, for example `fetch('/api/test')`, so that CloudFront can route backend requests. In this configuration, web files from the built /dist directory must be placed directly in the root of the s3 bucket to function and be served properly.
+- The frontend application must send API requests using the /api/\* path format, for example `fetch('/api/test')`, so that CloudFront can route backend requests.
+- In this configuration, frontend files from the built /dist directory must be placed directly in the root of the s3 bucket to function and be served properly.
 - The backend application must listen on the environment-defined port and expose API routes such as `app.get('/api/test'...)`. This combination ensures correct communication between frontend and backend through the CloudFront distribution.
 - The website may be viewed through the CloudFront distribution domain name link.
 
 _Cognito_
 
 - The Cognito template provisions all required resources for Cognito setup, including the User Pool, Client, and Domain.
-- Notable settings here include the CallbackURL and LogoutURL, which define routing. In addition to these, the authMiddleware.ts within /backend/src/middleware defines important functionality for token exchange.
+- Notable settings here include the CallbackURL and LogoutURL, which define routing.
 - The relevant frontend configurations can be found in /client/src/app/auth.service.ts, /client/src/app/auth.guard.ts and the /client/src/app/login-form component.
 - The relevant backend configurations can be found in /backend/middleware/authMiddleware.ts and /backend/server.ts. The jsonwebtoken jwks-rsa is a dependency needed for functionality.
+- Loginflow works as follows: frontend recieves an authorization code from cognito, which it exchanges for tokens, it sends the access token to the backend with a protected API, where the backend validates the JWT token and verifies it against Cognito public keys - JWKS, which then allows or denies access to protected routes.
 - Once Cognito is fully configured, you may create users in the Cognito management console to test and use your login feature on the launched application.
 
 ---
 
+The stacks as they were provisioned in this project:
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jamktiko/SoitinStock/main/CF-templates/related/stacks.png" alt="SoitinStock AWS Stacks" width="500">
+</p>
+
+Template naming convention during application development: SoitinStock-ServiceName
+
 ### Setting up the environment
 
-The AWS environment can be set up differently depending on usage.
-The provided templates in this project can be used as learning material. Due to the interdependencies built in development, this infrastructure cannot be implemented as is.
-
-Template naming convention during development: SoitinStock-ServiceName
+The AWS environment can be set up differently depending on usage. The provided templates in this project can be used as learning material.
+Due to the interdependencies built in development, this infrastructure cannot be implemented as is, but must instead be built incrementally with special attention paid to imported and exported values in each template.
