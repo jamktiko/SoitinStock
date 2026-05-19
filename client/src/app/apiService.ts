@@ -70,7 +70,4 @@ export class ApiService {
       }),
     );
   }
-  submitRental(rental: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/rentals`, rental);
-  }
 }
