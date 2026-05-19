@@ -51,7 +51,7 @@ button {
 
 .openmodal .modalbutton {
   font-family: 'Noto Serif', serif;
-  font-size: 20px;
+  font-size: 15px;
   /*padding: 0.5rem 0.8rem;*/
   border: 2px solid black;
   background: #4e1a1c;
@@ -502,7 +502,15 @@ input:focus {
 @media (max-width: 570px) {
   .instrument-card {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+  }
+
+  .instrument-card .openmodal {
+    align-items: center;
+  }
+
+  .instrument-card .instrument-name {
+    font-size: 20px;
   }
 
   .openmodal {
