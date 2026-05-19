@@ -72,8 +72,8 @@ _Cognito_
 
 The stacks as they were provisioned in this project:
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/jamktiko/SoitinStock/main/CF-templates/related/stacks.png" alt="SoitinStock AWS Stacks" width="500">
+<p align="left">
+  <img src="https://raw.githubusercontent.com/jamktiko/SoitinStock/main/CF-templates/related/stacks.png" alt="SoitinStock AWS Stacks" width="400">
 </p>
 
 Template naming convention during application development: SoitinStock-ServiceName
