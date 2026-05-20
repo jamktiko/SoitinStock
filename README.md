@@ -6,6 +6,8 @@ SoitinStock is an inventory and rental management system designed for a musical 
   Live Demo
 </a>
 
+Creators: Jun Fengari, Minttu Räisänen, Thomas Vainikainen, Oskari Puranen
+
 ## Description
 
 SoitinStock is a cloud-based inventory and rental management system designed to support the daily operations of a musical instrument rental shop. The application provides employees with a centralized interface for managing instrument stock, tracking availability, and handling customer rentals efficiently.
@@ -67,7 +69,7 @@ For development purposes, the source code can be cloned from the repository.
 
 To run locally:
 
-Please be aware that login credenials are set up to work solely through AWS Cognito. This functionality will need to be removed if not integrated into the cloud.
+Please be aware that login credentials are set up to work solely through AWS Cognito. This functionality will need to be removed if not integrated into the cloud.
 
 - clone repository with `git clone https://github.com/jamktiko/SoitinStock`
 - create and configure environment variables within frontend/backend
