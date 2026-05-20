@@ -1,6 +1,10 @@
 # SoitinStock
 
-SoitinStock is a web-based inventory and rental management system designed for a musical instrument rental shop. It enables employees to track instrument availability, rent instruments to customers, and monitor inventory through a centralized interface.
+SoitinStock is an inventory and rental management system designed for a musical instrument rental shop. It enables employees to track instrument availability, rent instruments to customers, and monitor inventory through a centralized interface.
+
+<a href="https://youtu.be/eF0VvbSEIqM" target="_blank">
+  Live Demo
+</a>
 
 ## Description
 
